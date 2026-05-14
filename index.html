@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rambam Learning Engine</title>
+  <style>
+    body { margin:0; font-family:Arial, Helvetica, sans-serif; background:#f8fafc; color:#0f172a; padding:18px; }
+    .wrap { max-width:1100px; margin:0 auto; }
+    header { background:#0f172a; color:white; border-radius:22px; padding:24px; margin-bottom:18px; }
+    .hebrew-title { direction:rtl; font-size:34px; font-weight:800; margin-bottom:8px; }
+    h1 { margin:0; font-size:36px; }
+    p { color:#64748b; }
+    header p { color:#cbd5e1; }
+    .tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+    button { border:1px solid #cbd5e1; background:white; border-radius:12px; padding:10px 14px; font-weight:700; cursor:pointer; }
+    button.active { background:#0f172a; color:white; border-color:#0f172a; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:12px; }
+    .card { background:white; border:1px solid #e2e8f0; border-radius:16px; padding:14px; box-shadow:0 1px 2px rgba(15,23,42,.06); }
+    .num { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:999px; background:#e2e8f0; font-weight:800; margin-bottom:10px; }
+    .heb { direction:rtl; font-size:23px; font-weight:900; line-height:1.2; }
+    .eng { font-size:16px; font-weight:800; margin-top:8px; }
+    .trans { color:#64748b; margin-top:4px; font-size:14px; }
+    .center-card { max-width:640px; margin:0 auto; text-align:center; }
+    .big-heb { direction:rtl; font-size:46px; font-weight:900; margin:20px 0; }
+    input { width:100%; box-sizing:border-box; border:1px solid #cbd5e1; border-radius:12px; padding:12px; font-size:16px; }
+    .good { background:#f0fdf4; border:1px solid #86efac; border-radius:14px; padding:12px; margin-top:12px; }
+    .bad { background:#fef2f2; border:1px solid #fca5a5; border-radius:14px; padding:12px; margin-top:12px; }
+    .hidden { display:none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="hebrew-title">י״ד ספרי משנה תורה</div>
+      <h1>Rambam Learning Engine</h1>
+      <p>Learn the 14 books of Mishneh Torah: names, numbers, and order.</p>
+    </header>
+
+    <div class="tabs">
+      <button id="learnBtn" class="active" onclick="showTab('learn')">Learn</button>
+      <button id="flashBtn" onclick="showTab('flash')">Flashcards</button>
+      <button id="quizBtn" onclick="showTab('quiz')">Name Quiz</button>
+    </div>
+
+    <section id="learn"></section>
+
+    <section id="flash" class="hidden">
+      <div class="card center-card">
+        <div class="num" id="flashNum"></div>
+        <div class="big-heb" id="flashHeb"></div>
+        <div id="flashReveal" class="hidden">
+          <div class="eng" id="flashEng"></div>
+          <div class="trans" id="flashTrans"></div>
+        </div>
+        <p id="flashHint">Try to remember it, then press reveal.</p>
+      </div>
+      <div class="tabs" style="justify-content:center; margin-top:14px;">
+        <button onclick="prevCard()">Previous</button>
+        <button class="active" onclick="toggleReveal()">Reveal / Hide</button>
+        <button onclick="nextCard()">Next</button>
+      </div>
+    </section>
+
+    <section id="quiz" class="hidden">
+      <div class="card center-card">
+        <div class="num" id="quizNum"></div>
+        <h2>What is this sefer?</h2>
+        <p>Type English, Hebrew, or transliteration.</p>
+        <input id="quizInput" placeholder="Example: Madda / Knowledge / מדע" />
+        <div class="tabs" style="justify-content:center; margin-top:14px;">
+          <button class="active" onclick="checkAnswer()">Check</button>
+          <button onclick="nextQuiz()">Next</button>
+        </div>
+        <div id="quizFeedback"></div>
+        <p id="scoreText">Score: 0/0</p>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const books = [
+      { n: 1, hebrew: "ספר המדע", shortHebrew: "מדע", english: "Knowledge", translit: "Madda" },
+      { n: 2, hebrew: "ספר אהבה", shortHebrew: "אהבה", english: "Love", translit: "Ahavah" },
+      { n: 3, hebrew: "ספר זמנים", shortHebrew: "זמנים", english: "Times", translit: "Zemanim" },
+      { n: 4, hebrew: "ספר נשים", shortHebrew: "נשים", english: "Women", translit: "Nashim" },
+      { n: 5, hebrew: "ספר קדושה", shortHebrew: "קדושה", english: "Holiness", translit: "Kedushah" },
+      { n: 6, hebrew: "ספר הפלאה", shortHebrew: "הפלאה", english: "Utterances", translit: "Haflaah" },
+      { n: 7, hebrew: "ספר זרעים", shortHebrew: "זרעים", english: "Seeds", translit: "Zeraim" },
+      { n: 8, hebrew: "ספר עבודה", shortHebrew: "עבודה", english: "Temple Service", translit: "Avodah" },
+      { n: 9, hebrew: "ספר קרבנות", shortHebrew: "קרבנות", english: "Offerings", translit: "Korbanot" },
+      { n: 10, hebrew: "ספר טהרה", shortHebrew: "טהרה", english: "Purity", translit: "Taharah" },
+      { n: 11, hebrew: "ספר נזיקין", shortHebrew: "נזיקין", english: "Damages", translit: "Nezikin" },
+      { n: 12, hebrew: "ספר קנין", shortHebrew: "קנין", english: "Acquisition", translit: "Kinyan" },
+      { n: 13, hebrew: "ספר משפטים", shortHebrew: "משפטים", english: "Judgments", translit: "Mishpatim" },
+      { n: 14, hebrew: "ספר שופטים", shortHebrew: "שופטים", english: "Judges", translit: "Shoftim" }
+    ];
+
+    let flashIndex = 0, revealed = false, quizIndex = 0, score = 0, asked = 0;
+
+    function normalize(value) {
+      return String(value || "").toLowerCase().replace(/^sefer\s+/i, "").replace(/[׳’'\-]/g, "").replace(/[^a-zא-ת0-9]/g, "").trim();
+    }
+
+    function renderLearn() {
+      document.getElementById("learn").innerHTML = '<div class="grid">' + books.map(book => `
+        <div class="card">
+          <div class="num">${book.n}</div>
+          <div class="heb">${book.hebrew}</div>
+          <div class="eng">${book.english}</div>
+          <div class="trans">${book.translit}</div>
+        </div>`).join("") + '</div>';
+    }
+
+    function showTab(tab) {
+      ["learn","flash","quiz"].forEach(id => document.getElementById(id).classList.add("hidden"));
+      ["learnBtn","flashBtn","quizBtn"].forEach(id => document.getElementById(id).classList.remove("active"));
+      document.getElementById(tab).classList.remove("hidden");
+      document.getElementById(tab + "Btn").classList.add("active");
+    }
+
+    function renderFlash() {
+      const book = books[flashIndex];
+      document.getElementById("flashNum").textContent = book.n;
+      document.getElementById("flashHeb").textContent = book.hebrew;
+      document.getElementById("flashEng").textContent = book.english;
+      document.getElementById("flashTrans").textContent = book.translit;
+      document.getElementById("flashReveal").classList.toggle("hidden", !revealed);
+      document.getElementById("flashHint").classList.toggle("hidden", revealed);
+    }
+
+    function nextCard() { flashIndex = (flashIndex + 1) % books.length; revealed = false; renderFlash(); }
+    function prevCard() { flashIndex = (flashIndex - 1 + books.length) % books.length; revealed = false; renderFlash(); }
+    function toggleReveal() { revealed = !revealed; renderFlash(); }
+
+    function renderQuiz() {
+      document.getElementById("quizNum").textContent = books[quizIndex].n;
+      document.getElementById("quizInput").value = "";
+      document.getElementById("quizFeedback").innerHTML = "";
+      document.getElementById("scoreText").textContent = `Score: ${score}/${asked}`;
+    }
+
+    function checkAnswer() {
+      const book = books[quizIndex];
+      const guess = normalize(document.getElementById("quizInput").value);
+      const answers = [book.hebrew, book.shortHebrew, book.english, book.translit].map(normalize);
+      const correct = answers.includes(guess);
+      asked++;
+      if (correct) score++;
+      document.getElementById("quizFeedback").innerHTML = `
+        <div class="${correct ? "good" : "bad"}">
+          <strong>${correct ? "Correct." : "Not quite."}</strong><br />
+          Answer: <span dir="rtl"><strong>${book.hebrew}</strong></span> — ${book.english} / ${book.translit}
+        </div>`;
+      document.getElementById("scoreText").textContent = `Score: ${score}/${asked}`;
+    }
+
+    function nextQuiz() { quizIndex = (quizIndex + 1) % books.length; renderQuiz(); }
+
+    renderLearn();
+    renderFlash();
+    renderQuiz();
+  </script>
+</body>
+</html>
