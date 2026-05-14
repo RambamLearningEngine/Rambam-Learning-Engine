@@ -27,6 +27,17 @@
     .good { background:#f0fdf4; border:1px solid #86efac; border-radius:14px; padding:12px; margin-top:12px; }
     .bad { background:#fef2f2; border:1px solid #fca5a5; border-radius:14px; padding:12px; margin-top:12px; }
     .hidden { display:none; }
+    .order-list { display:grid; gap:10px; margin-top:12px; }
+    .order-item { display:flex; align-items:center; justify-content:space-between; gap:12px; cursor:grab; user-select:none; }
+    .order-item:active { cursor:grabbing; }
+    .dragging { opacity:.45; }
+    .drag-over { outline:3px solid #94a3b8; }
+    .position { width:36px; height:36px; border-radius:999px; background:#e2e8f0; display:flex; align-items:center; justify-content:center; font-weight:900; flex-shrink:0; }
+    .order-left { display:flex; align-items:center; gap:12px; }
+    .correct { border-color:#22c55e; background:#f0fdf4; }
+    .wrong { border-color:#ef4444; background:#fef2f2; }
+    .handle { color:#64748b; font-weight:900; letter-spacing:2px; }
+    .small { font-size:13px; color:#64748b; }
   </style>
 </head>
 <body>
@@ -41,6 +52,8 @@
       <button id="learnBtn" class="active" onclick="showTab('learn')">Learn</button>
       <button id="flashBtn" onclick="showTab('flash')">Flashcards</button>
       <button id="quizBtn" onclick="showTab('quiz')">Name Quiz</button>
+      <button id="numberBtn" onclick="showTab('number')">Number Drill</button>
+      <button id="orderBtn" onclick="showTab('order')">Order Drill</button>
     </div>
 
     <section id="learn"></section>
@@ -76,6 +89,30 @@
         <p id="scoreText">Score: 0/0</p>
       </div>
     </section>
+
+    <section id="number" class="hidden">
+      <div class="card center-card">
+        <div class="num" id="numberPrompt"></div>
+        <h2>Which sefer is this number?</h2>
+        <div id="numberOptions" class="grid"></div>
+        <div id="numberFeedback"></div>
+        <p id="streakText">Streak: 0</p>
+      </div>
+    </section>
+
+    <section id="order" class="hidden">
+      <div class="card">
+        <h2 style="margin-top:0;">Order Drill</h2>
+        <p>Drag the sefarim into the correct order, then press Check Order.</p>
+        <div class="tabs">
+          <button onclick="shuffleOrder()">Shuffle</button>
+          <button class="active" onclick="checkOrder()">Check Order</button>
+          <button onclick="showCorrectOrder()">Show Correct Order</button>
+        </div>
+        <div id="orderFeedback"></div>
+        <div id="orderList" class="order-list"></div>
+      </div>
+    </section>
   </div>
 
   <script>
@@ -97,9 +134,17 @@
     ];
 
     let flashIndex = 0, revealed = false, quizIndex = 0, score = 0, asked = 0;
+    let numberPrompt = books[0], numberStreak = 0;
+    let orderItems = shuffle([...books]);
+    let draggedIndex = null;
+    let orderChecked = false;
 
     function normalize(value) {
       return String(value || "").toLowerCase().replace(/^sefer\s+/i, "").replace(/[׳’'\-]/g, "").replace(/[^a-zא-ת0-9]/g, "").trim();
+    }
+
+    function shuffle(arr) {
+      return [...arr].sort(() => Math.random() - 0.5);
     }
 
     function renderLearn() {
@@ -113,8 +158,8 @@
     }
 
     function showTab(tab) {
-      ["learn","flash","quiz"].forEach(id => document.getElementById(id).classList.add("hidden"));
-      ["learnBtn","flashBtn","quizBtn"].forEach(id => document.getElementById(id).classList.remove("active"));
+      ["learn","flash","quiz","number","order"].forEach(id => document.getElementById(id).classList.add("hidden"));
+      ["learnBtn","flashBtn","quizBtn","numberBtn","orderBtn"].forEach(id => document.getElementById(id).classList.remove("active"));
       document.getElementById(tab).classList.remove("hidden");
       document.getElementById(tab + "Btn").classList.add("active");
     }
@@ -157,9 +202,140 @@
 
     function nextQuiz() { quizIndex = (quizIndex + 1) % books.length; renderQuiz(); }
 
+    function newNumberPrompt() {
+      numberPrompt = books[Math.floor(Math.random() * books.length)];
+      renderNumberDrill();
+    }
+
+    function renderNumberDrill() {
+      document.getElementById("numberPrompt").textContent = numberPrompt.n;
+      document.getElementById("numberFeedback").innerHTML = "";
+      document.getElementById("streakText").textContent = `Streak: ${numberStreak}`;
+      const wrong = shuffle(books.filter(book => book.n !== numberPrompt.n)).slice(0, 3);
+      const options = shuffle([numberPrompt, ...wrong]);
+
+      document.getElementById("numberOptions").innerHTML = options.map(book => `
+        <button class="card" style="text-align:left;" onclick="chooseNumber(${book.n})">
+          <div class="heb">${book.hebrew}</div>
+          <div class="eng">${book.english}</div>
+          <div class="trans">${book.translit}</div>
+        </button>
+      `).join("");
+    }
+
+    function chooseNumber(bookNumber) {
+      const correct = bookNumber === numberPrompt.n;
+      numberStreak = correct ? numberStreak + 1 : 0;
+      document.getElementById("numberFeedback").innerHTML = `
+        <div class="${correct ? "good" : "bad"}">
+          <strong>${correct ? "Correct." : "Wrong."}</strong>
+          ${correct ? "" : `#${numberPrompt.n} is ${numberPrompt.translit}.`}
+          <br><br>
+          <button class="active" onclick="newNumberPrompt()">Next</button>
+        </div>
+      `;
+      document.getElementById("streakText").textContent = `Streak: ${numberStreak}`;
+    }
+
+    function renderOrder() {
+      const list = document.getElementById("orderList");
+      list.innerHTML = orderItems.map((book, index) => {
+        const isCorrect = orderChecked && book.n === index + 1;
+        const isWrong = orderChecked && book.n !== index + 1;
+        return `
+          <div
+            class="card order-item ${isCorrect ? "correct" : ""} ${isWrong ? "wrong" : ""}"
+            draggable="true"
+            data-index="${index}"
+            ondragstart="dragStart(event)"
+            ondragover="dragOver(event)"
+            ondragleave="dragLeave(event)"
+            ondrop="dropItem(event)"
+            ondragend="dragEnd(event)"
+          >
+            <div class="order-left">
+              <div class="position">${index + 1}</div>
+              <div>
+                <div class="heb">${book.hebrew}</div>
+                <div class="small">${book.english} / ${book.translit}</div>
+                ${isWrong ? `<div class="small" style="color:#dc2626;">Actually belongs at #${book.n}</div>` : ""}
+              </div>
+            </div>
+            <div class="handle">☰</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function dragStart(event) {
+      draggedIndex = Number(event.currentTarget.dataset.index);
+      event.currentTarget.classList.add("dragging");
+      event.dataTransfer.effectAllowed = "move";
+    }
+
+    function dragOver(event) {
+      event.preventDefault();
+      event.currentTarget.classList.add("drag-over");
+    }
+
+    function dragLeave(event) {
+      event.currentTarget.classList.remove("drag-over");
+    }
+
+    function dropItem(event) {
+      event.preventDefault();
+      const targetIndex = Number(event.currentTarget.dataset.index);
+      event.currentTarget.classList.remove("drag-over");
+
+      if (draggedIndex === null || draggedIndex === targetIndex) return;
+
+      const next = [...orderItems];
+      const [draggedItem] = next.splice(draggedIndex, 1);
+      next.splice(targetIndex, 0, draggedItem);
+      orderItems = next;
+      draggedIndex = null;
+      orderChecked = false;
+      document.getElementById("orderFeedback").innerHTML = "";
+      renderOrder();
+    }
+
+    function dragEnd(event) {
+      event.currentTarget.classList.remove("dragging");
+      document.querySelectorAll(".drag-over").forEach(item => item.classList.remove("drag-over"));
+    }
+
+    function shuffleOrder() {
+      orderItems = shuffle([...books]);
+      orderChecked = false;
+      document.getElementById("orderFeedback").innerHTML = "";
+      renderOrder();
+    }
+
+    function checkOrder() {
+      orderChecked = true;
+      const correctCount = orderItems.filter((book, index) => book.n === index + 1).length;
+      document.getElementById("orderFeedback").innerHTML = `
+        <div class="${correctCount === 14 ? "good" : "bad"}">
+          <strong>${correctCount === 14 ? "Perfect order." : correctCount + "/14 are in the correct position."}</strong>
+        </div>
+      `;
+      renderOrder();
+    }
+
+    function showCorrectOrder() {
+      orderItems = [...books];
+      orderChecked = true;
+      document.getElementById("orderFeedback").innerHTML = `
+        <div class="good"><strong>Correct order shown.</strong></div>
+      `;
+      renderOrder();
+    }
+
     renderLearn();
     renderFlash();
     renderQuiz();
+    newNumberPrompt();
+    renderOrder();
   </script>
 </body>
 </html>
