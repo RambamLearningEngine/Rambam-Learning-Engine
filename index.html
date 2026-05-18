@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,52 +31,58 @@ button.active{background:#0f172a;color:white;border-color:#0f172a}.grid{display:
 <button id="quizBtn" onclick="showTab('quiz')">Name Quiz</button>
 <button id="numberBtn" onclick="showTab('number')">Number Drill</button>
 <button id="matchBtn" onclick="showTab('match')">Picture Match</button>
+<button id="themeBtn" onclick="showTab('theme')">Theme Drill</button>
 <button id="orderBtn" onclick="showTab('order')">Order Drill</button>
 </div>
 <section id="learn"></section>
 <section id="flash" class="hidden"><div class="card center-card"><div class="num" id="flashNum"></div><img id="flashImg" class="big-img"><div class="big-heb" id="flashHeb"></div><div id="flashReveal" class="hidden"><div class="eng" id="flashEng"></div><div class="trans" id="flashTrans"></div></div><p id="flashHint">Look at the picture and try to remember the sefer, then press reveal.</p></div><div class="tabs" style="justify-content:center;margin-top:14px"><button onclick="prevCard()">Previous</button><button class="active" onclick="toggleReveal()">Reveal / Hide</button><button onclick="nextCard()">Next</button></div></section>
-<section id="quiz" class="hidden"><div class="card center-card"><div class="num" id="quizNum"></div><img id="quizImg" class="big-img"><h2>What is this sefer?</h2><input id="quizInput" placeholder="Example: Madda / Knowledge / מדע"><div class="tabs" style="justify-content:center;margin-top:14px"><button class="active" onclick="checkAnswer()">Check</button><button onclick="nextQuiz()">Next</button><button onclick="shuffleNameQuiz()">Shuffle Quiz</button></div><div id="quizFeedback"></div><p id="scoreText">Score: 0/0</p></div></section>
+<section id="quiz" class="hidden"><div class="card center-card"><div class="num" id="quizNum"></div><img id="quizImg" class="big-img"><h2>What is this sefer?</h2><input id="quizInput" placeholder="Example: Madda / Knowledge / מדע"><div class="tabs" style="justify-content:center;margin-top:14px"><button class="active" onclick="checkAnswer()">Check</button><button onclick="nextQuiz()">Next</button></div><div id="quizFeedback"></div><p id="scoreText">Score: 0/0</p></div></section>
 <section id="number" class="hidden"><div class="card center-card"><div class="num" id="numberPrompt"></div><h2>Which sefer is this number?</h2><div id="numberOptions" class="grid"></div><div id="numberFeedback"></div><p id="streakText">Streak: 0</p></div></section>
 <section id="match" class="hidden"><div class="card center-card"><h2>Match Picture to Sefer</h2><p>Look at the picture and choose the correct sefer name.</p><img id="matchImg" class="big-img"><div id="matchOptions" class="grid"></div><div id="matchFeedback"></div><p id="matchScoreText">Score: 0/0 · Streak: 0</p></div></section>
+<section id="theme" class="hidden"><div class="card center-card"><div class="num" id="themeNum"></div><img id="themeImg" class="big-img"><h2 id="themeQuestion">What is the main theme of this sefer?</h2><div id="themeOptions" class="grid"></div><div id="themeFeedback"></div><p id="themeScoreText">Score: 0/0 · Streak: 0</p></div></section>
 <section id="order" class="hidden"><div class="card"><h2>Order Drill</h2><p>Drag the sefarim into the correct order, then press Check Order.</p><div class="tabs"><button onclick="shuffleOrder()">Shuffle</button><button class="active" onclick="checkOrder()">Check Order</button><button onclick="showCorrectOrder()">Show Correct Order</button></div><div id="orderFeedback"></div><div id="orderList" class="order-list"></div></div></section>
 </div>
 <script>
 const books=[
-{n:1,hebrew:"ספר המדע",shortHebrew:"מדע",english:"Knowledge",translit:"Madda",img:"madda.jpeg"},
-{n:2,hebrew:"ספר אהבה",shortHebrew:"אהבה",english:"Love",translit:"Ahavah",img:"ahava.jpg"},
-{n:3,hebrew:"ספר זמנים",shortHebrew:"זמנים",english:"Times",translit:"Zemanim",img:"zmanim.jpg"},
-{n:4,hebrew:"ספר נשים",shortHebrew:"נשים",english:"Women",translit:"Nashim",img:"nashim.jpg"},
-{n:5,hebrew:"ספר קדושה",shortHebrew:"קדושה",english:"Holiness",translit:"Kedushah",img:"kedusha.jpg"},
-{n:6,hebrew:"ספר הפלאה",shortHebrew:"הפלאה",english:"Utterances",translit:"Haflaah",img:"haflaah.jpg"},
-{n:7,hebrew:"ספר זרעים",shortHebrew:"זרעים",english:"Seeds",translit:"Zeraim",img:"zeraim.jpg"},
-{n:8,hebrew:"ספר עבודה",shortHebrew:"עבודה",english:"Temple Service",translit:"Avodah",img:"avodah.jpg"},
-{n:9,hebrew:"ספר קרבנות",shortHebrew:"קרבנות",english:"Offerings",translit:"Korbanot",img:"korbanos.jpg"},
-{n:10,hebrew:"ספר טהרה",shortHebrew:"טהרה",english:"Purity",translit:"Taharah",img:"taharah.jpg"},
-{n:11,hebrew:"ספר נזיקין",shortHebrew:"נזיקין",english:"Damages",translit:"Nezikin",img:"nezikin.jpg"},
-{n:12,hebrew:"ספר קנין",shortHebrew:"קנין",english:"Acquisition",translit:"Kinyan",img:"kinyan.jpg"},
-{n:13,hebrew:"ספר משפטים",shortHebrew:"משפטים",english:"Judgments",translit:"Mishpatim",img:"mishpatim.png"},
-{n:14,hebrew:"ספר שופטים",shortHebrew:"שופטים",english:"Judges",translit:"Shoftim",img:"shoftim.jpg"}];
-let flashIndex=0,revealed=false,quizIndex=0,quizBooks=shuffle([...books]),score=0,asked=0,numberPrompt=books[0],numberStreak=0,matchPrompt=books[0],matchScore=0,matchAsked=0,matchStreak=0,orderItems=shuffle([...books]),draggedIndex=null,orderChecked=false;
+{n:1,hebrew:"ספר המדע",shortHebrew:"מדע",english:"Knowledge",translit:"Madda",theme:"Foundations of belief, character, Torah study, avoiding idolatry, and teshuvah",img:"madda.jpeg"},
+{n:2,hebrew:"ספר אהבה",shortHebrew:"אהבה",english:"Love",translit:"Ahavah",theme:"Daily mitzvot that express love and service of Hashem",img:"ahava.jpg"},
+{n:3,hebrew:"ספר זמנים",shortHebrew:"זמנים",english:"Times",translit:"Zemanim",theme:"Shabbat, festivals, fasts, Chanukah, and Purim",img:"zmanim.jpg"},
+{n:4,hebrew:"ספר נשים",shortHebrew:"נשים",english:"Women",translit:"Nashim",theme:"Marriage, divorce, yibbum, chalitzah, and family law",img:"nashim.jpg"},
+{n:5,hebrew:"ספר קדושה",shortHebrew:"קדושה",english:"Holiness",translit:"Kedushah",theme:"Forbidden relationships, forbidden foods, and holiness of conduct",img:"kedusha.jpg"},
+{n:6,hebrew:"ספר הפלאה",shortHebrew:"הפלאה",english:"Utterances",translit:"Haflaah",theme:"Vows, oaths, nezirut, and the power of speech",img:"haflaah.jpg"},
+{n:7,hebrew:"ספר זרעים",shortHebrew:"זרעים",english:"Seeds",translit:"Zeraim",theme:"Agricultural mitzvot, tithes, charity from produce, and the Land",img:"zeraim.jpg"},
+{n:8,hebrew:"ספר עבודה",shortHebrew:"עבודה",english:"Temple Service",translit:"Avodah",theme:"The Beit HaMikdash and its service",img:"avodah.jpg"},
+{n:9,hebrew:"ספר קרבנות",shortHebrew:"קרבנות",english:"Offerings",translit:"Korbanot",theme:"Sacrifices and offerings",img:"korbanos.jpg"},
+{n:10,hebrew:"ספר טהרה",shortHebrew:"טהרה",english:"Purity",translit:"Taharah",theme:"Purity and impurity laws",img:"taharah.jpg"},
+{n:11,hebrew:"ספר נזיקין",shortHebrew:"נזיקין",english:"Damages",translit:"Nezikin",theme:"Damages, injury, theft, robbery, and legal responsibility",img:"nezikin.jpg"},
+{n:12,hebrew:"ספר קנין",shortHebrew:"קנין",english:"Acquisition",translit:"Kinyan",theme:"Acquisition, property, sales, gifts, neighbors, and agents",img:"kinyan.jpg"},
+{n:13,hebrew:"ספר משפטים",shortHebrew:"משפטים",english:"Judgments",translit:"Mishpatim",theme:"Civil law, loans, claims, deposits, workers, and inheritance",img:"mishpatim.png"},
+{n:14,hebrew:"ספר שופטים",shortHebrew:"שופטים",english:"Judges",translit:"Shoftim",theme:"Judges, courts, kings, war, Sanhedrin, and public leadership",img:"shoftim.jpg"}];
+let flashIndex=0,revealed=false,quizIndex=0,quizBooks=shuffle([...books]),score=0,asked=0,numberPrompt=books[0],numberStreak=0,matchPrompt=books[0],matchScore=0,matchAsked=0,matchStreak=0,themePrompt=books[0],themeScore=0,themeAsked=0,themeStreak=0,orderItems=shuffle([...books]),draggedIndex=null,orderChecked=false;
 function normalize(v){return String(v||"").toLowerCase().replace(/^sefer\s+/i,"").replace(/[׳’'\-]/g,"").replace(/[^a-zא-ת0-9]/g,"").trim()}
 function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
-function showTab(t){["learn","flash","quiz","number","match","order"].forEach(id=>document.getElementById(id).classList.add("hidden"));["learnBtn","flashBtn","quizBtn","numberBtn","matchBtn","orderBtn"].forEach(id=>document.getElementById(id).classList.remove("active"));document.getElementById(t).classList.remove("hidden");document.getElementById(t+"Btn").classList.add("active")}
+function showTab(t){["learn","flash","quiz","number","match","theme","order"].forEach(id=>document.getElementById(id).classList.add("hidden"));["learnBtn","flashBtn","quizBtn","numberBtn","matchBtn","themeBtn","orderBtn"].forEach(id=>document.getElementById(id).classList.remove("active"));document.getElementById(t).classList.remove("hidden");document.getElementById(t+"Btn").classList.add("active")}
 function renderLearn(){document.getElementById("learn").innerHTML='<div class="grid">'+books.map(b=>`<div class="card"><div class="num">${b.n}</div><img class="card-img" src="${b.img}"><div class="heb">${b.hebrew}</div><div class="eng">${b.english}</div><div class="trans">${b.translit}</div></div>`).join("")+'</div>'}
 function renderFlash(){let b=books[flashIndex];flashNum.textContent=b.n;flashImg.src=b.img;flashHeb.textContent=b.hebrew;flashEng.textContent=b.english;flashTrans.textContent=b.translit;flashReveal.classList.toggle("hidden",!revealed);flashHint.classList.toggle("hidden",revealed)}
 function nextCard(){flashIndex=(flashIndex+1)%books.length;revealed=false;renderFlash()} function prevCard(){flashIndex=(flashIndex-1+books.length)%books.length;revealed=false;renderFlash()} function toggleReveal(){revealed=!revealed;renderFlash()}
 function renderQuiz(){let b=quizBooks[quizIndex];quizNum.textContent=b.n;quizImg.src=b.img;quizInput.value="";quizFeedback.innerHTML="";scoreText.textContent=`Score: ${score}/${asked}`}
 function checkAnswer(){let b=quizBooks[quizIndex],g=normalize(quizInput.value),ans=[b.hebrew,b.shortHebrew,b.english,b.translit].map(normalize),ok=ans.includes(g);asked++;if(ok)score++;quizFeedback.innerHTML=`<div class="${ok?"good":"bad"}"><strong>${ok?"Correct.":"Not quite."}</strong><br>Answer: <span dir="rtl"><strong>${b.hebrew}</strong></span> — ${b.english} / ${b.translit}</div>`;scoreText.textContent=`Score: ${score}/${asked}`}
-function nextQuiz(){quizIndex++;if(quizIndex>=quizBooks.length){quizBooks=shuffle([...books]);quizIndex=0}renderQuiz()}function shuffleNameQuiz(){quizBooks=shuffle([...books]);quizIndex=0;renderQuiz()}
+function nextQuiz(){   quizIndex++;    if(quizIndex >= quizBooks.length){     quizBooks = shuffle([...books]);     quizIndex = 0;   }    renderQuiz(); }
 function newNumberPrompt(){numberPrompt=books[Math.floor(Math.random()*books.length)];renderNumberDrill()}
 function renderNumberDrill(){numberPrompt.textContent;document.getElementById("numberPrompt").textContent=numberPrompt.n;numberFeedback.innerHTML="";streakText.textContent=`Streak: ${numberStreak}`;let opts=shuffle([numberPrompt,...shuffle(books.filter(b=>b.n!==numberPrompt.n)).slice(0,3)]);numberOptions.innerHTML=opts.map(b=>`<button class="card" onclick="chooseNumber(${b.n})"><img class="card-img" src="${b.img}"><div class="heb">${b.hebrew}</div><div class="eng">${b.english}</div><div class="trans">${b.translit}</div></button>`).join("")}
 function chooseNumber(n){let ok=n===numberPrompt.n;numberStreak=ok?numberStreak+1:0;numberFeedback.innerHTML=`<div class="${ok?"good":"bad"}"><strong>${ok?"Correct.":"Wrong."}</strong> ${ok?"":`#${numberPrompt.n} is ${numberPrompt.translit}.`}<br><br><button class="active" onclick="newNumberPrompt()">Next</button></div>`;streakText.textContent=`Streak: ${numberStreak}`}
 function newMatchPrompt(){matchPrompt=books[Math.floor(Math.random()*books.length)];renderPictureMatch()}
 function renderPictureMatch(){matchImg.src=matchPrompt.img;matchFeedback.innerHTML="";matchScoreText.textContent=`Score: ${matchScore}/${matchAsked} · Streak: ${matchStreak}`;let opts=shuffle([matchPrompt,...shuffle(books.filter(b=>b.n!==matchPrompt.n)).slice(0,3)]);matchOptions.innerHTML=opts.map(b=>`<button class="card" onclick="chooseMatch(${b.n})"><div class="heb">${b.hebrew}</div><div class="eng">${b.english}</div><div class="trans">${b.translit}</div></button>`).join("")}
 function chooseMatch(n){let ok=n===matchPrompt.n;matchAsked++;if(ok){matchScore++;matchStreak++}else{matchStreak=0}matchFeedback.innerHTML=`<div class="${ok?"good":"bad"}"><strong>${ok?"Correct.":"Wrong."}</strong><br>This picture is <span dir="rtl"><strong>${matchPrompt.hebrew}</strong></span> — ${matchPrompt.english} / ${matchPrompt.translit}.<br><br><button class="active" onclick="newMatchPrompt()">Next Picture</button></div>`;matchScoreText.textContent=`Score: ${matchScore}/${matchAsked} · Streak: ${matchStreak}`}
+function newThemePrompt(){themePrompt=books[Math.floor(Math.random()*books.length)];renderThemeDrill()}
+function renderThemeDrill(){themeNum.textContent=themePrompt.n;themeImg.src=themePrompt.img;themeQuestion.textContent=`What is the main theme of ${themePrompt.translit}?`;themeFeedback.innerHTML="";themeScoreText.textContent=`Score: ${themeScore}/${themeAsked} · Streak: ${themeStreak}`;let opts=shuffle([themePrompt,...shuffle(books.filter(b=>b.n!==themePrompt.n)).slice(0,3)]);themeOptions.innerHTML=opts.map(b=>`<button class="card" onclick="chooseTheme(${b.n})"><div class="eng">${b.theme}</div></button>`).join("")}
+function chooseTheme(n){let ok=n===themePrompt.n;themeAsked++;if(ok){themeScore++;themeStreak++}else{themeStreak=0}themeFeedback.innerHTML=`<div class="${ok?"good":"bad"}"><strong>${ok?"Correct.":"Wrong."}</strong><br><span dir="rtl"><strong>${themePrompt.hebrew}</strong></span> — ${themePrompt.english} / ${themePrompt.translit}<br><br><strong>Main theme:</strong> ${themePrompt.theme}<br><br><button class="active" onclick="newThemePrompt()">Next Theme</button></div>`;themeScoreText.textContent=`Score: ${themeScore}/${themeAsked} · Streak: ${themeStreak}`}
+
 function renderOrder(){orderList.innerHTML=orderItems.map((b,i)=>{let c=orderChecked&&b.n===i+1,w=orderChecked&&b.n!==i+1;return `<div class="card order-item ${c?"correct":""} ${w?"wrong":""}" draggable="true" data-index="${i}" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropItem(event)" ondragend="dragEnd(event)"><div class="order-left"><div class="position">${i+1}</div><img class="small-img" src="${b.img}"><div><div class="heb">${b.hebrew}</div><div class="small">${b.english} / ${b.translit}</div>${w?`<div class="small" style="color:#dc2626">Actually belongs at #${b.n}</div>`:""}</div></div><div class="handle">☰</div></div>`}).join("")}
 function dragStart(e){draggedIndex=Number(e.currentTarget.dataset.index);e.currentTarget.classList.add("dragging");e.dataTransfer.effectAllowed="move"}function dragOver(e){e.preventDefault();e.currentTarget.classList.add("drag-over")}function dragLeave(e){e.currentTarget.classList.remove("drag-over")}
 function dropItem(e){e.preventDefault();let target=Number(e.currentTarget.dataset.index);e.currentTarget.classList.remove("drag-over");if(draggedIndex===null||draggedIndex===target)return;let next=[...orderItems];let [it]=next.splice(draggedIndex,1);next.splice(target,0,it);orderItems=next;draggedIndex=null;orderChecked=false;orderFeedback.innerHTML="";renderOrder()}function dragEnd(e){e.currentTarget.classList.remove("dragging");document.querySelectorAll(".drag-over").forEach(x=>x.classList.remove("drag-over"))}
 function shuffleOrder(){orderItems=shuffle([...books]);orderChecked=false;orderFeedback.innerHTML="";renderOrder()}function checkOrder(){orderChecked=true;let count=orderItems.filter((b,i)=>b.n===i+1).length;orderFeedback.innerHTML=`<div class="${count===14?"good":"bad"}"><strong>${count===14?"Perfect order.":count+"/14 are in the correct position."}</strong></div>`;renderOrder()}function showCorrectOrder(){orderItems=[...books];orderChecked=true;orderFeedback.innerHTML=`<div class="good"><strong>Correct order shown.</strong></div>`;renderOrder()}
-renderLearn();renderFlash();renderQuiz();newNumberPrompt();newMatchPrompt();renderOrder();
+renderLearn();renderFlash();renderQuiz();newNumberPrompt();newMatchPrompt();newThemePrompt();renderOrder();
 </script>
 </body>
 </html>
