@@ -56,7 +56,7 @@ const books=[
 {n:12,hebrew:"ספר קנין",shortHebrew:"קנין",english:"Acquisition",translit:"Kinyan",img:"kinyan.jpg"},
 {n:13,hebrew:"ספר משפטים",shortHebrew:"משפטים",english:"Judgments",translit:"Mishpatim",img:"mishpatim.png"},
 {n:14,hebrew:"ספר שופטים",shortHebrew:"שופטים",english:"Judges",translit:"Shoftim",img:"shoftim.jpg"}];
-let flashIndex=0,revealed=false,quizIndex=0,score=0,asked=0,numberPrompt=books[0],numberStreak=0,matchPrompt=books[0],matchScore=0,matchAsked=0,matchStreak=0,orderItems=shuffle([...books]),draggedIndex=null,orderChecked=false;
+let flashIndex=0, revealed=false, quizIndex=0, quizBooks=shuffle([...books]), score=0, asked=0, numberPrompt=books[0], numberStreak=0, matchPrompt=books[0], matchScore=0, matchAsked=0, matchStreak=0, orderItems=shuffle([...books]), draggedIndex=null, orderChecked=false;
 function normalize(v){return String(v||"").toLowerCase().replace(/^sefer\s+/i,"").replace(/[׳’'\-]/g,"").replace(/[^a-zא-ת0-9]/g,"").trim()}
 function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
 function showTab(t){["learn","flash","quiz","number","match","order"].forEach(id=>document.getElementById(id).classList.add("hidden"));["learnBtn","flashBtn","quizBtn","numberBtn","matchBtn","orderBtn"].forEach(id=>document.getElementById(id).classList.remove("active"));document.getElementById(t).classList.remove("hidden");document.getElementById(t+"Btn").classList.add("active")}
