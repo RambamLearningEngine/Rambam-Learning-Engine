@@ -20,20 +20,82 @@ button.active{background:#0f172a;color:white;border-color:#0f172a}.grid{display:
 .hidden{display:none}.order-list{display:grid;gap:10px;margin-top:12px}.order-item{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:grab;user-select:none}
 .dragging{opacity:.45}.drag-over{outline:3px solid #94a3b8}.position{width:36px;height:36px;border-radius:999px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0}
 .order-left{display:flex;align-items:center;gap:12px}.correct{border-color:#22c55e;background:#f0fdf4}.wrong{border-color:#ef4444;background:#fef2f2}.handle{color:#64748b;font-weight:900;letter-spacing:2px}
+.section-title{font-size:24px;font-weight:900;margin:22px 0 10px}.module-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-bottom:20px}.module-card{background:white;border:1px solid #e2e8f0;border-radius:20px;padding:18px;box-shadow:0 1px 2px rgba(15,23,42,.06);cursor:pointer;text-align:left}.module-card:hover{border-color:#0f172a;transform:translateY(-1px)}.module-card.locked{opacity:.62;cursor:not-allowed}.module-kicker{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#64748b;font-weight:900}.module-title{font-size:22px;font-weight:900;margin:8px 0}.module-desc{color:#64748b;line-height:1.45;margin:0}.backbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}.pill{display:inline-block;background:#e2e8f0;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:800;color:#334155;margin-top:10px}
 </style>
 </head>
 <body>
 <div class="wrap">
-<header><div class="hebrew-title">י״ד ספרי משנה תורה</div><h1>Rambam Learning Engine</h1><p>Learn the 14 books of Mishneh Torah using names, numbers, order, and visual memory images.</p></header>
-<div class="tabs">
-<button id="learnBtn" class="active" onclick="showTab('learn')">Learn</button>
-<button id="flashBtn" onclick="showTab('flash')">Flashcards</button>
-<button id="quizBtn" onclick="showTab('quiz')">Name Quiz</button>
-<button id="numberBtn" onclick="showTab('number')">Number Drill</button>
-<button id="matchBtn" onclick="showTab('match')">Picture Match</button>
-<button id="themeBtn" onclick="showTab('theme')">Theme Drill</button>
-<button id="orderBtn" onclick="showTab('order')">Order Drill</button>
-</div>
+<header><div class="hebrew-title">י״ד ספרי משנה תורה</div><h1>Rambam Learning Engine</h1><p>Master the structure of Mishneh Torah through visual memory, retrieval practice, hierarchy, sequencing, and conceptual mapping.</p></header>
+<section id="home">
+  <h2 class="section-title">Foundations</h2>
+  <div class="module-grid">
+    <div class="module-card" onclick="enterModule('books14')">
+      <div class="module-kicker">Level 1</div>
+      <div class="module-title">14 Books of Mishneh Torah</div>
+      <p class="module-desc">Learn the names, order, themes, numbers, and visual anchors of the 14 sefarim.</p>
+      <span class="pill">Available now</span>
+    </div>
+    <div class="module-card locked">
+      <div class="module-kicker">Level 2</div>
+      <div class="module-title">Hilchot Within Each Sefer</div>
+      <p class="module-desc">Learn the names and number/order of the halachot inside each sefer. We will start with Mada.</p>
+      <span class="pill">Next build</span>
+    </div>
+    <div class="module-card locked">
+      <div class="module-kicker">Level 3</div>
+      <div class="module-title">Perakim Within Each Hilchah</div>
+      <p class="module-desc">Learn chapter counts, chapter themes, and internal progression.</p>
+      <span class="pill">Future</span>
+    </div>
+  </div>
+
+  <h2 class="section-title">Mitzvah Systems</h2>
+  <div class="module-grid">
+    <div class="module-card locked">
+      <div class="module-kicker">Mishneh Torah Map</div>
+      <div class="module-title">Mitzvot in Rambam Order</div>
+      <p class="module-desc">Learn mitzvot by sefer, Hilchah, and short memory trigger.</p>
+      <span class="pill">Future</span>
+    </div>
+    <div class="module-card locked">
+      <div class="module-kicker">Chumash Map</div>
+      <div class="module-title">Mitzvot in Torah Order</div>
+      <p class="module-desc">Learn mitzvot by Chumash, parsha, and pasuk/source.</p>
+      <span class="pill">Future</span>
+    </div>
+  </div>
+
+  <h2 class="section-title">Mastery Tools</h2>
+  <div class="module-grid">
+    <div class="module-card locked">
+      <div class="module-kicker">Memory</div>
+      <div class="module-title">Relationship Maps</div>
+      <p class="module-desc">Connect sefarim, themes, mitzvah clusters, and conceptual bridges.</p>
+      <span class="pill">Future</span>
+    </div>
+    <div class="module-card locked">
+      <div class="module-kicker">Review</div>
+      <div class="module-title">Weak Area Review</div>
+      <p class="module-desc">Eventually: track weak spots and generate review drills.</p>
+      <span class="pill">Future</span>
+    </div>
+  </div>
+</section>
+
+<section id="books14Module" class="hidden">
+  <div class="backbar">
+    <button onclick="showHome()">← Back to Home</button>
+    <div class="small">Module: 14 Books of Mishneh Torah</div>
+  </div>
+  <div class="tabs">
+    <button id="learnBtn" class="active" onclick="showTab('learn')">Learn</button>
+    <button id="flashBtn" onclick="showTab('flash')">Flashcards</button>
+    <button id="quizBtn" onclick="showTab('quiz')">Name Quiz</button>
+    <button id="numberBtn" onclick="showTab('number')">Number Drill</button>
+    <button id="matchBtn" onclick="showTab('match')">Picture Match</button>
+    <button id="themeBtn" onclick="showTab('theme')">Theme Drill</button>
+    <button id="orderBtn" onclick="showTab('order')">Order Drill</button>
+  </div>
 <section id="learn"></section>
 <section id="flash" class="hidden"><div class="card center-card"><div class="num" id="flashNum"></div><img id="flashImg" class="big-img"><div class="big-heb" id="flashHeb"></div><div id="flashReveal" class="hidden"><div class="eng" id="flashEng"></div><div class="trans" id="flashTrans"></div></div><p id="flashHint">Look at the picture and try to remember the sefer, then press reveal.</p></div><div class="tabs" style="justify-content:center;margin-top:14px"><button onclick="prevCard()">Previous</button><button class="active" onclick="toggleReveal()">Reveal / Hide</button><button onclick="nextCard()">Next</button></div></section>
 <section id="quiz" class="hidden"><div class="card center-card"><div class="num" id="quizNum"></div><img id="quizImg" class="big-img"><h2>What is this sefer?</h2><input id="quizInput" placeholder="Example: Madda / Knowledge / מדע"><div class="tabs" style="justify-content:center;margin-top:14px"><button class="active" onclick="checkAnswer()">Check</button><button onclick="nextQuiz()">Next</button></div><div id="quizFeedback"></div><p id="scoreText">Score: 0/0</p></div></section>
@@ -41,6 +103,7 @@ button.active{background:#0f172a;color:white;border-color:#0f172a}.grid{display:
 <section id="match" class="hidden"><div class="card center-card"><h2>Match Picture to Sefer</h2><p>Look at the picture and choose the correct sefer name.</p><img id="matchImg" class="big-img"><div id="matchOptions" class="grid"></div><div id="matchFeedback"></div><p id="matchScoreText">Score: 0/0 · Streak: 0</p></div></section>
 <section id="theme" class="hidden"><div class="card center-card"><div class="num" id="themeNum"></div><img id="themeImg" class="big-img"><h2 id="themeQuestion">What is the main theme of this sefer?</h2><div id="themeOptions" class="grid"></div><div id="themeFeedback"></div><p id="themeScoreText">Score: 0/0 · Streak: 0</p></div></section>
 <section id="order" class="hidden"><div class="card"><h2>Order Drill</h2><p>Drag the sefarim into the correct order, then press Check Order.</p><div class="tabs"><button onclick="shuffleOrder()">Shuffle</button><button class="active" onclick="checkOrder()">Check Order</button><button onclick="showCorrectOrder()">Show Correct Order</button></div><div id="orderFeedback"></div><div id="orderList" class="order-list"></div></div></section>
+</section>
 </div>
 <script>
 const books=[
@@ -61,6 +124,15 @@ const books=[
 let flashIndex=0,revealed=false,quizIndex=0,quizBooks=shuffle([...books]),score=0,asked=0,numberPrompt=books[0],numberStreak=0,matchPrompt=books[0],matchScore=0,matchAsked=0,matchStreak=0,themePrompt=books[0],themeScore=0,themeAsked=0,themeStreak=0,orderItems=shuffle([...books]),draggedIndex=null,orderChecked=false;
 function normalize(v){return String(v||"").toLowerCase().replace(/^sefer\s+/i,"").replace(/[׳’'\-]/g,"").replace(/[^a-zא-ת0-9]/g,"").trim()}
 function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function enterModule(name){
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("books14Module").classList.remove("hidden");
+  showTab("learn");
+}
+function showHome(){
+  document.getElementById("books14Module").classList.add("hidden");
+  document.getElementById("home").classList.remove("hidden");
+}
 function showTab(t){["learn","flash","quiz","number","match","theme","order"].forEach(id=>document.getElementById(id).classList.add("hidden"));["learnBtn","flashBtn","quizBtn","numberBtn","matchBtn","themeBtn","orderBtn"].forEach(id=>document.getElementById(id).classList.remove("active"));document.getElementById(t).classList.remove("hidden");document.getElementById(t+"Btn").classList.add("active")}
 function renderLearn(){document.getElementById("learn").innerHTML='<div class="grid">'+books.map(b=>`<div class="card"><div class="num">${b.n}</div><img class="card-img" src="${b.img}"><div class="heb">${b.hebrew}</div><div class="eng">${b.english}</div><div class="trans">${b.translit}</div></div>`).join("")+'</div>'}
 function renderFlash(){let b=books[flashIndex];flashNum.textContent=b.n;flashImg.src=b.img;flashHeb.textContent=b.hebrew;flashEng.textContent=b.english;flashTrans.textContent=b.translit;flashReveal.classList.toggle("hidden",!revealed);flashHint.classList.toggle("hidden",revealed)}
