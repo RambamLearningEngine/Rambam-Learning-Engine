@@ -20,64 +20,68 @@ button.active{background:#0f172a;color:white;border-color:#0f172a}.grid{display:
 .hidden{display:none}.order-list{display:grid;gap:10px;margin-top:12px}.order-item{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:grab;user-select:none}
 .dragging{opacity:.45}.drag-over{outline:3px solid #94a3b8}.position{width:36px;height:36px;border-radius:999px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0}
 .order-left{display:flex;align-items:center;gap:12px}.correct{border-color:#22c55e;background:#f0fdf4}.wrong{border-color:#ef4444;background:#fef2f2}.handle{color:#64748b;font-weight:900;letter-spacing:2px}
-.section-title{font-size:24px;font-weight:900;margin:22px 0 10px}.module-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-bottom:20px}.module-card{background:white;border:1px solid #e2e8f0;border-radius:20px;padding:18px;box-shadow:0 1px 2px rgba(15,23,42,.06);cursor:pointer;text-align:left}.module-card:hover{border-color:#0f172a;transform:translateY(-1px)}.module-card.locked{opacity:.62;cursor:not-allowed}.module-kicker{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#64748b;font-weight:900}.module-title{font-size:22px;font-weight:900;margin:8px 0}.module-desc{color:#64748b;line-height:1.45;margin:0}.backbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}.pill{display:inline-block;background:#e2e8f0;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:800;color:#334155;margin-top:10px}
+ .home-intro{max-width:760px;margin:0 auto 18px;text-align:center;color:#475569;line-height:1.55}.level-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}.level-card{position:relative;overflow:hidden;min-height:245px;background:white;border:1px solid #e2e8f0;border-radius:24px;padding:22px;box-shadow:0 1px 2px rgba(15,23,42,.06);cursor:pointer;text-align:left;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}.level-card:hover{transform:translateY(-3px);border-color:#0f172a;box-shadow:0 14px 30px rgba(15,23,42,.12)}.level-card.locked{cursor:not-allowed}.level-kicker{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#64748b;font-weight:900}.level-title{font-size:26px;font-weight:900;margin:10px 0 8px}.level-desc{color:#64748b;line-height:1.45;margin:0}.level-details{position:absolute;left:0;right:0;bottom:0;background:#0f172a;color:white;padding:16px 20px;transform:translateY(100%);transition:transform .2s ease}.level-card:hover .level-details{transform:translateY(0)}.level-details ul{margin:8px 0 0 18px;padding:0}.level-details li{margin:5px 0;color:#e2e8f0}.pill{display:inline-block;background:#e2e8f0;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:800;color:#334155;margin-top:12px}.backbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}@media(max-width:850px){.level-grid{grid-template-columns:1fr}.level-card{min-height:220px}}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header><div class="hebrew-title">י״ד ספרי משנה תורה</div><h1>Rambam Learning Engine</h1><p>Master the structure of Mishneh Torah through visual memory, retrieval practice, hierarchy, sequencing, and conceptual mapping.</p></header>
 <section id="home">
-  <h2 class="section-title">Foundations</h2>
-  <div class="module-grid">
-    <div class="module-card" onclick="enterModule('books14')">
-      <div class="module-kicker">Level 1</div>
-      <div class="module-title">14 Books of Mishneh Torah</div>
-      <p class="module-desc">Learn the names, order, themes, numbers, and visual anchors of the 14 sefarim.</p>
+  <p class="home-intro">Choose a learning level. Hover over a card to see what is inside. Start with the 14 Books, then move deeper into Hilchot and eventually Perakim/Mitzvot.</p>
+
+  <div class="level-grid">
+    <div class="level-card" onclick="enterModule('books14')">
+      <div class="level-kicker">Level 1</div>
+      <div class="level-title">14 Books</div>
+      <p class="level-desc">Names, order, numbers, pictures, and main themes of the fourteen books of Mishneh Torah.</p>
       <span class="pill">Available now</span>
+      <div class="level-details">
+        <strong>Inside this level:</strong>
+        <ul>
+          <li>Learn overview</li>
+          <li>Flashcards</li>
+          <li>Name Quiz</li>
+          <li>Number Drill</li>
+          <li>Picture Match</li>
+          <li>Theme Drill</li>
+          <li>Order Drill</li>
+        </ul>
+      </div>
     </div>
-    <div class="module-card locked">
-      <div class="module-kicker">Level 2</div>
-      <div class="module-title">Hilchot Within Each Sefer</div>
-      <p class="module-desc">Learn the names and number/order of the halachot inside each sefer. We will start with Mada.</p>
+
+    <div class="level-card locked">
+      <div class="level-kicker">Level 2</div>
+      <div class="level-title">Hilchot per Sefer</div>
+      <p class="level-desc">Learn the names, number, order, and themes of the halachot inside each sefer.</p>
       <span class="pill">Next build</span>
+      <div class="level-details">
+        <strong>Planned inside this level:</strong>
+        <ul>
+          <li>Choose a sefer</li>
+          <li>Hilchot list</li>
+          <li>Hilchot order drill</li>
+          <li>Theme matching</li>
+          <li>Chapter counts</li>
+          <li>Start with Sefer Mada</li>
+        </ul>
+      </div>
     </div>
-    <div class="module-card locked">
-      <div class="module-kicker">Level 3</div>
-      <div class="module-title">Perakim Within Each Hilchah</div>
-      <p class="module-desc">Learn chapter counts, chapter themes, and internal progression.</p>
-      <span class="pill">Future</span>
-    </div>
-  </div>
 
-  <h2 class="section-title">Mitzvah Systems</h2>
-  <div class="module-grid">
-    <div class="module-card locked">
-      <div class="module-kicker">Mishneh Torah Map</div>
-      <div class="module-title">Mitzvot in Rambam Order</div>
-      <p class="module-desc">Learn mitzvot by sefer, Hilchah, and short memory trigger.</p>
+    <div class="level-card locked">
+      <div class="level-kicker">Level 3</div>
+      <div class="level-title">Perakim & Mitzvot</div>
+      <p class="level-desc">Go deeper into chapter structure and eventually the mitzvot in Mishneh Torah and Chumash order.</p>
       <span class="pill">Future</span>
-    </div>
-    <div class="module-card locked">
-      <div class="module-kicker">Chumash Map</div>
-      <div class="module-title">Mitzvot in Torah Order</div>
-      <p class="module-desc">Learn mitzvot by Chumash, parsha, and pasuk/source.</p>
-      <span class="pill">Future</span>
-    </div>
-  </div>
-
-  <h2 class="section-title">Mastery Tools</h2>
-  <div class="module-grid">
-    <div class="module-card locked">
-      <div class="module-kicker">Memory</div>
-      <div class="module-title">Relationship Maps</div>
-      <p class="module-desc">Connect sefarim, themes, mitzvah clusters, and conceptual bridges.</p>
-      <span class="pill">Future</span>
-    </div>
-    <div class="module-card locked">
-      <div class="module-kicker">Review</div>
-      <div class="module-title">Weak Area Review</div>
-      <p class="module-desc">Eventually: track weak spots and generate review drills.</p>
-      <span class="pill">Future</span>
+      <div class="level-details">
+        <strong>Planned inside this level:</strong>
+        <ul>
+          <li>Perakim inside each Hilchah</li>
+          <li>Mitzvot in Rambam order</li>
+          <li>Mitzvot in Chumash order</li>
+          <li>One-word memory triggers</li>
+          <li>Relationship maps</li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
