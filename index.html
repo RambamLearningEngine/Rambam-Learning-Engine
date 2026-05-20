@@ -423,6 +423,117 @@
       display: none !important;
     }
 
+
+    .sefer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .sefer-card {
+      min-height: 190px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    .sefer-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.11);
+      border-color: rgba(176, 141, 87, 0.65);
+    }
+
+    .sefer-card.locked {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .hilchot-subpage {
+      display: none;
+    }
+
+    .hilchot-subpage.active {
+      display: block;
+    }
+
+    .flow-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      display: grid;
+      gap: 12px;
+    }
+
+    .flow-node {
+      text-align: center;
+      padding: 20px;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .flow-node:hover {
+      transform: scale(1.015);
+      border-color: rgba(176, 141, 87, 0.7);
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.09);
+    }
+
+    .flow-arrow {
+      text-align: center;
+      color: var(--gold);
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .relationship-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+    }
+
+    .concept-card {
+      min-height: 120px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .tree {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .tree-root {
+      text-align: center;
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 20px;
+    }
+
+    .tree-list {
+      display: grid;
+      gap: 10px;
+      border-left: 3px solid var(--line);
+      margin-left: 24px;
+      padding-left: 18px;
+    }
+
+    .tree-item {
+      position: relative;
+      padding: 16px;
+    }
+
+    .tree-item::before {
+      content: "";
+      position: absolute;
+      left: -21px;
+      top: 28px;
+      width: 18px;
+      height: 2px;
+      background: var(--line);
+    }
+
     @media (max-width: 850px) {
       .home-grid {
         grid-template-columns: 1fr;
@@ -589,30 +700,103 @@
     </div>
 
     <div id="hilchotPage" class="page">
-      <div class="topbar">
-        <button onclick="openPage('homePage')">← Home</button>
-        <div class="module-title">
-          <h2>Hilchot</h2>
-          <p>Names and structure of the halachic sections inside each sefer.</p>
+      <div id="hilchotLanding" class="hilchot-subpage active">
+        <div class="topbar">
+          <button onclick="openPage('homePage')">← Home</button>
+          <div class="module-title">
+            <h2>Hilchot</h2>
+            <p>Enter the inner structure of each sefer.</p>
+          </div>
+        </div>
+
+        <div class="sefer-grid">
+          <div class="card sefer-card" onclick="openHilchotSubpage('madaModule')">
+            <div>
+              <h3>Mada</h3>
+              <p>Yesodei HaTorah · De'ot · Talmud Torah · Avodah Zarah · Teshuvah</p>
+            </div>
+            <div class="hover-details" style="opacity:1;transform:none;">
+              <span class="pill">Explore</span>
+              <span class="pill">Flow</span>
+              <span class="pill">Structure</span>
+            </div>
+          </div>
+
+          <div class="card sefer-card locked">
+            <h3>Ahavah</h3>
+            <p>Coming next.</p>
+          </div>
+
+          <div class="card sefer-card locked">
+            <h3>Zmanim</h3>
+            <p>Coming next.</p>
+          </div>
+
+          <div class="card sefer-card locked">
+            <h3>Nashim</h3>
+            <p>Coming next.</p>
+          </div>
         </div>
       </div>
 
-      <div class="placeholder-grid">
-        <div class="card placeholder-card">
-          <h3>Mada</h3>
-          <p>Yesodei HaTorah · De'ot · Talmud Torah · Avodah Zarah · Teshuvah</p>
-          <button class="active" onclick="alert('Mada Hilchot module coming next.')">Enter Mada</button>
+      <div id="madaModule" class="hilchot-subpage">
+        <div class="topbar">
+          <button onclick="openHilchotSubpage('hilchotLanding')">← Hilchot</button>
+          <div class="module-title">
+            <h2>Sefer Mada</h2>
+            <p>Foundations → Character → Torah → Falsehood → Return</p>
+          </div>
         </div>
-        <div class="card placeholder-card">
-          <h3>Ahavah</h3>
-          <p>Coming next.</p>
-          <button disabled>Locked</button>
+
+        <div class="tabs">
+          <button id="madaExploreBtn" class="tab-btn active" onclick="showMadaSection('madaExplore')">Explore</button>
+          <button id="madaFlowBtn" class="tab-btn" onclick="showMadaSection('madaFlow')">Flow</button>
+          <button id="madaRelationshipsBtn" class="tab-btn" onclick="showMadaSection('madaRelationships')">Relationships</button>
+          <button id="madaStructureBtn" class="tab-btn" onclick="showMadaSection('madaStructure')">Structure</button>
+          <button id="madaRetrievalBtn" class="tab-btn" onclick="showMadaSection('madaRetrieval')">Retrieval</button>
         </div>
-        <div class="card placeholder-card">
-          <h3>Zmanim</h3>
-          <p>Coming next.</p>
-          <button disabled>Locked</button>
-        </div>
+
+        <section id="madaExplore" class="section active">
+          <div class="card">
+            <div class="controls">
+              <button id="toggleMadaNumbers" class="toggle-btn active" onclick="toggleMadaExplore('numbers')">Numbers</button>
+              <button id="toggleMadaHebrew" class="toggle-btn active" onclick="toggleMadaExplore('hebrew')">Hebrew</button>
+              <button id="toggleMadaEnglish" class="toggle-btn active" onclick="toggleMadaExplore('english')">English</button>
+              <button id="toggleMadaTheme" class="toggle-btn active" onclick="toggleMadaExplore('theme')">Theme</button>
+              <button id="toggleMadaChapters" class="toggle-btn" onclick="toggleMadaExplore('chapters')">Chapters</button>
+            </div>
+            <div id="madaExploreGrid" class="grid"></div>
+          </div>
+        </section>
+
+        <section id="madaFlow" class="section">
+          <div class="flow-wrap" id="madaFlowList"></div>
+        </section>
+
+        <section id="madaRelationships" class="section">
+          <div class="relationship-grid" id="madaRelationshipGrid"></div>
+        </section>
+
+        <section id="madaStructure" class="section">
+          <div class="card tree">
+            <div class="tree-root">Sefer Mada</div>
+            <div id="madaTreeList" class="tree-list"></div>
+          </div>
+        </section>
+
+        <section id="madaRetrieval" class="section">
+          <div class="card center-card">
+            <div class="num" id="madaPromptNum"></div>
+            <h2 id="madaPromptText">Which Hilchah is this?</h2>
+            <input id="madaRetrievalInput" placeholder="Example: De'ot / דעות">
+            <div class="tabs" style="justify-content:center">
+              <button class="active" onclick="checkMadaRetrieval()">Check</button>
+              <button onclick="newMadaPrompt()">Next</button>
+            </div>
+            <div id="madaRetrievalFeedback"></div>
+            <p id="madaRetrievalScore" class="trans">Score: 0/0</p>
+          </div>
+        </section>
       </div>
     </div>
 
@@ -716,7 +900,167 @@
     function toggleExplore(setting) {
       exploreSettings[setting] = !exploreSettings[setting];
       document.getElementById("toggle" + capitalize(setting)).classList.toggle("active", exploreSettings[setting]);
-      renderExplore();
+  
+    const madaHilchot = [
+      {
+        n: 1,
+        hebrew: "הלכות יסודי התורה",
+        english: "Yesodei HaTorah",
+        theme: "Foundations of belief and knowing Hashem.",
+        short: "Foundations",
+        chapters: 10
+      },
+      {
+        n: 2,
+        hebrew: "הלכות דעות",
+        english: "De'ot",
+        theme: "Character refinement and balanced conduct.",
+        short: "Character",
+        chapters: 7
+      },
+      {
+        n: 3,
+        hebrew: "הלכות תלמוד תורה",
+        english: "Talmud Torah",
+        theme: "The mitzvah and structure of Torah learning.",
+        short: "Torah Study",
+        chapters: 7
+      },
+      {
+        n: 4,
+        hebrew: "הלכות עבודה זרה וחוקות הגויים",
+        english: "Avodah Zarah v'Chukotei HaGoyim",
+        theme: "Rejecting idolatry and false spiritual systems.",
+        short: "Falsehood",
+        chapters: 12
+      },
+      {
+        n: 5,
+        hebrew: "הלכות תשובה",
+        english: "Teshuvah",
+        theme: "Return, repair, free will, and closeness to Hashem.",
+        short: "Return",
+        chapters: 10
+      }
+    ];
+
+    let madaExploreSettings = {
+      numbers: true,
+      hebrew: true,
+      english: true,
+      theme: true,
+      chapters: false
+    };
+
+    let madaPrompt = madaHilchot[0];
+    let madaRetrievalScoreValue = 0;
+    let madaRetrievalAsked = 0;
+
+    function openHilchotSubpage(pageId) {
+      document.querySelectorAll("#hilchotPage .hilchot-subpage").forEach(page => page.classList.remove("active"));
+      document.getElementById(pageId).classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showMadaSection(sectionId) {
+      document.querySelectorAll("#madaModule .section").forEach(section => section.classList.remove("active"));
+      document.querySelectorAll("#madaModule .tab-btn").forEach(button => button.classList.remove("active"));
+
+      document.getElementById(sectionId).classList.add("active");
+      document.getElementById(sectionId + "Btn").classList.add("active");
+    }
+
+    function toggleMadaExplore(setting) {
+      madaExploreSettings[setting] = !madaExploreSettings[setting];
+      document.getElementById("toggleMada" + capitalize(setting)).classList.toggle("active", madaExploreSettings[setting]);
+      renderMadaExplore();
+    }
+
+    function renderMadaExplore() {
+      const grid = document.getElementById("madaExploreGrid");
+
+      grid.innerHTML = madaHilchot.map(item => `
+        <div class="card book-card">
+          ${madaExploreSettings.numbers ? `<div class="num">${item.n}</div>` : ""}
+          ${madaExploreSettings.hebrew ? `<div class="heb">${item.hebrew}</div>` : ""}
+          ${madaExploreSettings.english ? `<div class="eng">${item.english}</div>` : ""}
+          ${madaExploreSettings.theme ? `<div class="trans">${item.theme}</div>` : ""}
+          ${madaExploreSettings.chapters ? `<div class="pill" style="margin-top:12px;">${item.chapters} Perakim</div>` : ""}
+        </div>
+      `).join("");
+    }
+
+    function renderMadaFlow() {
+      const list = document.getElementById("madaFlowList");
+
+      list.innerHTML = madaHilchot.map((item, index) => `
+        <div>
+          <div class="card flow-node">
+            <div class="num">${item.n}</div>
+            <div class="heb">${item.hebrew}</div>
+            <div class="eng">${item.english}</div>
+            <div class="trans">${item.short}: ${item.theme}</div>
+          </div>
+          ${index < madaHilchot.length - 1 ? `<div class="flow-arrow">↓</div>` : ""}
+        </div>
+      `).join("");
+    }
+
+    function renderMadaRelationships() {
+      const grid = document.getElementById("madaRelationshipGrid");
+
+      grid.innerHTML = madaHilchot.map(item => `
+        <div class="card concept-card">
+          <div class="pill">${item.short}</div>
+          <div class="eng">${item.english}</div>
+          <div class="trans">${item.theme}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderMadaStructure() {
+      const list = document.getElementById("madaTreeList");
+
+      list.innerHTML = madaHilchot.map(item => `
+        <div class="card tree-item">
+          <div class="num">${item.n}</div>
+          <div class="heb">${item.hebrew}</div>
+          <div class="eng">${item.english}</div>
+          <div class="trans">${item.chapters} Perakim · ${item.theme}</div>
+        </div>
+      `).join("");
+    }
+
+    function newMadaPrompt() {
+      madaPrompt = madaHilchot[Math.floor(Math.random() * madaHilchot.length)];
+      document.getElementById("madaPromptNum").textContent = madaPrompt.n;
+      document.getElementById("madaPromptText").textContent = madaPrompt.theme;
+      document.getElementById("madaRetrievalInput").value = "";
+      document.getElementById("madaRetrievalFeedback").innerHTML = "";
+      document.getElementById("madaRetrievalScore").textContent = `Score: ${madaRetrievalScoreValue}/${madaRetrievalAsked}`;
+    }
+
+    function checkMadaRetrieval() {
+      const guess = normalize(document.getElementById("madaRetrievalInput").value);
+      const answers = [madaPrompt.hebrew, madaPrompt.english].map(normalize);
+      const correct = answers.includes(guess);
+
+      madaRetrievalAsked++;
+      if (correct) madaRetrievalScoreValue++;
+
+      document.getElementById("madaRetrievalFeedback").innerHTML = `
+        <div class="${correct ? "good" : "bad"}">
+          <strong>${correct ? "Correct." : "Not quite."}</strong><br>
+          Answer:
+          <span dir="rtl"><strong>${madaPrompt.hebrew}</strong></span>
+          — ${madaPrompt.english}
+        </div>
+      `;
+
+      document.getElementById("madaRetrievalScore").textContent = `Score: ${madaRetrievalScoreValue}/${madaRetrievalAsked}`;
+    }
+
+    renderExplore();
     }
 
     function capitalize(value) {
@@ -929,6 +1273,11 @@
 
       document.getElementById("orderFeedback").innerHTML = "";
       renderOrder();
+    renderMadaExplore();
+    renderMadaFlow();
+    renderMadaRelationships();
+    renderMadaStructure();
+    newMadaPrompt();
     }
 
     function dragEnd(event) {
@@ -942,6 +1291,11 @@
 
       document.getElementById("orderFeedback").innerHTML = "";
       renderOrder();
+    renderMadaExplore();
+    renderMadaFlow();
+    renderMadaRelationships();
+    renderMadaStructure();
+    newMadaPrompt();
     }
 
     function checkOrder() {
@@ -956,6 +1310,11 @@
       `;
 
       renderOrder();
+    renderMadaExplore();
+    renderMadaFlow();
+    renderMadaRelationships();
+    renderMadaStructure();
+    newMadaPrompt();
     }
 
     function showCorrectOrder() {
@@ -967,6 +1326,171 @@
       `;
 
       renderOrder();
+    renderMadaExplore();
+    renderMadaFlow();
+    renderMadaRelationships();
+    renderMadaStructure();
+    newMadaPrompt();
+    }
+
+
+    const madaHilchot = [
+      {
+        n: 1,
+        hebrew: "הלכות יסודי התורה",
+        english: "Yesodei HaTorah",
+        theme: "Foundations of belief and knowing Hashem.",
+        short: "Foundations",
+        chapters: 10
+      },
+      {
+        n: 2,
+        hebrew: "הלכות דעות",
+        english: "De'ot",
+        theme: "Character refinement and balanced conduct.",
+        short: "Character",
+        chapters: 7
+      },
+      {
+        n: 3,
+        hebrew: "הלכות תלמוד תורה",
+        english: "Talmud Torah",
+        theme: "The mitzvah and structure of Torah learning.",
+        short: "Torah Study",
+        chapters: 7
+      },
+      {
+        n: 4,
+        hebrew: "הלכות עבודה זרה וחוקות הגויים",
+        english: "Avodah Zarah v'Chukotei HaGoyim",
+        theme: "Rejecting idolatry and false spiritual systems.",
+        short: "Falsehood",
+        chapters: 12
+      },
+      {
+        n: 5,
+        hebrew: "הלכות תשובה",
+        english: "Teshuvah",
+        theme: "Return, repair, free will, and closeness to Hashem.",
+        short: "Return",
+        chapters: 10
+      }
+    ];
+
+    let madaExploreSettings = {
+      numbers: true,
+      hebrew: true,
+      english: true,
+      theme: true,
+      chapters: false
+    };
+
+    let madaPrompt = madaHilchot[0];
+    let madaRetrievalScoreValue = 0;
+    let madaRetrievalAsked = 0;
+
+    function openHilchotSubpage(pageId) {
+      document.querySelectorAll("#hilchotPage .hilchot-subpage").forEach(page => page.classList.remove("active"));
+      document.getElementById(pageId).classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showMadaSection(sectionId) {
+      document.querySelectorAll("#madaModule .section").forEach(section => section.classList.remove("active"));
+      document.querySelectorAll("#madaModule .tab-btn").forEach(button => button.classList.remove("active"));
+
+      document.getElementById(sectionId).classList.add("active");
+      document.getElementById(sectionId + "Btn").classList.add("active");
+    }
+
+    function toggleMadaExplore(setting) {
+      madaExploreSettings[setting] = !madaExploreSettings[setting];
+      document.getElementById("toggleMada" + capitalize(setting)).classList.toggle("active", madaExploreSettings[setting]);
+      renderMadaExplore();
+    }
+
+    function renderMadaExplore() {
+      const grid = document.getElementById("madaExploreGrid");
+
+      grid.innerHTML = madaHilchot.map(item => `
+        <div class="card book-card">
+          ${madaExploreSettings.numbers ? `<div class="num">${item.n}</div>` : ""}
+          ${madaExploreSettings.hebrew ? `<div class="heb">${item.hebrew}</div>` : ""}
+          ${madaExploreSettings.english ? `<div class="eng">${item.english}</div>` : ""}
+          ${madaExploreSettings.theme ? `<div class="trans">${item.theme}</div>` : ""}
+          ${madaExploreSettings.chapters ? `<div class="pill" style="margin-top:12px;">${item.chapters} Perakim</div>` : ""}
+        </div>
+      `).join("");
+    }
+
+    function renderMadaFlow() {
+      const list = document.getElementById("madaFlowList");
+
+      list.innerHTML = madaHilchot.map((item, index) => `
+        <div>
+          <div class="card flow-node">
+            <div class="num">${item.n}</div>
+            <div class="heb">${item.hebrew}</div>
+            <div class="eng">${item.english}</div>
+            <div class="trans">${item.short}: ${item.theme}</div>
+          </div>
+          ${index < madaHilchot.length - 1 ? `<div class="flow-arrow">↓</div>` : ""}
+        </div>
+      `).join("");
+    }
+
+    function renderMadaRelationships() {
+      const grid = document.getElementById("madaRelationshipGrid");
+
+      grid.innerHTML = madaHilchot.map(item => `
+        <div class="card concept-card">
+          <div class="pill">${item.short}</div>
+          <div class="eng">${item.english}</div>
+          <div class="trans">${item.theme}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderMadaStructure() {
+      const list = document.getElementById("madaTreeList");
+
+      list.innerHTML = madaHilchot.map(item => `
+        <div class="card tree-item">
+          <div class="num">${item.n}</div>
+          <div class="heb">${item.hebrew}</div>
+          <div class="eng">${item.english}</div>
+          <div class="trans">${item.chapters} Perakim · ${item.theme}</div>
+        </div>
+      `).join("");
+    }
+
+    function newMadaPrompt() {
+      madaPrompt = madaHilchot[Math.floor(Math.random() * madaHilchot.length)];
+      document.getElementById("madaPromptNum").textContent = madaPrompt.n;
+      document.getElementById("madaPromptText").textContent = madaPrompt.theme;
+      document.getElementById("madaRetrievalInput").value = "";
+      document.getElementById("madaRetrievalFeedback").innerHTML = "";
+      document.getElementById("madaRetrievalScore").textContent = `Score: ${madaRetrievalScoreValue}/${madaRetrievalAsked}`;
+    }
+
+    function checkMadaRetrieval() {
+      const guess = normalize(document.getElementById("madaRetrievalInput").value);
+      const answers = [madaPrompt.hebrew, madaPrompt.english].map(normalize);
+      const correct = answers.includes(guess);
+
+      madaRetrievalAsked++;
+      if (correct) madaRetrievalScoreValue++;
+
+      document.getElementById("madaRetrievalFeedback").innerHTML = `
+        <div class="${correct ? "good" : "bad"}">
+          <strong>${correct ? "Correct." : "Not quite."}</strong><br>
+          Answer:
+          <span dir="rtl"><strong>${madaPrompt.hebrew}</strong></span>
+          — ${madaPrompt.english}
+        </div>
+      `;
+
+      document.getElementById("madaRetrievalScore").textContent = `Score: ${madaRetrievalScoreValue}/${madaRetrievalAsked}`;
     }
 
     renderExplore();
@@ -974,6 +1498,11 @@
     newNumberPrompt();
     newThemePrompt();
     renderOrder();
+    renderMadaExplore();
+    renderMadaFlow();
+    renderMadaRelationships();
+    renderMadaStructure();
+    newMadaPrompt();
   </script>
 </body>
 </html>
