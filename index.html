@@ -21,121 +21,30 @@ button.active{background:#0f172a;color:white;border-color:#0f172a}.grid{display:
 .dragging{opacity:.45}.drag-over{outline:3px solid #94a3b8}.position{width:36px;height:36px;border-radius:999px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0}
 .order-left{display:flex;align-items:center;gap:12px}.correct{border-color:#22c55e;background:#f0fdf4}.wrong{border-color:#ef4444;background:#fef2f2}.handle{color:#64748b;font-weight:900;letter-spacing:2px}
 
-    .guided-intro {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: linear-gradient(135deg, #faf7f0, #ffffff);
-      padding: 28px;
-      overflow: auto;
+    .learn-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
     }
-    .guided-wrap {
-      max-width: 1100px;
-      margin: 0 auto;
+    .card .learn-hebrew,
+    .card .learn-english,
+    .card .learn-translit {
+      display: none;
     }
-    .guided-hero {
-      background: #0f172a;
-      color: white;
-      border-radius: 28px;
-      padding: 34px;
-      margin-bottom: 22px;
-      box-shadow: 0 18px 40px rgba(15,23,42,.14);
+    body.show-hebrew .card .learn-hebrew {
+      display: block;
     }
-    .guided-hero h1 {
-      margin: 0;
-      font-size: 46px;
+    body.show-english .card .learn-english {
+      display: block;
     }
-    .guided-hero p {
-      color: #cbd5e1;
-      font-size: 18px;
-      max-width: 720px;
-    }
-    .guided-hebrew {
-      direction: rtl;
-      font-size: 36px;
-      font-weight: 900;
-      margin-bottom: 8px;
-    }
-    .guided-paths {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 18px;
-    }
-    .guided-card {
-      background: white;
-      color: #0f172a;
-      border: 1px solid #ddd0bd;
-      border-radius: 24px;
-      padding: 24px;
-      cursor: pointer;
-      text-align: left;
-      box-shadow: 0 14px 30px rgba(15,23,42,.08);
-      transition: transform .15s ease;
-    }
-    .guided-card:hover {
-      transform: translateY(-2px);
-    }
-    .guided-icon {
-      font-size: 42px;
-      margin-bottom: 10px;
-    }
-    .guided-card h2 {
-      margin: 0 0 8px;
-      font-size: 28px;
-    }
-    .guided-card p {
-      color: #64748b;
-      line-height: 1.45;
-      margin: 0;
-    }
-    .guided-note {
-      color: #64748b;
-      margin-top: 16px;
-      font-size: 14px;
-    }
-    @media(max-width:700px) {
-      .guided-intro { padding: 14px; }
-      .guided-hero { padding: 24px; }
-      .guided-hero h1 { font-size: 34px; }
-      .guided-hebrew { font-size: 28px; }
+    body.show-translit .card .learn-translit {
+      display: block;
     }
 
 </style>
 </head>
 <body>
-
-<div id="guidedIntro" class="guided-intro">
-  <div class="guided-wrap">
-    <div class="guided-hero">
-      <div class="guided-hebrew">י״ד ספרי משנה תורה</div>
-      <h1>Rambam Learning Engine</h1>
-      <p>Choose a path. First explore the structure, then train your memory, then challenge yourself.</p>
-    </div>
-
-    <div class="guided-paths">
-      <div class="guided-card" onclick="startPath('learn')">
-        <div class="guided-icon">🔎</div>
-        <h2>Explore</h2>
-        <p>See the 14 sefarim with pictures, Hebrew, English, and transliteration.</p>
-      </div>
-
-      <div class="guided-card" onclick="startPath('match')">
-        <div class="guided-icon">🧠</div>
-        <h2>Train</h2>
-        <p>Practice recall with picture matching, flashcards, and number drills.</p>
-      </div>
-
-      <div class="guided-card" onclick="startPath('order')">
-        <div class="guided-icon">🏆</div>
-        <h2>Challenge</h2>
-        <p>Test yourself with typing quizzes and drag-and-drop order practice.</p>
-      </div>
-    </div>
-
-    <div class="guided-note">This opening screen keeps the first view simple and lets learners choose what they want to do.</div>
-  </div>
-</div>
-
 <div class="wrap">
 <header><div class="hebrew-title">י״ד ספרי משנה תורה</div><h1>Rambam Learning Engine</h1><p>Learn the 14 books of Mishneh Torah using names, numbers, order, and visual memory images.</p></header>
 <div class="tabs">
@@ -194,15 +103,7 @@ function renderOrder(){orderList.innerHTML=orderItems.map((b,i)=>{let c=orderChe
 function dragStart(e){draggedIndex=Number(e.currentTarget.dataset.index);e.currentTarget.classList.add("dragging");e.dataTransfer.effectAllowed="move"}function dragOver(e){e.preventDefault();e.currentTarget.classList.add("drag-over")}function dragLeave(e){e.currentTarget.classList.remove("drag-over")}
 function dropItem(e){e.preventDefault();let target=Number(e.currentTarget.dataset.index);e.currentTarget.classList.remove("drag-over");if(draggedIndex===null||draggedIndex===target)return;let next=[...orderItems];let [it]=next.splice(draggedIndex,1);next.splice(target,0,it);orderItems=next;draggedIndex=null;orderChecked=false;orderFeedback.innerHTML="";renderOrder()}function dragEnd(e){e.currentTarget.classList.remove("dragging");document.querySelectorAll(".drag-over").forEach(x=>x.classList.remove("drag-over"))}
 function shuffleOrder(){orderItems=shuffle([...books]);orderChecked=false;orderFeedback.innerHTML="";renderOrder()}function checkOrder(){orderChecked=true;let count=orderItems.filter((b,i)=>b.n===i+1).length;orderFeedback.innerHTML=`<div class="${count===14?"good":"bad"}"><strong>${count===14?"Perfect order.":count+"/14 are in the correct position."}</strong></div>`;renderOrder()}function showCorrectOrder(){orderItems=[...books];orderChecked=true;orderFeedback.innerHTML=`<div class="good"><strong>Correct order shown.</strong></div>`;renderOrder()}
-
-    function startPath(tabName) {
-      document.getElementById("guidedIntro").style.display = "none";
-      if (typeof showTab === "function") {
-        showTab(tabName);
-      }
-    }
-
-    renderLearn();renderFlash();renderQuiz();newNumberPrompt();newMatchPrompt();renderOrder();
+renderLearn();renderFlash();renderQuiz();newNumberPrompt();newMatchPrompt();renderOrder();
 </script>
 </body>
 </html>
