@@ -1,0 +1,83 @@
+<!-- ADD THIS HTML STRUCTURE FOR EACH BOOK CARD -->
+
+<div class="book-card" onclick="cycleReveal(this)">
+  <div class="book-number">1</div>
+
+  <img src="madda.jpeg" class="book-picture" />
+
+  <div class="book-info hebrew">ספר המדע</div>
+  <div class="book-info english">Knowledge</div>
+  <div class="book-info translit">Madda</div>
+</div>
+
+
+<!-- ADD THIS CSS -->
+
+<style>
+.book-info {
+  display: none;
+}
+
+.book-card.reveal-hebrew .hebrew {
+  display: block;
+}
+
+.book-card.reveal-english .english {
+  display: block;
+}
+
+.book-card.reveal-translit .translit {
+  display: block;
+}
+
+.book-card {
+  cursor: pointer;
+}
+
+.book-picture {
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+}
+
+.book-number {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #efe7da;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+</style>
+
+
+<!-- ADD THIS JAVASCRIPT -->
+
+<script>
+function cycleReveal(card) {
+
+  if (!card.classList.contains("reveal-hebrew")) {
+    card.classList.add("reveal-hebrew");
+    return;
+  }
+
+  if (!card.classList.contains("reveal-english")) {
+    card.classList.add("reveal-english");
+    return;
+  }
+
+  if (!card.classList.contains("reveal-translit")) {
+    card.classList.add("reveal-translit");
+    return;
+  }
+
+  card.classList.remove(
+    "reveal-hebrew",
+    "reveal-english",
+    "reveal-translit"
+  );
+}
+</script>
