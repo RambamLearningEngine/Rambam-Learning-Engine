@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>מפת משנה תורה</title>
+
+  <style>
+    :root {
+      --bg: #f7f4ee;
+      --panel: #fffdf8;
+      --ink: #111827;
+      --muted: #6b7280;
+      --line: #ded7ca;
+      --navy: #101827;
+      --gold: #b08d57;
+      --soft: #f1eadf;
+      --good-bg: #ecfdf5;
+      --good-border: #86efac;
+      --bad-bg: #fef2f2;
+      --bad-border: #fca5a5;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(176, 141, 87, 0.13), transparent 28%),
+        linear-gradient(180deg, #fbfaf7 0%, var(--bg) 100%);
+      color: var(--ink);
+      padding: 24px;
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    header {
+      min-height: 250px;
+      background: linear-gradient(135deg, var(--navy), #263044);
+      color: white;
+      border-radius: 32px;
+      padding: 42px 28px;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+    }
+
+    .hebrew-title {
+      direction: rtl;
+      font-size: 44px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 42px;
+      letter-spacing: -0.04em;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .home-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .home-card {
+      position: relative;
+      min-height: 260px;
+      background: rgba(255, 253, 248, 0.92);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      padding: 30px;
+      cursor: pointer;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.07);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    .home-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.13);
+      border-color: rgba(176, 141, 87, 0.65);
+    }
+
+    .home-card::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      bottom: -70px;
+      width: 160px;
+      height: 160px;
+      border-radius: 999px;
+      background: rgba(176, 141, 87, 0.12);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .home-card:hover::after {
+      transform: scale(1.22);
+      opacity: 0.95;
+    }
+
+    .level-kicker {
+      color: var(--gold);
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .home-title {
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      margin-bottom: 18px;
+    }
+
+    .hover-details {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 20px;
+    }
+
+    .home-card:hover .hover-details {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      background: var(--soft);
+      border-radius: 999px;
+      padding: 8px 11px;
+      color: #374151;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 16px 0 18px;
+    }
+
+    .module-title h2 {
+      margin: 0;
+      font-size: 30px;
+      letter-spacing: -0.03em;
+    }
+
+    .module-title p {
+      margin: 6px 0 0;
+      color: var(--muted);
+    }
+
+    button {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--ink);
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+    }
+
+    button:hover {
+      border-color: var(--gold);
+    }
+
+    button.active {
+      background: var(--navy);
+      color: white;
+      border-color: var(--navy);
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .tabs,
+    .controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 16px 0;
+    }
+
+    .tab-btn.active,
+    .toggle-btn.active {
+      background: var(--navy);
+      color: white;
+      border-color: var(--navy);
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 5px 18px rgba(15, 23, 42, 0.06);
+    }
+
+    .book-card {
+      text-align: center;
+    }
+
+    .card-img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      background: white;
+      border-radius: 16px;
+      margin: 6px 0 10px;
+    }
+
+    .big-img {
+      max-width: 420px;
+      width: 100%;
+      max-height: 420px;
+      object-fit: contain;
+      background: white;
+      border-radius: 22px;
+      margin: 14px auto;
+      display: block;
+    }
+
+    .small-img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      background: white;
+      border-radius: 14px;
+      flex-shrink: 0;
+    }
+
+    .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      background: var(--soft);
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .heb {
+      direction: rtl;
+      font-size: 23px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .eng {
+      font-size: 16px;
+      font-weight: 900;
+      margin-top: 6px;
+    }
+
+    .trans,
+    .small {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .center-card {
+      max-width: 720px;
+      margin: auto;
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 13px;
+      font-size: 16px;
+      background: white;
+    }
+
+    .good {
+      background: var(--good-bg);
+      border: 1px solid var(--good-border);
+      border-radius: 16px;
+      padding: 13px;
+      margin-top: 12px;
+    }
+
+    .bad {
+      background: var(--bad-bg);
+      border: 1px solid var(--bad-border);
+      border-radius: 16px;
+      padding: 13px;
+      margin-top: 12px;
+    }
+
+    .order-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .order-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: grab;
+      user-select: none;
+    }
+
+    .dragging {
+      opacity: 0.45;
+    }
+
+    .drag-over {
+      outline: 3px solid #94a3b8;
+    }
+
+    .position {
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      background: var(--soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .order-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .correct {
+      border-color: #22c55e;
+      background: #f0fdf4;
+    }
+
+    .wrong {
+      border-color: #ef4444;
+      background: #fef2f2;
+    }
+
+    .handle {
+      color: var(--muted);
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    .placeholder-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .placeholder-card {
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .placeholder-card h3 {
+      font-size: 25px;
+      margin: 0;
+      letter-spacing: -0.03em;
+    }
+
+    .placeholder-card p {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .hidden-display {
+      display: none !important;
+    }
+
+    @media (max-width: 850px) {
+      .home-grid {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        min-height: 220px;
+      }
+
+      .hebrew-title {
+        font-size: 34px;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .home-card {
+        min-height: 220px;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <div id="homePage" class="page active">
+      <header>
+        <div>
+          <div class="hebrew-title">מפת משנה תורה</div>
+          <h1>Rambam Learning Engine</h1>
+        </div>
+      </header>
+
+      <div class="home-grid">
+        <div class="home-card" onclick="openPage('booksPage')">
+          <div class="level-kicker">Level One</div>
+          <div class="home-title">14 Books</div>
+          <div class="hover-details">
+            <span class="pill">Names</span>
+            <span class="pill">Order</span>
+            <span class="pill">Themes</span>
+            <span class="pill">Visual Memory</span>
+            <span class="pill">Retrieval</span>
+          </div>
+        </div>
+
+        <div class="home-card" onclick="openPage('hilchotPage')">
+          <div class="level-kicker">Level Two</div>
+          <div class="home-title">Hilchot</div>
+          <div class="hover-details">
+            <span class="pill">Mada</span>
+            <span class="pill">Ahavah</span>
+            <span class="pill">Zmanim</span>
+            <span class="pill">Nashim</span>
+            <span class="pill">All Sefarim</span>
+          </div>
+        </div>
+
+        <div class="home-card" onclick="openPage('mitzvotPage')">
+          <div class="level-kicker">Level Three</div>
+          <div class="home-title">Mitzvot</div>
+          <div class="hover-details">
+            <span class="pill">Mishneh Torah Order</span>
+            <span class="pill">Chumash Order</span>
+            <span class="pill">Positive / Negative</span>
+            <span class="pill">Themes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="booksPage" class="page">
+      <div class="topbar">
+        <button onclick="openPage('homePage')">← Home</button>
+        <div class="module-title">
+          <h2>14 Books</h2>
+          <p>Names, order, themes, pictures, and retrieval.</p>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button id="exploreBtn" class="tab-btn active" onclick="showSection('explore')">Explore</button>
+        <button id="retrievalBtn" class="tab-btn" onclick="showSection('retrieval')">Retrieval</button>
+        <button id="numberBtn" class="tab-btn" onclick="showSection('number')">Number Drill</button>
+        <button id="orderBtn" class="tab-btn" onclick="showSection('order')">Order</button>
+        <button id="themeBtn" class="tab-btn" onclick="showSection('theme')">Themes</button>
+      </div>
+
+      <section id="explore" class="section active">
+        <div class="card">
+          <div class="controls">
+            <button id="toggleNumbers" class="toggle-btn active" onclick="toggleExplore('numbers')">Numbers</button>
+            <button id="togglePictures" class="toggle-btn active" onclick="toggleExplore('pictures')">Pictures</button>
+            <button id="toggleHebrew" class="toggle-btn active" onclick="toggleExplore('hebrew')">Hebrew</button>
+            <button id="toggleEnglish" class="toggle-btn active" onclick="toggleExplore('english')">English</button>
+            <button id="toggleTranslit" class="toggle-btn active" onclick="toggleExplore('translit')">Translit</button>
+          </div>
+          <div id="exploreGrid" class="grid"></div>
+        </div>
+      </section>
+
+      <section id="retrieval" class="section">
+        <div class="card center-card">
+          <div class="num" id="quizNum"></div>
+          <img id="quizImg" class="big-img" alt="">
+          <h2>What is this sefer?</h2>
+          <input id="quizInput" placeholder="Example: Madda / Knowledge / מדע">
+          <div class="tabs" style="justify-content:center">
+            <button class="active" onclick="checkAnswer()">Check</button>
+            <button onclick="nextQuiz()">Next</button>
+            <button onclick="shuffleQuiz()">Shuffle</button>
+          </div>
+          <div id="quizFeedback"></div>
+          <p id="scoreText" class="trans">Score: 0/0</p>
+        </div>
+      </section>
+
+      <section id="number" class="section">
+        <div class="card center-card">
+          <img id="numberImg" class="big-img" alt="">
+          <h2>What number is this sefer?</h2>
+          <p class="trans">Type its order number from 1–14.</p>
+          <input id="numberInput" type="number" min="1" max="14" placeholder="Enter number">
+          <div class="tabs" style="justify-content:center">
+            <button class="active" onclick="checkNumberAnswer()">Check</button>
+            <button onclick="newNumberPrompt()">Next</button>
+          </div>
+          <div id="numberFeedback"></div>
+          <p id="streakText" class="trans">Streak: 0</p>
+        </div>
+      </section>
+
+      <section id="order" class="section">
+        <div class="card">
+          <h2 style="margin-top:0">Order</h2>
+          <p class="trans">Drag the sefarim into the correct order.</p>
+          <div class="tabs">
+            <button onclick="shuffleOrder()">Shuffle</button>
+            <button class="active" onclick="checkOrder()">Check Order</button>
+            <button onclick="showCorrectOrder()">Show Correct Order</button>
+          </div>
+          <div id="orderFeedback"></div>
+          <div id="orderList" class="order-list"></div>
+        </div>
+      </section>
+
+      <section id="theme" class="section">
+        <div class="card center-card">
+          <div class="num" id="themeNum"></div>
+          <img id="themeImg" class="big-img" alt="">
+          <h2>What is the main theme?</h2>
+          <div id="themeOptions" class="grid"></div>
+          <div id="themeFeedback"></div>
+          <p id="themeScoreText" class="trans">Score: 0/0 · Streak: 0</p>
+        </div>
+      </section>
+    </div>
+
+    <div id="hilchotPage" class="page">
+      <div class="topbar">
+        <button onclick="openPage('homePage')">← Home</button>
+        <div class="module-title">
+          <h2>Hilchot</h2>
+          <p>Names and structure of the halachic sections inside each sefer.</p>
+        </div>
+      </div>
+
+      <div class="placeholder-grid">
+        <div class="card placeholder-card">
+          <h3>Mada</h3>
+          <p>Yesodei HaTorah · De'ot · Talmud Torah · Avodah Zarah · Teshuvah</p>
+          <button class="active" onclick="alert('Mada Hilchot module coming next.')">Enter Mada</button>
+        </div>
+        <div class="card placeholder-card">
+          <h3>Ahavah</h3>
+          <p>Coming next.</p>
+          <button disabled>Locked</button>
+        </div>
+        <div class="card placeholder-card">
+          <h3>Zmanim</h3>
+          <p>Coming next.</p>
+          <button disabled>Locked</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="mitzvotPage" class="page">
+      <div class="topbar">
+        <button onclick="openPage('homePage')">← Home</button>
+        <div class="module-title">
+          <h2>Mitzvot</h2>
+          <p>Mitzvah mastery systems will live here.</p>
+        </div>
+      </div>
+
+      <div class="placeholder-grid">
+        <div class="card placeholder-card">
+          <h3>Mishneh Torah Order</h3>
+          <p>Future sequence system by sefer and hilchah.</p>
+        </div>
+        <div class="card placeholder-card">
+          <h3>Chumash Order</h3>
+          <p>Future sequence system by Chumash, parsha, and pasuk.</p>
+        </div>
+        <div class="card placeholder-card">
+          <h3>Positive / Negative</h3>
+          <p>Future categorization system.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const books = [
+      { n: 1, hebrew: "ספר המדע", shortHebrew: "מדע", english: "Knowledge", translit: "Madda", img: "madda.jpeg", theme: "Foundations of belief, character, Torah learning, rejecting idolatry, and teshuvah." },
+      { n: 2, hebrew: "ספר אהבה", shortHebrew: "אהבה", english: "Love", translit: "Ahavah", img: "ahava.jpg", theme: "Daily mitzvot that express love and service of Hashem." },
+      { n: 3, hebrew: "ספר זמנים", shortHebrew: "זמנים", english: "Times", translit: "Zemanim", img: "zmanim.jpg", theme: "Shabbat, festivals, fasts, Chanukah, Purim, and sacred time." },
+      { n: 4, hebrew: "ספר נשים", shortHebrew: "נשים", english: "Women", translit: "Nashim", img: "nashim.jpg", theme: "Marriage, divorce, yibbum, chalitzah, and family structure." },
+      { n: 5, hebrew: "ספר קדושה", shortHebrew: "קדושה", english: "Holiness", translit: "Kedushah", img: "kedusha.jpg", theme: "Forbidden relationships, forbidden foods, and sanctified conduct." },
+      { n: 6, hebrew: "ספר הפלאה", shortHebrew: "הפלאה", english: "Utterances", translit: "Haflaah", img: "haflaah.jpg", theme: "Vows, oaths, nazirut, and the power of speech." },
+      { n: 7, hebrew: "ספר זרעים", shortHebrew: "זרעים", english: "Seeds", translit: "Zeraim", img: "zeraim.jpg", theme: "Agricultural mitzvot, gifts to the poor, tithes, shemittah, and yovel." },
+      { n: 8, hebrew: "ספר עבודה", shortHebrew: "עבודה", english: "Temple Service", translit: "Avodah", img: "avodah.jpg", theme: "Beit HaMikdash structure and daily Temple service." },
+      { n: 9, hebrew: "ספר קרבנות", shortHebrew: "קרבנות", english: "Offerings", translit: "Korbanot", img: "korbanos.jpg", theme: "Sacrifices, offerings, and laws of bringing korbanot." },
+      { n: 10, hebrew: "ספר טהרה", shortHebrew: "טהרה", english: "Purity", translit: "Taharah", img: "taharah.jpg", theme: "Purity, impurity, tumah, taharah, and related systems." },
+      { n: 11, hebrew: "ספר נזיקין", shortHebrew: "נזיקין", english: "Damages", translit: "Nezikin", img: "nezikin.jpg", theme: "Damages, injury, theft, robbery, murder, and guarding life/property." },
+      { n: 12, hebrew: "ספר קנין", shortHebrew: "קנין", english: "Acquisition", translit: "Kinyan", img: "kinyan.jpg", theme: "Ownership, sales, gifts, neighbors, agents, and acquisition systems." },
+      { n: 13, hebrew: "ספר משפטים", shortHebrew: "משפטים", english: "Judgments", translit: "Mishpatim", img: "mishpatim.png", theme: "Civil law, claims, loans, deposits, servants, inheritance, and monetary obligations." },
+      { n: 14, hebrew: "ספר שופטים", shortHebrew: "שופטים", english: "Judges", translit: "Shoftim", img: "shoftim.jpg", theme: "Courts, judges, kings, war, Sanhedrin, testimony, and national governance." }
+    ];
+
+    let exploreSettings = {
+      numbers: true,
+      pictures: true,
+      hebrew: true,
+      english: true,
+      translit: true
+    };
+
+    let quizIndex = 0;
+    let quizBooks = shuffle([...books]);
+    let score = 0;
+    let asked = 0;
+
+    let numberPrompt = books[0];
+    let numberStreak = 0;
+
+    let themePrompt = books[0];
+    let themeScore = 0;
+    let themeAsked = 0;
+    let themeStreak = 0;
+
+    let orderItems = shuffle([...books]);
+    let draggedIndex = null;
+    let orderChecked = false;
+
+    function normalize(value) {
+      return String(value || "")
+        .toLowerCase()
+        .replace(/^sefer\s+/i, "")
+        .replace(/[׳’'\-]/g, "")
+        .replace(/[^a-zא-ת0-9]/g, "")
+        .trim();
+    }
+
+    function shuffle(array) {
+      return [...array].sort(() => Math.random() - 0.5);
+    }
+
+    function openPage(pageId) {
+      document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
+      document.getElementById(pageId).classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showSection(sectionId) {
+      document.querySelectorAll("#booksPage .section").forEach(section => section.classList.remove("active"));
+      document.querySelectorAll("#booksPage .tab-btn").forEach(button => button.classList.remove("active"));
+
+      document.getElementById(sectionId).classList.add("active");
+      document.getElementById(sectionId + "Btn").classList.add("active");
+    }
+
+    function toggleExplore(setting) {
+      exploreSettings[setting] = !exploreSettings[setting];
+      document.getElementById("toggle" + capitalize(setting)).classList.toggle("active", exploreSettings[setting]);
+      renderExplore();
+    }
+
+    function capitalize(value) {
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    }
+
+    function renderExplore() {
+      const grid = document.getElementById("exploreGrid");
+
+      grid.innerHTML = books.map(book => `
+        <div class="card book-card">
+          ${exploreSettings.numbers ? `<div class="num">${book.n}</div>` : ""}
+          ${exploreSettings.pictures ? `<img class="card-img" src="${book.img}" alt="${book.translit}">` : ""}
+          ${exploreSettings.hebrew ? `<div class="heb">${book.hebrew}</div>` : ""}
+          ${exploreSettings.english ? `<div class="eng">${book.english}</div>` : ""}
+          ${exploreSettings.translit ? `<div class="trans">${book.translit}</div>` : ""}
+        </div>
+      `).join("");
+    }
+
+    function renderQuiz() {
+      const book = quizBooks[quizIndex];
+
+      document.getElementById("quizNum").textContent = book.n;
+      document.getElementById("quizImg").src = book.img;
+      document.getElementById("quizImg").alt = book.translit;
+      document.getElementById("quizInput").value = "";
+      document.getElementById("quizFeedback").innerHTML = "";
+      document.getElementById("scoreText").textContent = `Score: ${score}/${asked}`;
+    }
+
+    function checkAnswer() {
+      const book = quizBooks[quizIndex];
+      const guess = normalize(document.getElementById("quizInput").value);
+      const answers = [book.hebrew, book.shortHebrew, book.english, book.translit].map(normalize);
+      const correct = answers.includes(guess);
+
+      asked++;
+      if (correct) score++;
+
+      document.getElementById("quizFeedback").innerHTML = `
+        <div class="${correct ? "good" : "bad"}">
+          <strong>${correct ? "Correct." : "Not quite."}</strong><br>
+          Answer:
+          <span dir="rtl"><strong>${book.hebrew}</strong></span>
+          — ${book.english} / ${book.translit}
+        </div>
+      `;
+
+      document.getElementById("scoreText").textContent = `Score: ${score}/${asked}`;
+    }
+
+    function nextQuiz() {
+      quizIndex++;
+
+      if (quizIndex >= quizBooks.length) {
+        quizBooks = shuffle([...books]);
+        quizIndex = 0;
+      }
+
+      renderQuiz();
+    }
+
+    function shuffleQuiz() {
+      quizBooks = shuffle([...books]);
+      quizIndex = 0;
+      renderQuiz();
+    }
+
+    function newNumberPrompt() {
+      numberPrompt = books[Math.floor(Math.random() * books.length)];
+
+      document.getElementById("numberInput").value = "";
+      document.getElementById("numberFeedback").innerHTML = "";
+      document.getElementById("numberImg").src = numberPrompt.img;
+      document.getElementById("numberImg").alt = numberPrompt.translit;
+      document.getElementById("streakText").textContent = `Streak: ${numberStreak}`;
+    }
+
+    function checkNumberAnswer() {
+      const guess = Number(document.getElementById("numberInput").value);
+      const correct = guess === numberPrompt.n;
+
+      numberStreak = correct ? numberStreak + 1 : 0;
+
+      document.getElementById("numberFeedback").innerHTML = `
+        <div class="${correct ? "good" : "bad"}">
+          <strong>${correct ? "Correct." : "Wrong."}</strong><br>
+          <span dir="rtl"><strong>${numberPrompt.hebrew}</strong></span>
+          — ${numberPrompt.english} / ${numberPrompt.translit}<br>
+          Correct number: <strong>${numberPrompt.n}</strong><br><br>
+          <button class="active" onclick="newNumberPrompt()">Next</button>
+        </div>
+      `;
+
+      document.getElementById("streakText").textContent = `Streak: ${numberStreak}`;
+    }
+
+    function newThemePrompt() {
+      themePrompt = books[Math.floor(Math.random() * books.length)];
+      renderThemeDrill();
+    }
+
+    function renderThemeDrill() {
+      document.getElementById("themeNum").textContent = themePrompt.n;
+      document.getElementById("themeImg").src = themePrompt.img;
+      document.getElementById("themeImg").alt = themePrompt.translit;
+      document.getElementById("themeFeedback").innerHTML = "";
+      document.getElementById("themeScoreText").textContent = `Score: ${themeScore}/${themeAsked} · Streak: ${themeStreak}`;
+
+      const options = shuffle([
+        themePrompt,
+        ...shuffle(books.filter(book => book.n !== themePrompt.n)).slice(0, 3)
+      ]);
+
+      document.getElementById("themeOptions").innerHTML = options.map(book => `
+        <button class="card" onclick="chooseTheme(${book.n})">
+          <div class="eng">${book.english}</div>
+          <div class="trans">${book.theme}</div>
+        </button>
+      `).join("");
+    }
+
+    function chooseTheme(bookNumber) {
+      const correct = bookNumber === themePrompt.n;
+
+      themeAsked++;
+      if (correct) {
+        themeScore++;
+        themeStreak++;
+      } else {
+        themeStreak = 0;
+      }
+
+      document.getElementById("themeFeedback").innerHTML = `
+        <div class="${correct ? "good" : "bad"}">
+          <strong>${correct ? "Correct." : "Wrong."}</strong><br>
+          <span dir="rtl"><strong>${themePrompt.hebrew}</strong></span>
+          — ${themePrompt.theme}<br><br>
+          <button class="active" onclick="newThemePrompt()">Next Theme</button>
+        </div>
+      `;
+
+      document.getElementById("themeScoreText").textContent = `Score: ${themeScore}/${themeAsked} · Streak: ${themeStreak}`;
+    }
+
+    function renderOrder() {
+      const list = document.getElementById("orderList");
+
+      list.innerHTML = orderItems.map((book, index) => {
+        const isCorrect = orderChecked && book.n === index + 1;
+        const isWrong = orderChecked && book.n !== index + 1;
+
+        return `
+          <div
+            class="card order-item ${isCorrect ? "correct" : ""} ${isWrong ? "wrong" : ""}"
+            draggable="true"
+            data-index="${index}"
+            ondragstart="dragStart(event)"
+            ondragover="dragOver(event)"
+            ondragleave="dragLeave(event)"
+            ondrop="dropItem(event)"
+            ondragend="dragEnd(event)"
+          >
+            <div class="order-left">
+              <div class="position">${index + 1}</div>
+              <img class="small-img" src="${book.img}" alt="${book.translit}">
+              <div>
+                <div class="heb">${book.hebrew}</div>
+                <div class="small">${book.english} / ${book.translit}</div>
+                ${isWrong ? `<div class="small" style="color:#dc2626;">Actually belongs at #${book.n}</div>` : ""}
+              </div>
+            </div>
+            <div class="handle">☰</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function dragStart(event) {
+      draggedIndex = Number(event.currentTarget.dataset.index);
+      event.currentTarget.classList.add("dragging");
+      event.dataTransfer.effectAllowed = "move";
+    }
+
+    function dragOver(event) {
+      event.preventDefault();
+      event.currentTarget.classList.add("drag-over");
+    }
+
+    function dragLeave(event) {
+      event.currentTarget.classList.remove("drag-over");
+    }
+
+    function dropItem(event) {
+      event.preventDefault();
+
+      const targetIndex = Number(event.currentTarget.dataset.index);
+      event.currentTarget.classList.remove("drag-over");
+
+      if (draggedIndex === null || draggedIndex === targetIndex) return;
+
+      const next = [...orderItems];
+      const [draggedItem] = next.splice(draggedIndex, 1);
+      next.splice(targetIndex, 0, draggedItem);
+
+      orderItems = next;
+      draggedIndex = null;
+      orderChecked = false;
+
+      document.getElementById("orderFeedback").innerHTML = "";
+      renderOrder();
+    }
+
+    function dragEnd(event) {
+      event.currentTarget.classList.remove("dragging");
+      document.querySelectorAll(".drag-over").forEach(item => item.classList.remove("drag-over"));
+    }
+
+    function shuffleOrder() {
+      orderItems = shuffle([...books]);
+      orderChecked = false;
+
+      document.getElementById("orderFeedback").innerHTML = "";
+      renderOrder();
+    }
+
+    function checkOrder() {
+      orderChecked = true;
+
+      const correctCount = orderItems.filter((book, index) => book.n === index + 1).length;
+
+      document.getElementById("orderFeedback").innerHTML = `
+        <div class="${correctCount === 14 ? "good" : "bad"}">
+          <strong>${correctCount === 14 ? "Perfect order." : correctCount + "/14 are in the correct position."}</strong>
+        </div>
+      `;
+
+      renderOrder();
+    }
+
+    function showCorrectOrder() {
+      orderItems = [...books];
+      orderChecked = true;
+
+      document.getElementById("orderFeedback").innerHTML = `
+        <div class="good"><strong>Correct order shown.</strong></div>
+      `;
+
+      renderOrder();
+    }
+
+    renderExplore();
+    renderQuiz();
+    newNumberPrompt();
+    newThemePrompt();
+    renderOrder();
+  </script>
+</body>
+</html>
