@@ -28,11 +28,89 @@ button.active{background:#0f172a;color:white;border-color:#0f172a}.grid{display:
 #learn .card.show-translit .learn-translit{display:block}
 #learn .learn-hint{color:#64748b;margin-bottom:14px;font-size:14px}
 
+
+.home-screen {
+  margin-top: 18px;
+}
+.home-paths {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+}
+.home-card {
+  background: white;
+  border: 1px solid #e5dccb;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.home-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.14);
+}
+.home-card .icon {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+.home-card h2 {
+  margin: 0 0 8px;
+  font-size: 28px;
+}
+.home-card p {
+  color: #64748b;
+  line-height: 1.45;
+  margin: 0;
+}
+.home-card .preview {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #e5dccb;
+  color: #0f172a;
+  font-weight: 700;
+  opacity: .78;
+}
+.back-home {
+  margin-bottom: 14px;
+}
+.app-hidden {
+  display: none !important;
+}
+
 </style>
 </head>
 <body>
 <div class="wrap">
 <header><div class="hebrew-title">י״ד ספרי משנה תורה</div><h1>Rambam Learning Engine</h1><p>Learn the 14 books of Mishneh Torah using names, numbers, order, and visual memory images.</p></header>
+
+<section id="homeScreen" class="home-screen">
+  <div class="home-paths">
+    <div class="home-card" onclick="openPath('learn')">
+      <div class="icon">🔎</div>
+      <h2>Explore</h2>
+      <p>Begin with the 14 sefarim visually. Start with picture + number only, then reveal more.</p>
+      <div class="preview">14 Books · Pictures · Hebrew · English</div>
+    </div>
+
+    <div class="home-card" onclick="openPath('match')">
+      <div class="icon">🧠</div>
+      <h2>Train</h2>
+      <p>Build recall through active practice instead of passively reading the list.</p>
+      <div class="preview">Flashcards · Picture Match · Number Drill</div>
+    </div>
+
+    <div class="home-card" onclick="openPath('order')">
+      <div class="icon">🏆</div>
+      <h2>Challenge</h2>
+      <p>Test whether you really know the names, numbers, pictures, and order.</p>
+      <div class="preview">Order Drill · Name Quiz · Self-test</div>
+    </div>
+  </div>
+</section>
+
+<section id="mainApp" class="app-hidden">
+  <button class="back-home" onclick="goHome()">← Back to Home</button>
 <div class="tabs">
 <button id="learnBtn" class="active" onclick="showTab('learn')">Learn</button>
 <button id="flashBtn" onclick="showTab('flash')">Flashcards</button>
@@ -53,7 +131,24 @@ button.active{background:#0f172a;color:white;border-color:#0f172a}.grid{display:
 <p id="matchScoreText">Score: 0/0 · Streak: 0</p></div></section>
 <section id="order" class="hidden"><div class="card"><h2>Order Drill</h2><p>Drag the sefarim into the correct order, then press Check Order.</p><div class="tabs"><button onclick="shuffleOrder()">Shuffle</button><button class="active" onclick="checkOrder()">Check Order</button><button onclick="showCorrectOrder()">Show Correct Order</button></div><div id="orderFeedback"></div><div id="orderList" class="order-list"></div></div></section>
 </div>
+
+</section>
+
 <script>
+
+function goHome(){
+  document.getElementById("homeScreen").classList.remove("app-hidden");
+  document.getElementById("mainApp").classList.add("app-hidden");
+}
+
+function openPath(tabName){
+  document.getElementById("homeScreen").classList.add("app-hidden");
+  document.getElementById("mainApp").classList.remove("app-hidden");
+  if(typeof showTab === "function"){
+    showTab(tabName);
+  }
+}
+
 const books=[
 {n:1,hebrew:"ספר המדע",shortHebrew:"מדע",english:"Knowledge",translit:"Madda",img:"madda.jpeg"},
 {n:2,hebrew:"ספר אהבה",shortHebrew:"אהבה",english:"Love",translit:"Ahavah",img:"ahava.jpg"},
