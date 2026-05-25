@@ -450,85 +450,18 @@
       }
     }
   
-    .hilchot-summary {
-      color: var(--muted);
-      margin: 0 0 16px;
-      line-height: 1.5;
-    }
+.hilchot-summary{color:var(--muted);margin:0 0 16px;line-height:1.5}
+.sefer-hilchot-card{cursor:pointer;min-height:220px;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+.sefer-hilchot-card:hover{transform:translateY(-4px);box-shadow:0 18px 45px rgba(15,23,42,.12);border-color:rgba(176,141,87,.65)}
+.hilchot-card-top{display:flex;align-items:center;gap:12px;text-align:left}
+.hilchot-card-top img{width:72px;height:72px;object-fit:contain;background:white;border-radius:14px;flex-shrink:0}
+.hilchot-count{display:inline-flex;border-radius:999px;padding:8px 12px;background:var(--soft);color:#374151;font-weight:900;margin-top:10px}
+.hilchot-list{display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);text-align:left}
+.sefer-hilchot-card.open .hilchot-list{display:block}
+.hilchot-list ol{margin:0;padding-left:22px}.hilchot-list li{margin:7px 0;font-weight:700}
+.hilchot-prompt{font-size:34px;font-weight:900;margin:12px 0 4px}
 
-    .sefer-hilchot-card {
-      cursor: pointer;
-      min-height: 220px;
-      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
-    }
-
-    .sefer-hilchot-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
-      border-color: rgba(176, 141, 87, 0.65);
-    }
-
-    .hilchot-count {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 999px;
-      padding: 8px 12px;
-      background: var(--soft);
-      color: #374151;
-      font-weight: 900;
-      margin-top: 10px;
-    }
-
-    .hilchot-list {
-      display: none;
-      margin-top: 14px;
-      padding-top: 14px;
-      border-top: 1px solid var(--line);
-      text-align: left;
-    }
-
-    .sefer-hilchot-card.open .hilchot-list {
-      display: block;
-    }
-
-    .hilchot-list ol {
-      margin: 0;
-      padding-left: 22px;
-    }
-
-    .hilchot-list li {
-      margin: 7px 0;
-      font-weight: 700;
-    }
-
-    .hilchot-card-top {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-align: left;
-    }
-
-    .hilchot-card-top img {
-      width: 72px;
-      height: 72px;
-      object-fit: contain;
-      background: white;
-      border-radius: 14px;
-      flex-shrink: 0;
-    }
-
-    .hilchot-prompt {
-      font-size: 34px;
-      font-weight: 900;
-      margin: 12px 0 4px;
-    }
-
-    .sort-options {
-      margin-top: 16px;
-    }
-
-  </style>
+</style>
 </head>
 
 <body>
@@ -683,9 +616,7 @@
 
       <section id="hilchotOverview" class="section active">
         <div class="card">
-          <p class="hilchot-summary">
-            First learn how many hilchot are inside each sefer. Click a sefer card to reveal its subject names.
-          </p>
+          <p class="hilchot-summary">First learn how many hilchot are inside each sefer. Click a sefer card to reveal its subject names.</p>
           <div id="hilchotOverviewGrid" class="grid"></div>
         </div>
       </section>
@@ -695,7 +626,7 @@
           <div class="num" id="hilchotSortNumber"></div>
           <div class="hilchot-prompt" id="hilchotSortPrompt"></div>
           <p class="trans">Which sefer does this hilchah belong to?</p>
-          <div id="hilchotSortOptions" class="grid sort-options"></div>
+          <div id="hilchotSortOptions" class="grid"></div>
           <div id="hilchotSortFeedback"></div>
           <p id="hilchotSortScore" class="trans">Score: 0/0 · Streak: 0</p>
         </div>
@@ -803,254 +734,69 @@
       exploreSettings[setting] = !exploreSettings[setting];
       document.getElementById("toggle" + capitalize(setting)).classList.toggle("active", exploreSettings[setting]);
   
-    const hilchotData = [
-      {
-            "n": 1,
-            "book": "Madda",
-            "hebrew": "ספר המדע",
-            "img": "madda.jpeg",
-            "hilchot": [
-                  "Yesodei HaTorah",
-                  "De'ot",
-                  "Talmud Torah",
-                  "Avodat Kochavim",
-                  "Teshuvah"
-            ]
-      },
-      {
-            "n": 2,
-            "book": "Ahavah",
-            "hebrew": "ספר אהבה",
-            "img": "ahava.jpg",
-            "hilchot": [
-                  "Kri'at Shema",
-                  "Tefilah and Birkat Kohanim",
-                  "Tefillin, Mezuzah and Sefer Torah",
-                  "Tzitzit",
-                  "Berachot",
-                  "Milah",
-                  "Seder Tefilot"
-            ]
-      },
-      {
-            "n": 3,
-            "book": "Zemanim",
-            "hebrew": "ספר זמנים",
-            "img": "zmanim.jpg",
-            "hilchot": [
-                  "Shabbat",
-                  "Eruvin",
-                  "Shevitat Asor",
-                  "Shevitat Yom Tov",
-                  "Chametz U'Matzah",
-                  "Shofar, Sukkah and Lulav",
-                  "Shekalim",
-                  "Kiddush HaChodesh",
-                  "Ta'aniyot",
-                  "Megillah and Chanukah"
-            ]
-      },
-      {
-            "n": 4,
-            "book": "Nashim",
-            "hebrew": "ספר נשים",
-            "img": "nashim.jpg",
-            "hilchot": [
-                  "Ishut",
-                  "Gerushin",
-                  "Yibbum and Chalitzah",
-                  "Na'arah Betulah",
-                  "Sotah"
-            ]
-      },
-      {
-            "n": 5,
-            "book": "Kedushah",
-            "hebrew": "ספר קדושה",
-            "img": "kedusha.jpg",
-            "hilchot": [
-                  "Issurei Biah",
-                  "Ma'achalot Assurot",
-                  "Shechitah"
-            ]
-      },
-      {
-            "n": 6,
-            "book": "Haflaah",
-            "hebrew": "ספר הפלאה",
-            "img": "haflaah.jpg",
-            "hilchot": [
-                  "Shevuot",
-                  "Nedarim",
-                  "Nezirut",
-                  "Arachin and Charamin"
-            ]
-      },
-      {
-            "n": 7,
-            "book": "Zeraim",
-            "hebrew": "ספר זרעים",
-            "img": "zeraim.jpg",
-            "hilchot": [
-                  "Kilayim",
-                  "Matanot Aniyim",
-                  "Terumot",
-                  "Ma'aser",
-                  "Ma'aser Sheni and Neta Revai",
-                  "Bikkurim",
-                  "Shemittah and Yovel"
-            ]
-      },
-      {
-            "n": 8,
-            "book": "Avodah",
-            "hebrew": "ספר עבודה",
-            "img": "avodah.jpg",
-            "hilchot": [
-                  "Beit HaBechirah",
-                  "Klei HaMikdash",
-                  "Bi'at HaMikdash",
-                  "Issurei Mizbeach",
-                  "Ma'aseh HaKorbanot",
-                  "Temidin U'Musafin",
-                  "Pesulei HaMukdashin",
-                  "Avodat Yom HaKippurim",
-                  "Me'ilah"
-            ]
-      },
-      {
-            "n": 9,
-            "book": "Korbanot",
-            "hebrew": "ספר קרבנות",
-            "img": "korbanos.jpg",
-            "hilchot": [
-                  "Korban Pesach",
-                  "Chagigah",
-                  "Bechorot",
-                  "Shegagot",
-                  "Mechusrei Kapparah",
-                  "Temurah"
-            ]
-      },
-      {
-            "n": 10,
-            "book": "Taharah",
-            "hebrew": "ספר טהרה",
-            "img": "taharah.jpg",
-            "hilchot": [
-                  "Tum'at Met",
-                  "Parah Adumah",
-                  "Tum'at Tzara'at",
-                  "Metamei Mishkav U'Moshav",
-                  "She'ar Avot HaTum'ah",
-                  "Tum'at Ochalin",
-                  "Kelim",
-                  "Mikvaot"
-            ]
-      },
-      {
-            "n": 11,
-            "book": "Nezikin",
-            "hebrew": "ספר נזיקין",
-            "img": "nezikin.jpg",
-            "hilchot": [
-                  "Nizkei Mamon",
-                  "Geneivah",
-                  "Gezeilah Va'Aveidah",
-                  "Chovel U'Mazik",
-                  "Rotzeach U'Shemirat HaNefesh"
-            ]
-      },
-      {
-            "n": 12,
-            "book": "Kinyan",
-            "hebrew": "ספר קנין",
-            "img": "kinyan.jpg",
-            "hilchot": [
-                  "Mechirah",
-                  "Zechiyah U'Matanah",
-                  "Shechenim",
-                  "Sheluchin VeShutafin",
-                  "Avadim"
-            ]
-      },
-      {
-            "n": 13,
-            "book": "Mishpatim",
-            "hebrew": "ספר משפטים",
-            "img": "mishpatim.png",
-            "hilchot": [
-                  "Sechirut",
-                  "She'eilah U'Pikadon",
-                  "Malveh VeLoveh",
-                  "To'en VeNit'an",
-                  "Nachalot"
-            ]
-      },
-      {
-            "n": 14,
-            "book": "Shoftim",
-            "hebrew": "ספר שופטים",
-            "img": "shoftim.jpg",
-            "hilchot": [
-                  "Sanhedrin",
-                  "Edut",
-                  "Mamrim",
-                  "Evel",
-                  "Melachim U'Milchamot"
-            ]
-      }
-];
+    const hilchotData = [{"n": 1, "book": "Madda", "hebrew": "ספר המדע", "img": "madda.jpeg", "hilchot": ["Yesodei HaTorah", "De'ot", "Talmud Torah", "Avodat Kochavim", "Teshuvah"]}, {"n": 2, "book": "Ahavah", "hebrew": "ספר אהבה", "img": "ahava.jpg", "hilchot": ["Kri'at Shema", "Tefilah and Birkat Kohanim", "Tefillin, Mezuzah and Sefer Torah", "Tzitzit", "Berachot", "Milah", "Seder Tefilot"]}, {"n": 3, "book": "Zemanim", "hebrew": "ספר זמנים", "img": "zmanim.jpg", "hilchot": ["Shabbat", "Eruvin", "Shevitat Asor", "Shevitat Yom Tov", "Chametz U'Matzah", "Shofar, Sukkah and Lulav", "Shekalim", "Kiddush HaChodesh", "Ta'aniyot", "Megillah and Chanukah"]}, {"n": 4, "book": "Nashim", "hebrew": "ספר נשים", "img": "nashim.jpg", "hilchot": ["Ishut", "Gerushin", "Yibbum and Chalitzah", "Na'arah Betulah", "Sotah"]}, {"n": 5, "book": "Kedushah", "hebrew": "ספר קדושה", "img": "kedusha.jpg", "hilchot": ["Issurei Biah", "Ma'achalot Assurot", "Shechitah"]}, {"n": 6, "book": "Haflaah", "hebrew": "ספר הפלאה", "img": "haflaah.jpg", "hilchot": ["Shevuot", "Nedarim", "Nezirut", "Arachin and Charamin"]}, {"n": 7, "book": "Zeraim", "hebrew": "ספר זרעים", "img": "zeraim.jpg", "hilchot": ["Kilayim", "Matanot Aniyim", "Terumot", "Ma'aser", "Ma'aser Sheni and Neta Revai", "Bikkurim", "Shemittah and Yovel"]}, {"n": 8, "book": "Avodah", "hebrew": "ספר עבודה", "img": "avodah.jpg", "hilchot": ["Beit HaBechirah", "Klei HaMikdash", "Bi'at HaMikdash", "Issurei Mizbeach", "Ma'aseh HaKorbanot", "Temidin U'Musafin", "Pesulei HaMukdashin", "Avodat Yom HaKippurim", "Me'ilah"]}, {"n": 9, "book": "Korbanot", "hebrew": "ספר קרבנות", "img": "korbanos.jpg", "hilchot": ["Korban Pesach", "Chagigah", "Bechorot", "Shegagot", "Mechusrei Kapparah", "Temurah"]}, {"n": 10, "book": "Taharah", "hebrew": "ספר טהרה", "img": "taharah.jpg", "hilchot": ["Tum'at Met", "Parah Adumah", "Tum'at Tzara'at", "Metamei Mishkav U'Moshav", "She'ar Avot HaTum'ah", "Tum'at Ochalin", "Kelim", "Mikvaot"]}, {"n": 11, "book": "Nezikin", "hebrew": "ספר נזיקין", "img": "nezikin.jpg", "hilchot": ["Nizkei Mamon", "Geneivah", "Gezeilah Va'Aveidah", "Chovel U'Mazik", "Rotzeach U'Shemirat HaNefesh"]}, {"n": 12, "book": "Kinyan", "hebrew": "ספר קנין", "img": "kinyan.jpg", "hilchot": ["Mechirah", "Zechiyah U'Matanah", "Shechenim", "Sheluchin VeShutafin", "Avadim"]}, {"n": 13, "book": "Mishpatim", "hebrew": "ספר משפטים", "img": "mishpatim.png", "hilchot": ["Sechirut", "She'eilah U'Pikadon", "Malveh VeLoveh", "To'en VeNit'an", "Nachalot"]}, {"n": 14, "book": "Shoftim", "hebrew": "ספר שופטים", "img": "shoftim.jpg", "hilchot": ["Sanhedrin", "Edut", "Mamrim", "Evel", "Melachim U'Milchamot"]}];
 
-    let hilchotSortItems = shuffle(hilchotData.flatMap(sefer =>
-      sefer.hilchot.map((name, index) => ({
-        name,
-        sefer: sefer.book,
-        seferHebrew: sefer.hebrew,
-        seferNumber: sefer.n,
-        img: sefer.img,
-        localNumber: index + 1
-      }))
-    ));
-
+    let hilchotSortItems = [];
     let hilchotSortIndex = 0;
     let hilchotSortScore = 0;
     let hilchotSortAsked = 0;
     let hilchotSortStreak = 0;
 
-    function showHilchotSection(sectionId) {
-      document.querySelectorAll("#hilchotPage .section").forEach(section => section.classList.remove("active"));
-      document.querySelectorAll("#hilchotPage .tab-btn").forEach(button => button.classList.remove("active"));
+    function setupHilchotSortItems() {
+      hilchotSortItems = shuffle(hilchotData.flatMap(function(sefer) {
+        return sefer.hilchot.map(function(name, index) {
+          return {
+            name: name,
+            sefer: sefer.book,
+            seferHebrew: sefer.hebrew,
+            seferNumber: sefer.n,
+            img: sefer.img,
+            localNumber: index + 1
+          };
+        });
+      }));
+    }
 
+    function showHilchotSection(sectionId) {
+      document.querySelectorAll("#hilchotPage .section").forEach(function(section) {
+        section.classList.remove("active");
+      });
+      document.querySelectorAll("#hilchotPage .tab-btn").forEach(function(button) {
+        button.classList.remove("active");
+      });
       document.getElementById(sectionId).classList.add("active");
       document.getElementById(sectionId + "Btn").classList.add("active");
+    }
+
+    function toggleHilchotCard(card) {
+      card.classList.toggle("open");
     }
 
     function renderHilchotOverview() {
       const grid = document.getElementById("hilchotOverviewGrid");
       if (!grid) return;
 
-      grid.innerHTML = hilchotData.map(sefer => `
-        <div class="card sefer-hilchot-card" onclick="this.classList.toggle('open')">
-          <div class="hilchot-card-top">
-            <img src="${sefer.img}" alt="${sefer.book}">
-            <div>
-              <div class="num">${sefer.n}</div>
-              <div dir="rtl" class="heb">${sefer.hebrew}</div>
-              <div class="eng">${sefer.book}</div>
-              <div class="hilchot-count">${sefer.hilchot.length} Hilchot</div>
-            </div>
-          </div>
-          <div class="hilchot-list">
-            <ol>
-              ${sefer.hilchot.map(name => `<li>${name}</li>`).join("")}
-            </ol>
-          </div>
-        </div>
-      `).join("");
+      grid.innerHTML = hilchotData.map(function(sefer) {
+        return '<div class="card sefer-hilchot-card" onclick="toggleHilchotCard(this)">' +
+          '<div class="hilchot-card-top">' +
+            '<img src="' + sefer.img + '" alt="' + sefer.book + '">' +
+            '<div>' +
+              '<div class="num">' + sefer.n + '</div>' +
+              '<div dir="rtl" class="heb">' + sefer.hebrew + '</div>' +
+              '<div class="eng">' + sefer.book + '</div>' +
+              '<div class="hilchot-count">' + sefer.hilchot.length + ' Hilchot</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="hilchot-list"><ol>' +
+            sefer.hilchot.map(function(name) { return '<li>' + name + '</li>'; }).join('') +
+          '</ol></div>' +
+        '</div>';
+      }).join('');
     }
 
     function renderHilchotSort() {
+      if (!hilchotSortItems.length) setupHilchotSortItems();
+
       const item = hilchotSortItems[hilchotSortIndex];
       if (!item) return;
 
@@ -1058,25 +804,25 @@
       document.getElementById("hilchotSortPrompt").textContent = item.name;
       document.getElementById("hilchotSortFeedback").innerHTML = "";
       document.getElementById("hilchotSortScore").textContent =
-        `Score: ${hilchotSortScore}/${hilchotSortAsked} · Streak: ${hilchotSortStreak}`;
+        "Score: " + hilchotSortScore + "/" + hilchotSortAsked + " · Streak: " + hilchotSortStreak;
 
-      const correctSefer = hilchotData.find(sefer => sefer.book === item.sefer);
-      const wrongOptions = shuffle(hilchotData.filter(sefer => sefer.book !== item.sefer)).slice(0, 3);
-      const options = shuffle([correctSefer, ...wrongOptions]);
+      const correctSefer = hilchotData.find(function(sefer) { return sefer.book === item.sefer; });
+      const wrongOptions = shuffle(hilchotData.filter(function(sefer) { return sefer.book !== item.sefer; })).slice(0, 3);
+      const options = shuffle([correctSefer].concat(wrongOptions));
 
-      document.getElementById("hilchotSortOptions").innerHTML = options.map(sefer => `
-        <button class="card" onclick="chooseHilchotSefer('${sefer.book.replace(/'/g, "\\'")}')">
-          <img class="small-img" src="${sefer.img}" alt="${sefer.book}">
-          <div dir="rtl" class="heb">${sefer.hebrew}</div>
-          <div class="eng">${sefer.book}</div>
-          <div class="trans">${sefer.hilchot.length} Hilchot</div>
-        </button>
-      `).join("");
+      document.getElementById("hilchotSortOptions").innerHTML = options.map(function(sefer) {
+        return '<button class="card" onclick="chooseHilchotSefer(' + sefer.n + ')">' +
+          '<img class="small-img" src="' + sefer.img + '" alt="' + sefer.book + '">' +
+          '<div dir="rtl" class="heb">' + sefer.hebrew + '</div>' +
+          '<div class="eng">' + sefer.book + '</div>' +
+          '<div class="trans">' + sefer.hilchot.length + ' Hilchot</div>' +
+        '</button>';
+      }).join('');
     }
 
-    function chooseHilchotSefer(bookName) {
+    function chooseHilchotSefer(seferNumber) {
       const item = hilchotSortItems[hilchotSortIndex];
-      const correct = bookName === item.sefer;
+      const correct = seferNumber === item.seferNumber;
 
       hilchotSortAsked++;
       if (correct) {
@@ -1086,37 +832,25 @@
         hilchotSortStreak = 0;
       }
 
-      document.getElementById("hilchotSortFeedback").innerHTML = `
-        <div class="${correct ? "good" : "bad"}">
-          <strong>${correct ? "Correct." : "Wrong."}</strong><br>
-          <strong>${item.name}</strong> belongs to
-          <span dir="rtl"><strong>${item.seferHebrew}</strong></span>
-          — ${item.sefer}.<br><br>
-          <button class="active" onclick="nextHilchotSort()">Next</button>
-        </div>
-      `;
+      document.getElementById("hilchotSortFeedback").innerHTML =
+        '<div class="' + (correct ? "good" : "bad") + '">' +
+          '<strong>' + (correct ? "Correct." : "Wrong.") + '</strong><br>' +
+          '<strong>' + item.name + '</strong> belongs to ' +
+          '<span dir="rtl"><strong>' + item.seferHebrew + '</strong></span>' +
+          ' — ' + item.sefer + '.<br><br>' +
+          '<button class="active" onclick="nextHilchotSort()">Next</button>' +
+        '</div>';
 
       document.getElementById("hilchotSortScore").textContent =
-        `Score: ${hilchotSortScore}/${hilchotSortAsked} · Streak: ${hilchotSortStreak}`;
+        "Score: " + hilchotSortScore + "/" + hilchotSortAsked + " · Streak: " + hilchotSortStreak;
     }
 
     function nextHilchotSort() {
       hilchotSortIndex++;
-
       if (hilchotSortIndex >= hilchotSortItems.length) {
-        hilchotSortItems = shuffle(hilchotData.flatMap(sefer =>
-          sefer.hilchot.map((name, index) => ({
-            name,
-            sefer: sefer.book,
-            seferHebrew: sefer.hebrew,
-            seferNumber: sefer.n,
-            img: sefer.img,
-            localNumber: index + 1
-          }))
-        ));
+        setupHilchotSortItems();
         hilchotSortIndex = 0;
       }
-
       renderHilchotSort();
     }
 
