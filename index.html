@@ -450,18 +450,79 @@
       }
     }
   
-.hilchot-summary{color:var(--muted);margin:0 0 16px;line-height:1.5}
-.sefer-hilchot-card{cursor:pointer;min-height:220px;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
-.sefer-hilchot-card:hover{transform:translateY(-4px);box-shadow:0 18px 45px rgba(15,23,42,.12);border-color:rgba(176,141,87,.65)}
-.hilchot-card-top{display:flex;align-items:center;gap:12px;text-align:left}
-.hilchot-card-top img{width:72px;height:72px;object-fit:contain;background:white;border-radius:14px;flex-shrink:0}
-.hilchot-count{display:inline-flex;border-radius:999px;padding:8px 12px;background:var(--soft);color:#374151;font-weight:900;margin-top:10px}
-.hilchot-list{display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);text-align:left}
-.sefer-hilchot-card.open .hilchot-list{display:block}
-.hilchot-list ol{margin:0;padding-left:22px}.hilchot-list li{margin:7px 0;font-weight:700}
-.hilchot-prompt{font-size:34px;font-weight:900;margin:12px 0 4px}
+    .hilchot-summary {
+      color: var(--muted);
+      margin: 0 0 16px;
+      line-height: 1.5;
+    }
 
-</style>
+    .sefer-hilchot-card {
+      cursor: pointer;
+      min-height: 220px;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+
+    .sefer-hilchot-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+      border-color: rgba(176, 141, 87, 0.65);
+    }
+
+    .hilchot-card-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+    }
+
+    .hilchot-card-top img {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+      background: white;
+      border-radius: 14px;
+      flex-shrink: 0;
+    }
+
+    .hilchot-count {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: var(--soft);
+      color: #374151;
+      font-weight: 900;
+      margin-top: 10px;
+    }
+
+    .hilchot-list {
+      display: none;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      text-align: left;
+    }
+
+    .sefer-hilchot-card.open .hilchot-list {
+      display: block;
+    }
+
+    .hilchot-list ol {
+      margin: 0;
+      padding-left: 22px;
+    }
+
+    .hilchot-list li {
+      margin: 7px 0;
+      font-weight: 700;
+    }
+
+    .hilchot-prompt {
+      font-size: 34px;
+      font-weight: 900;
+      margin: 12px 0 4px;
+    }
+
+  </style>
 </head>
 
 <body>
@@ -616,8 +677,333 @@
 
       <section id="hilchotOverview" class="section active">
         <div class="card">
-          <p class="hilchot-summary">First learn how many hilchot are inside each sefer. Click a sefer card to reveal its subject names.</p>
-          <div id="hilchotOverviewGrid" class="grid"></div>
+          <p class="hilchot-summary">
+            First learn how many hilchot are inside each sefer. Click a sefer card to reveal its subject names.
+          </p>
+          <div id="hilchotOverviewGrid" class="grid">
+            
+            <div class="card sefer-hilchot-card" onclick="this.classList.toggle('open')">
+              <div class="hilchot-card-top">
+                <img src="madda.jpeg" alt="Madda">
+                <div>
+                  <div class="num">1</div>
+                  <div dir="rtl" class="heb">ספר המדע</div>
+                  <div class="eng">Madda</div>
+                  <div class="hilchot-count">5 Hilchot</div>
+                </div>
+              </div>
+              <div class="hilchot-list">
+                <ol>
+                  <li>Yesodei HaTorah</li>
+<li>De'ot</li>
+<li>Talmud Torah</li>
+<li>Avodat Kochavim</li>
+<li>Teshuvah</li>
+                </ol>
+              </div>
+            </div>
+
+
+            <div class="card sefer-hilchot-card" onclick="this.classList.toggle('open')">
+              <div class="hilchot-card-top">
+                <img src="ahava.jpg" alt="Ahavah">
+                <div>
+                  <div class="num">2</div>
+                  <div dir="rtl" class="heb">ספר אהבה</div>
+                  <div class="eng">Ahavah</div>
+                  <div class="hilchot-count">7 Hilchot</div>
+                </div>
+              </div>
+              <div class="hilchot-list">
+                <ol>
+                  <li>Kri'at Shema</li>
+<li>Tefilah and Birkat Kohanim</li>
+<li>Tefillin, Mezuzah and Sefer Torah</li>
+<li>Tzitzit</li>
+<li>Berachot</li>
+<li>Milah</li>
+<li>Seder Tefilot</li>
+                </ol>
+              </div>
+            </div>
+
+
+            <div class="card sefer-hilchot-card" onclick="this.classList.toggle('open')">
+              <div class="hilchot-card-top">
+                <img src="zmanim.jpg" alt="Zemanim">
+                <div>
+                  <div class="num">3</div>
+                  <div dir="rtl" class="heb">ספר זמנים</div>
+                  <div class="eng">Zemanim</div>
+                  <div class="hilchot-count">10 Hilchot</div>
+                </div>
+              </div>
+              <div class="hilchot-list">
+                <ol>
+                  <li>Shabbat</li>
+<li>Eruvin</li>
+<li>Shevitat Asor</li>
+<li>Shevitat Yom Tov</li>
+<li>Chametz U'Matzah</li>
+<li>Shofar, Sukkah and Lulav</li>
+<li>Shekalim</li>
+<li>Kiddush HaChodesh</li>
+<li>Ta'aniyot</li>
+<li>Megillah and Chanukah</li>
+                </ol>
+              </div>
+            </div>
+
+
+            <div class="card sefer-hilchot-card" onclick="this.classList.toggle('open')">
+              <div class="hilchot-card-top">
+                <img src="nashim.jpg" alt="Nashim">
+                <div>
+                  <div class="num">4</div>
+                  <div dir="rtl" class="heb">ספר נשים</div>
+                  <div class="eng">Nashim</div>
+                  <div class="hilchot-count">5 Hilchot</div>
+                </div>
+              </div>
+              <div class="hilchot-list">
+                <ol>
+                  <li>Ishut</li>
+<li>Gerushin</li>
+<li>Yibbum and Chalitzah</li>
+<li>Na'arah Betulah</li>
+<li>Sotah</li>
+                </ol>
+              </div>
+            </div>
+
+
+            <div class="card sefer-hilchot-card" onclick="this.classList.toggle('open')">
+              <div class="hilchot-card-top">
+                <img src="kedusha.jpg" alt="Kedushah">
+                <div>
+                  <div class="num">5</div>
+                  <div dir="rtl" class="heb">ספר קדושה</div>
+                  <div class="eng">Kedushah</div>
+                  <div class="hilchot-count">3 Hilchot</div>
+                </div>
+              </div>
+              <div class="hilchot-list">
+                <ol>
+                  <li>Issurei Biah</li>
+<li>Ma'achalot Assurot</li>
+<li>Shechitah</li>
+                </ol>
+              </div>
+            </div>
+
+
+            <div class="card sefer-hilchot-card" onclick="this.classList.toggle('open')">
+              <div class="hilchot-card-top">
+                <img src="haflaah.jpg" alt="Haflaah">
+                <div>
+                  <div class="num">6</div>
+                  <div dir="rtl" class="heb">ספר הפלאה</div>
+                  <div class="eng">Haflaah</div>
+                  <div class="hilchot-count">4 Hilchot</div>
+                </div>
+              </div>
+              <div class="hilchot-list">
+                <ol>
+                  <li>Shevuot</li>
+<li>Nedarim</li>
+<li>Nezirut</li>
+<li>Arachin and Charamin</li>
+                </ol>
+              </div>
+            </div>
+
+
+            <div class="card sefer-hilchot-card" onclick="this.classList.toggle('open')">
+              <div class="hilchot-card-top">
+                <img src="zeraim.jpg" alt="Zeraim">
+                <div>
+                  <div class="num">7</div>
+                  <div dir="rtl" class="heb">ספר זרעים</div>
+                  <div class="eng">Zeraim</div>
+                  <div class="hilchot-count">7 Hilchot</div>
+                </div>
+              </div>
+              <div class="hilchot-list">
+                <ol>
+                  <li>Kilayim</li>
+<li>Matanot Aniyim</li>
+<li>Terumot</li>
+<li>Ma'aser</li>
+<li>Ma'aser Sheni and Neta Revai</li>
+<li>Bikkurim</li>
+<li>Shemittah and Yovel</li>
+                </ol>
+              </div>
+            </div>
+
+
+            <div class="card sefer-hilchot-card" onclick="this.classList.toggle('open')">
+              <div class="hilchot-card-top">
+                <img src="avodah.jpg" alt="Avodah">
+                <div>
+                  <div class="num">8</div>
+                  <div dir="rtl" class="heb">ספר עבודה</div>
+                  <div class="eng">Avodah</div>
+                  <div class="hilchot-count">9 Hilchot</div>
+                </div>
+              </div>
+              <div class="hilchot-list">
+                <ol>
+                  <li>Beit HaBechirah</li>
+<li>Klei HaMikdash</li>
+<li>Bi'at HaMikdash</li>
+<li>Issurei Mizbeach</li>
+<li>Ma'aseh HaKorbanot</li>
+<li>Temidin U'Musafin</li>
+<li>Pesulei HaMukdashin</li>
+<li>Avodat Yom HaKippurim</li>
+<li>Me'ilah</li>
+                </ol>
+              </div>
+            </div>
+
+
+            <div class="card sefer-hilchot-card" onclick="this.classList.toggle('open')">
+              <div class="hilchot-card-top">
+                <img src="korbanos.jpg" alt="Korbanot">
+                <div>
+                  <div class="num">9</div>
+                  <div dir="rtl" class="heb">ספר קרבנות</div>
+                  <div class="eng">Korbanot</div>
+                  <div class="hilchot-count">6 Hilchot</div>
+                </div>
+              </div>
+              <div class="hilchot-list">
+                <ol>
+                  <li>Korban Pesach</li>
+<li>Chagigah</li>
+<li>Bechorot</li>
+<li>Shegagot</li>
+<li>Mechusrei Kapparah</li>
+<li>Temurah</li>
+                </ol>
+              </div>
+            </div>
+
+
+            <div class="card sefer-hilchot-card" onclick="this.classList.toggle('open')">
+              <div class="hilchot-card-top">
+                <img src="taharah.jpg" alt="Taharah">
+                <div>
+                  <div class="num">10</div>
+                  <div dir="rtl" class="heb">ספר טהרה</div>
+                  <div class="eng">Taharah</div>
+                  <div class="hilchot-count">8 Hilchot</div>
+                </div>
+              </div>
+              <div class="hilchot-list">
+                <ol>
+                  <li>Tum'at Met</li>
+<li>Parah Adumah</li>
+<li>Tum'at Tzara'at</li>
+<li>Metamei Mishkav U'Moshav</li>
+<li>She'ar Avot HaTum'ah</li>
+<li>Tum'at Ochalin</li>
+<li>Kelim</li>
+<li>Mikvaot</li>
+                </ol>
+              </div>
+            </div>
+
+
+            <div class="card sefer-hilchot-card" onclick="this.classList.toggle('open')">
+              <div class="hilchot-card-top">
+                <img src="nezikin.jpg" alt="Nezikin">
+                <div>
+                  <div class="num">11</div>
+                  <div dir="rtl" class="heb">ספר נזיקין</div>
+                  <div class="eng">Nezikin</div>
+                  <div class="hilchot-count">5 Hilchot</div>
+                </div>
+              </div>
+              <div class="hilchot-list">
+                <ol>
+                  <li>Nizkei Mamon</li>
+<li>Geneivah</li>
+<li>Gezeilah Va'Aveidah</li>
+<li>Chovel U'Mazik</li>
+<li>Rotzeach U'Shemirat HaNefesh</li>
+                </ol>
+              </div>
+            </div>
+
+
+            <div class="card sefer-hilchot-card" onclick="this.classList.toggle('open')">
+              <div class="hilchot-card-top">
+                <img src="kinyan.jpg" alt="Kinyan">
+                <div>
+                  <div class="num">12</div>
+                  <div dir="rtl" class="heb">ספר קנין</div>
+                  <div class="eng">Kinyan</div>
+                  <div class="hilchot-count">5 Hilchot</div>
+                </div>
+              </div>
+              <div class="hilchot-list">
+                <ol>
+                  <li>Mechirah</li>
+<li>Zechiyah U'Matanah</li>
+<li>Shechenim</li>
+<li>Sheluchin VeShutafin</li>
+<li>Avadim</li>
+                </ol>
+              </div>
+            </div>
+
+
+            <div class="card sefer-hilchot-card" onclick="this.classList.toggle('open')">
+              <div class="hilchot-card-top">
+                <img src="mishpatim.png" alt="Mishpatim">
+                <div>
+                  <div class="num">13</div>
+                  <div dir="rtl" class="heb">ספר משפטים</div>
+                  <div class="eng">Mishpatim</div>
+                  <div class="hilchot-count">5 Hilchot</div>
+                </div>
+              </div>
+              <div class="hilchot-list">
+                <ol>
+                  <li>Sechirut</li>
+<li>She'eilah U'Pikadon</li>
+<li>Malveh VeLoveh</li>
+<li>To'en VeNit'an</li>
+<li>Nachalot</li>
+                </ol>
+              </div>
+            </div>
+
+
+            <div class="card sefer-hilchot-card" onclick="this.classList.toggle('open')">
+              <div class="hilchot-card-top">
+                <img src="shoftim.jpg" alt="Shoftim">
+                <div>
+                  <div class="num">14</div>
+                  <div dir="rtl" class="heb">ספר שופטים</div>
+                  <div class="eng">Shoftim</div>
+                  <div class="hilchot-count">5 Hilchot</div>
+                </div>
+              </div>
+              <div class="hilchot-list">
+                <ol>
+                  <li>Sanhedrin</li>
+<li>Edut</li>
+<li>Mamrim</li>
+<li>Evel</li>
+<li>Melachim U'Milchamot</li>
+                </ol>
+              </div>
+            </div>
+
+          </div>
         </div>
       </section>
 
@@ -768,32 +1154,6 @@
       document.getElementById(sectionId + "Btn").classList.add("active");
     }
 
-    function toggleHilchotCard(card) {
-      card.classList.toggle("open");
-    }
-
-    function renderHilchotOverview() {
-      const grid = document.getElementById("hilchotOverviewGrid");
-      if (!grid) return;
-
-      grid.innerHTML = hilchotData.map(function(sefer) {
-        return '<div class="card sefer-hilchot-card" onclick="toggleHilchotCard(this)">' +
-          '<div class="hilchot-card-top">' +
-            '<img src="' + sefer.img + '" alt="' + sefer.book + '">' +
-            '<div>' +
-              '<div class="num">' + sefer.n + '</div>' +
-              '<div dir="rtl" class="heb">' + sefer.hebrew + '</div>' +
-              '<div class="eng">' + sefer.book + '</div>' +
-              '<div class="hilchot-count">' + sefer.hilchot.length + ' Hilchot</div>' +
-            '</div>' +
-          '</div>' +
-          '<div class="hilchot-list"><ol>' +
-            sefer.hilchot.map(function(name) { return '<li>' + name + '</li>'; }).join('') +
-          '</ol></div>' +
-        '</div>';
-      }).join('');
-    }
-
     function renderHilchotSort() {
       if (!hilchotSortItems.length) setupHilchotSortItems();
 
@@ -856,7 +1216,6 @@
 
 
     renderExplore();
-    renderHilchotOverview();
     renderHilchotSort();
     }
 
