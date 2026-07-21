@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>מפת משנה תורה</title>
-
+<title>משנה תורה</title>
   <style>
     :root {
       --bg: #f7f4ee;
@@ -128,12 +128,27 @@
       margin-bottom: 18px;
     }
 
-    .home-title {
-      font-size: 36px;
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      margin-bottom: 18px;
-    }
+.home-number {
+  font-size: 72px;
+  font-weight: 900;
+  line-height: 0.9;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+.home-title {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  margin-bottom: 8px;
+}
+
+.home-subtitle {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.4;
+  margin-bottom: 18px;
+}
 
     .hover-details {
       opacity: 0;
@@ -449,7 +464,7 @@
         align-items: flex-start;
       }
     }
-  
+
     .hilchot-summary {
       color: var(--muted);
       margin: 0 0 16px;
@@ -522,7 +537,7 @@
       margin: 12px 0 4px;
     }
 
-  
+
     .hilchot-focus-layout {
       display: grid;
       grid-template-columns: 310px minmax(0, 1fr);
@@ -650,8 +665,7 @@
         margin: 0 auto;
       }
     }
-
-</style>
+  </style>
 </head>
 
 <body>
@@ -660,7 +674,7 @@
     <div id="homePage" class="page active">
       <header>
         <div>
-          <div class="hebrew-title">מפת משנה תורה</div>
+          <div class="hebrew-title"> משנה תורה</div>
           <h1>Rambam Learning Engine</h1>
         </div>
       </header>
@@ -668,7 +682,14 @@
       <div class="home-grid">
         <div class="home-card" onclick="openPage('booksPage')">
           <div class="level-kicker">Level One</div>
-          <div class="home-title">14 Books</div>
+
+<div class="home-number">14</div>
+
+<div class="home-title">Sefarim</div>
+
+<div class="home-subtitle">
+    Master the structure of Mishneh Torah
+</div>
           <div class="hover-details">
             <span class="pill">Names</span>
             <span class="pill">Order</span>
@@ -680,7 +701,13 @@
 
         <div class="home-card" onclick="openPage('hilchotPage')">
           <div class="level-kicker">Level Two</div>
-          <div class="home-title">Hilchot</div>
+          <div class="home-number">83</div>
+
+<div class="home-title">Hilchot</div>
+
+<div class="home-subtitle">
+    Learn every section of every Sefer
+</div>
           <div class="hover-details">
             <span class="pill">Mada</span>
             <span class="pill">Ahavah</span>
@@ -692,7 +719,13 @@
 
         <div class="home-card" onclick="openPage('mitzvotPage')">
           <div class="level-kicker">Level Three</div>
-          <div class="home-title">Mitzvot</div>
+          <div class="home-number">613</div>
+
+<div class="home-title">Mitzvot</div>
+
+<div class="home-subtitle">
+    Master every mitzvah in the Rambam
+</div>
           <div class="hover-details">
             <span class="pill">Mishneh Torah Order</span>
             <span class="pill">Chumash Order</span>
@@ -800,11 +833,12 @@
       </div>
 
       <div class="tabs">
-        <button id="hilchotOverviewBtn" class="tab-btn active" onclick="showHilchotSection('hilchotOverview')">Overview</button>
+        <button id="hilchotOverviewBtn" class="tab-btn active"
+          onclick="showHilchotSection('hilchotOverview')">Overview</button>
         <button id="hilchotSortBtn" class="tab-btn" onclick="showHilchotSection('hilchotSort')">Sort Activity</button>
       </div>
 
-      
+
       <section id="hilchotOverview" class="section active">
         <div class="card">
           <p class="focus-instruction">
@@ -813,7 +847,7 @@
 
           <div class="hilchot-focus-layout">
             <div class="sefer-list">
-              
+
               <button class="sefer-row" id="seferRow1" data-sefer="1">
                 <span class="sefer-row-main">
                   <span class="mini-num">1</span>
@@ -834,7 +868,7 @@
                     <span class="trans">Ahavah</span>
                   </span>
                 </span>
-                <span class="trans">7</span>
+                <span class="trans">6</span>
               </button>
 
 
@@ -918,7 +952,7 @@
                     <span class="trans">Korbanot</span>
                   </span>
                 </span>
-                <span class="trans">6</span>
+                <span class="trans">5</span>
               </button>
 
 
@@ -942,7 +976,7 @@
                     <span class="trans">Nezikin</span>
                   </span>
                 </span>
-                <span class="trans">5</span>
+                <span class="trans">6</span>
               </button>
 
 
@@ -1016,7 +1050,7 @@
       </section>
     </div>
 
-<div id="mitzvotPage" class="page">
+    <div id="mitzvotPage" class="page">
       <div class="topbar">
         <button onclick="openPage('homePage')">← Home</button>
         <div class="module-title">
@@ -1116,156 +1150,158 @@
     function toggleExplore(setting) {
       exploreSettings[setting] = !exploreSettings[setting];
       document.getElementById("toggle" + capitalize(setting)).classList.toggle("active", exploreSettings[setting]);
-  
-    const hilchotData = [{"n": 1, "book": "Madda", "hebrew": "ספר המדע", "img": "madda.jpeg", "hilchot": ["Yesodei HaTorah", "De'ot", "Talmud Torah", "Avodat Kochavim", "Teshuvah"]}, {"n": 2, "book": "Ahavah", "hebrew": "ספר אהבה", "img": "ahava.jpg", "hilchot": ["Kri'at Shema", "Tefilah and Birkat Kohanim", "Tefillin, Mezuzah and Sefer Torah", "Tzitzit", "Berachot", "Milah", "Seder Tefilot"]}, {"n": 3, "book": "Zemanim", "hebrew": "ספר זמנים", "img": "zmanim.jpg", "hilchot": ["Shabbat", "Eruvin", "Shevitat Asor", "Shevitat Yom Tov", "Chametz U'Matzah", "Shofar, Sukkah and Lulav", "Shekalim", "Kiddush HaChodesh", "Ta'aniyot", "Megillah and Chanukah"]}, {"n": 4, "book": "Nashim", "hebrew": "ספר נשים", "img": "nashim.jpg", "hilchot": ["Ishut", "Gerushin", "Yibbum and Chalitzah", "Na'arah Betulah", "Sotah"]}, {"n": 5, "book": "Kedushah", "hebrew": "ספר קדושה", "img": "kedusha.jpg", "hilchot": ["Issurei Biah", "Ma'achalot Assurot", "Shechitah"]}, {"n": 6, "book": "Haflaah", "hebrew": "ספר הפלאה", "img": "haflaah.jpg", "hilchot": ["Shevuot", "Nedarim", "Nezirut", "Arachin and Charamin"]}, {"n": 7, "book": "Zeraim", "hebrew": "ספר זרעים", "img": "zeraim.jpg", "hilchot": ["Kilayim", "Matanot Aniyim", "Terumot", "Ma'aser", "Ma'aser Sheni and Neta Revai", "Bikkurim", "Shemittah and Yovel"]}, {"n": 8, "book": "Avodah", "hebrew": "ספר עבודה", "img": "avodah.jpg", "hilchot": ["Beit HaBechirah", "Klei HaMikdash", "Bi'at HaMikdash", "Issurei Mizbeach", "Ma'aseh HaKorbanot", "Temidin U'Musafin", "Pesulei HaMukdashin", "Avodat Yom HaKippurim", "Me'ilah"]}, {"n": 9, "book": "Korbanot", "hebrew": "ספר קרבנות", "img": "korbanos.jpg", "hilchot": ["Korban Pesach", "Chagigah", "Bechorot", "Shegagot", "Mechusrei Kapparah", "Temurah"]}, {"n": 10, "book": "Taharah", "hebrew": "ספר טהרה", "img": "taharah.jpg", "hilchot": ["Tum'at Met", "Parah Adumah", "Tum'at Tzara'at", "Metamei Mishkav U'Moshav", "She'ar Avot HaTum'ah", "Tum'at Ochalin", "Kelim", "Mikvaot"]}, {"n": 11, "book": "Nezikin", "hebrew": "ספר נזיקין", "img": "nezikin.jpg", "hilchot": ["Nizkei Mamon", "Geneivah", "Gezeilah Va'Aveidah", "Chovel U'Mazik", "Rotzeach U'Shemirat HaNefesh"]}, {"n": 12, "book": "Kinyan", "hebrew": "ספר קנין", "img": "kinyan.jpg", "hilchot": ["Mechirah", "Zechiyah U'Matanah", "Shechenim", "Sheluchin VeShutafin", "Avadim"]}, {"n": 13, "book": "Mishpatim", "hebrew": "ספר משפטים", "img": "mishpatim.png", "hilchot": ["Sechirut", "She'eilah U'Pikadon", "Malveh VeLoveh", "To'en VeNit'an", "Nachalot"]}, {"n": 14, "book": "Shoftim", "hebrew": "ספר שופטים", "img": "shoftim.jpg", "hilchot": ["Sanhedrin", "Edut", "Mamrim", "Evel", "Melachim U'Milchamot"]}];
 
-    let hilchotSortItems = [];
-    let hilchotSortIndex = 0;
-    let hilchotSortScore = 0;
-    let hilchotSortAsked = 0;
-    let hilchotSortStreak = 0;
+      }
+      const hilchotData = [{ "n": 1, "book": "Madda", "hebrew": "ספר המדע", "img": "madda.jpeg", "hilchot": ["Yesodei HaTorah", "De'ot", "Talmud Torah", "Avodat Kochavim", "Teshuvah"] }, { "n": 2, "book": "Ahavah", "hebrew": "ספר אהבה", "img": "ahava.jpg", "hilchot": ["Kri'at Shema", "Tefilah and Birkat Kohanim", "Tefillin, Mezuzah and Sefer Torah", "Tzitzit", "Berachot", "Milah"] }, { "n": 3, "book": "Zemanim", "hebrew": "ספר זמנים", "img": "zmanim.jpg", "hilchot": ["Shabbat", "Eruvin", "Shevitat Asor", "Shevitat Yom Tov", "Chametz U'Matzah", "Shofar, Sukkah and Lulav", "Shekalim", "Kiddush HaChodesh", "Ta'aniyot", "Megillah and Chanukah"] }, { "n": 4, "book": "Nashim", "hebrew": "ספר נשים", "img": "nashim.jpg", "hilchot": ["Ishut", "Gerushin", "Yibbum and Chalitzah", "Na'arah Betulah", "Sotah"] }, { "n": 5, "book": "Kedushah", "hebrew": "ספר קדושה", "img": "kedusha.jpg", "hilchot": ["Issurei Biah", "Ma'achalot Assurot", "Shechitah"] }, { "n": 6, "book": "Haflaah", "hebrew": "ספר הפלאה", "img": "haflaah.jpg", "hilchot": ["Shevuot", "Nedarim", "Nezirut", "Arachin and Charamin"] }, { "n": 7, "book": "Zeraim", "hebrew": "ספר זרעים", "img": "zeraim.jpg", "hilchot": ["Kilayim", "Matanot Aniyim", "Terumot", "Ma'aser", "Ma'aser Sheni and Neta Revai", "Bikkurim", "Shemittah and Yovel"] }, { "n": 8, "book": "Avodah", "hebrew": "ספר עבודה", "img": "avodah.jpg", "hilchot": ["Beit HaBechirah", "Klei HaMikdash", "Bi'at HaMikdash", "Issurei Mizbeach", "Ma'aseh HaKorbanot", "Temidin U'Musafin", "Pesulei HaMukdashin", "Avodat Yom HaKippurim", "Me'ilah"] }, { "n": 9, "book": "Korbanot", "hebrew": "ספר קרבנות", "img": "korbanos.jpg", "hilchot": ["Korban Pesach", "Chagigah", "Bechorot", "Shegagot", "Mechusrei Kapparah", "Temurah"] }, { "n": 10, "book": "Taharah", "hebrew": "ספר טהרה", "img": "taharah.jpg", "hilchot": ["Tum'at Met", "Parah Adumah", "Tum'at Tzara'at", "Metamei Mishkav U'Moshav", "She'ar Avot HaTum'ah", "Tum'at Ochalin", "Kelim", "Mikvaot"] }, { "n": 11, "book": "Nezikin", "hebrew": "ספר נזיקין", "img": "nezikin.jpg", "hilchot": ["Nizkei Mamon", "Geneivah", "Gezeilah Va'Aveidah", "Chovel U'Mazik", "Rotzeach U'Shemirat HaNefesh"] }, { "n": 12, "book": "Kinyan", "hebrew": "ספר קנין", "img": "kinyan.jpg", "hilchot": ["Mechirah", "Zechiyah U'Matanah", "Shechenim", "Sheluchin VeShutafin", "Avadim"] }, { "n": 13, "book": "Mishpatim", "hebrew": "ספר משפטים", "img": "mishpatim.png", "hilchot": ["Sechirut", "She'eilah U'Pikadon", "Malveh VeLoveh", "To'en VeNit'an", "Nachalot"] }, { "n": 14, "book": "Shoftim", "hebrew": "ספר שופטים", "img": "shoftim.jpg", "hilchot": ["Sanhedrin", "Edut", "Mamrim", "Evel", "Melachim U'Milchamot"] }];
 
-    function setupHilchotSortItems() {
-      hilchotSortItems = shuffle(hilchotData.flatMap(function(sefer) {
-        return sefer.hilchot.map(function(name, index) {
-          return {
-            name: name,
-            sefer: sefer.book,
-            seferHebrew: sefer.hebrew,
-            seferNumber: sefer.n,
-            img: sefer.img,
-            localNumber: index + 1
-          };
-        });
-      }));
-    }
+      let hilchotSortItems = [];
+      let hilchotSortIndex = 0;
+      let hilchotSortScore = 0;
+      let hilchotSortAsked = 0;
+      let hilchotSortStreak = 0;
 
-    function showHilchotSection(sectionId) {
-      document.querySelectorAll("#hilchotPage .section").forEach(function(section) {
-        section.classList.remove("active");
-      });
-      document.querySelectorAll("#hilchotPage .tab-btn").forEach(function(button) {
-        button.classList.remove("active");
-      });
-      document.getElementById(sectionId).classList.add("active");
-      document.getElementById(sectionId + "Btn").classList.add("active");
-    }
-
-    function renderHilchotSort() {
-      if (!hilchotSortItems.length) setupHilchotSortItems();
-
-      const item = hilchotSortItems[hilchotSortIndex];
-      if (!item) return;
-
-      document.getElementById("hilchotSortNumber").textContent = item.localNumber;
-      document.getElementById("hilchotSortPrompt").textContent = item.name;
-      document.getElementById("hilchotSortFeedback").innerHTML = "";
-      document.getElementById("hilchotSortScore").textContent =
-        "Score: " + hilchotSortScore + "/" + hilchotSortAsked + " · Streak: " + hilchotSortStreak;
-
-      const correctSefer = hilchotData.find(function(sefer) { return sefer.book === item.sefer; });
-      const wrongOptions = shuffle(hilchotData.filter(function(sefer) { return sefer.book !== item.sefer; })).slice(0, 3);
-      const options = shuffle([correctSefer].concat(wrongOptions));
-
-      document.getElementById("hilchotSortOptions").innerHTML = options.map(function(sefer) {
-        return '<button class="card" onclick="chooseHilchotSefer(' + sefer.n + ')">' +
-          '<img class="small-img" src="' + sefer.img + '" alt="' + sefer.book + '">' +
-          '<div dir="rtl" class="heb">' + sefer.hebrew + '</div>' +
-          '<div class="eng">' + sefer.book + '</div>' +
-          '<div class="trans">' + sefer.hilchot.length + ' Hilchot</div>' +
-        '</button>';
-      }).join('');
-    }
-
-    function chooseHilchotSefer(seferNumber) {
-      const item = hilchotSortItems[hilchotSortIndex];
-      const correct = seferNumber === item.seferNumber;
-
-      hilchotSortAsked++;
-      if (correct) {
-        hilchotSortScore++;
-        hilchotSortStreak++;
-      } else {
-        hilchotSortStreak = 0;
+      function setupHilchotSortItems() {
+        hilchotSortItems = shuffle(hilchotData.flatMap(function (sefer) {
+          return sefer.hilchot.map(function (name, index) {
+            return {
+              name: name,
+              sefer: sefer.book,
+              seferHebrew: sefer.hebrew,
+              seferNumber: sefer.n,
+              img: sefer.img,
+              localNumber: index + 1
+            };
+          });
+        }));
       }
 
-      document.getElementById("hilchotSortFeedback").innerHTML =
-        '<div class="' + (correct ? "good" : "bad") + '">' +
+      function showHilchotSection(sectionId) {
+        document.querySelectorAll("#hilchotPage .section").forEach(function (section) {
+          section.classList.remove("active");
+        });
+        document.querySelectorAll("#hilchotPage .tab-btn").forEach(function (button) {
+          button.classList.remove("active");
+        });
+        document.getElementById(sectionId).classList.add("active");
+        document.getElementById(sectionId + "Btn").classList.add("active");
+      }
+
+      function renderHilchotSort() {
+        if (!hilchotSortItems.length) setupHilchotSortItems();
+
+        const item = hilchotSortItems[hilchotSortIndex];
+        if (!item) return;
+
+        document.getElementById("hilchotSortNumber").textContent = item.localNumber;
+        document.getElementById("hilchotSortPrompt").textContent = item.name;
+        document.getElementById("hilchotSortFeedback").innerHTML = "";
+        document.getElementById("hilchotSortScore").textContent =
+          "Score: " + hilchotSortScore + "/" + hilchotSortAsked + " · Streak: " + hilchotSortStreak;
+
+        const correctSefer = hilchotData.find(function (sefer) { return sefer.book === item.sefer; });
+        const wrongOptions = shuffle(hilchotData.filter(function (sefer) { return sefer.book !== item.sefer; })).slice(0, 3);
+        const options = shuffle([correctSefer].concat(wrongOptions));
+
+        document.getElementById("hilchotSortOptions").innerHTML = options.map(function (sefer) {
+          return '<button class="card" onclick="chooseHilchotSefer(' + sefer.n + ')">' +
+            '<img class="small-img" src="' + sefer.img + '" alt="' + sefer.book + '">' +
+            '<div dir="rtl" class="heb">' + sefer.hebrew + '</div>' +
+            '<div class="eng">' + sefer.book + '</div>' +
+            '<div class="trans">' + sefer.hilchot.length + ' Hilchot</div>' +
+            '</button>';
+        }).join('');
+      }
+
+      function chooseHilchotSefer(seferNumber) {
+        const item = hilchotSortItems[hilchotSortIndex];
+        const correct = seferNumber === item.seferNumber;
+
+        hilchotSortAsked++;
+        if (correct) {
+          hilchotSortScore++;
+          hilchotSortStreak++;
+        } else {
+          hilchotSortStreak = 0;
+        }
+
+        document.getElementById("hilchotSortFeedback").innerHTML =
+          '<div class="' + (correct ? "good" : "bad") + '">' +
           '<strong>' + (correct ? "Correct." : "Wrong.") + '</strong><br>' +
           '<strong>' + item.name + '</strong> belongs to ' +
           '<span dir="rtl"><strong>' + item.seferHebrew + '</strong></span>' +
           ' — ' + item.sefer + '.<br><br>' +
           '<button class="active" onclick="nextHilchotSort()">Next</button>' +
-        '</div>';
+          '</div>';
 
-      document.getElementById("hilchotSortScore").textContent =
-        "Score: " + hilchotSortScore + "/" + hilchotSortAsked + " · Streak: " + hilchotSortStreak;
-    }
-
-    function nextHilchotSort() {
-      hilchotSortIndex++;
-      if (hilchotSortIndex >= hilchotSortItems.length) {
-        setupHilchotSortItems();
-        hilchotSortIndex = 0;
+        document.getElementById("hilchotSortScore").textContent =
+          "Score: " + hilchotSortScore + "/" + hilchotSortAsked + " · Streak: " + hilchotSortStreak;
       }
+
+      function nextHilchotSort() {
+        hilchotSortIndex++;
+        if (hilchotSortIndex >= hilchotSortItems.length) {
+          setupHilchotSortItems();
+          hilchotSortIndex = 0;
+        }
+        renderHilchotSort();
+      }
+
+
+
+      const hilchotFocusData = [{ "n": 1, "book": "Madda", "hebrew": "ספר המדע", "img": "madda.jpeg", "hilchot": ["Yesodei HaTorah", "De'ot", "Talmud Torah", "Avodat Kochavim", "Teshuvah"] }, { "n": 2, "book": "Ahavah", "hebrew": "ספר אהבה", "img": "ahava.jpg", "hilchot": ["Kri'at Shema", "Tefilah and Birkat Kohanim", "Tefillin, Mezuzah and Sefer Torah", "Tzitzit", "Berachot", "Milah"] }, { "n": 3, "book": "Zemanim", "hebrew": "ספר זמנים", "img": "zmanim.jpg", "hilchot": ["Shabbat", "Eruvin", "Shevitat Asor", "Shevitat Yom Tov", "Chametz U'Matzah", "Shofar, Sukkah and Lulav", "Shekalim", "Kiddush HaChodesh", "Ta'aniyot", "Megillah and Chanukah"] }, { "n": 4, "book": "Nashim", "hebrew": "ספר נשים", "img": "nashim.jpg", "hilchot": ["Ishut", "Gerushin", "Yibbum and Chalitzah", "Na'arah Betulah", "Sotah"] }, { "n": 5, "book": "Kedushah", "hebrew": "ספר קדושה", "img": "kedusha.jpg", "hilchot": ["Issurei Biah", "Ma'achalot Assurot", "Shechitah"] }, { "n": 6, "book": "Haflaah", "hebrew": "ספר הפלאה", "img": "haflaah.jpg", "hilchot": ["Shevuot", "Nedarim", "Nezirut", "Arachin and Charamin"] }, { "n": 7, "book": "Zeraim", "hebrew": "ספר זרעים", "img": "zeraim.jpg", "hilchot": ["Kilayim", "Matanot Aniyim", "Terumot", "Ma'aser", "Ma'aser Sheni and Neta Revai", "Bikkurim", "Shemittah and Yovel"] }, { "n": 8, "book": "Avodah", "hebrew": "ספר עבודה", "img": "avodah.jpg", "hilchot": ["Beit HaBechirah", "Klei HaMikdash", "Bi'at HaMikdash", "Issurei Mizbeach", "Ma'aseh HaKorbanot", "Temidin U'Musafin", "Pesulei HaMukdashin", "Avodat Yom HaKippurim", "Me'ilah"] }, { "n": 9, "book": "Korbanot", "hebrew": "ספר קרבנות", "img": "korbanos.jpg", "hilchot": ["Korban Pesach", "Chagigah", "Bechorot", "Shegagot", "Mechusrei Kapparah", "Temurah"] }, { "n": 10, "book": "Taharah", "hebrew": "ספר טהרה", "img": "taharah.jpg", "hilchot": ["Tum'at Met", "Parah Adumah", "Tum'at Tzara'at", "Metamei Mishkav U'Moshav", "She'ar Avot HaTum'ah", "Tum'at Ochalin", "Kelim", "Mikvaot"] }, { "n": 11, "book": "Nezikin", "hebrew": "ספר נזיקין", "img": "nezikin.jpg", "hilchot": ["Nizkei Mamon", "Geneivah", "Gezeilah Va'Aveidah", "Chovel U'Mazik", "Rotzeach U'Shemirat HaNefesh"] }, { "n": 12, "book": "Kinyan", "hebrew": "ספר קנין", "img": "kinyan.jpg", "hilchot": ["Mechirah", "Zechiyah U'Matanah", "Shechenim", "Sheluchin VeShutafin", "Avadim"] }, { "n": 13, "book": "Mishpatim", "hebrew": "ספר משפטים", "img": "mishpatim.png", "hilchot": ["Sechirut", "She'eilah U'Pikadon", "Malveh VeLoveh", "To'en VeNit'an", "Nachalot"] }, { "n": 14, "book": "Shoftim", "hebrew": "ספר שופטים", "img": "shoftim.jpg", "hilchot": ["Sanhedrin", "Edut", "Mamrim", "Evel", "Melachim U'Milchamot"] }];
+
+      function focusHilchotSefer(num) {
+        console.log("focusHilchotSefer called:", num);
+
+        const sefer = hilchotFocusData.find(function (item) {
+          return item.n === num;
+        });
+
+        if (!sefer) return;
+
+        document.querySelectorAll(".sefer-row").forEach(function (row) {
+          row.classList.remove("active");
+        });
+
+        const activeRow = document.getElementById("seferRow" + num);
+        if (activeRow) activeRow.classList.add("active");
+
+        document.getElementById("focusHilchotImg").src = sefer.img;
+        document.getElementById("focusHilchotImg").alt = sefer.book;
+        document.getElementById("focusHilchotNum").textContent = sefer.n;
+        document.getElementById("focusHilchotHebrew").textContent = sefer.hebrew;
+        document.getElementById("focusHilchotEnglish").textContent = sefer.book;
+        document.getElementById("focusHilchotCount").textContent = sefer.hilchot.length + " Hilchot";
+        document.getElementById("focusHilchotList").innerHTML =
+          sefer.hilchot.map(function (name) {
+            return "<li>" + name + "</li>";
+          }).join("");
+      }
+
+
+
+      function attachHilchotFocusHandlers() {
+        document.querySelectorAll(".sefer-row").forEach(function (row) {
+          const num = Number(row.getAttribute("data-sefer"));
+          row.addEventListener("mouseenter", function () {
+            focusHilchotSefer(num);
+          });
+          row.addEventListener("click", function () {
+            focusHilchotSefer(num);
+          });
+          row.addEventListener("focus", function () {
+            focusHilchotSefer(num);
+          });
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        attachHilchotFocusHandlers();
+        focusHilchotSefer(1);
+      });
+
+      renderExplore();
       renderHilchotSort();
-    }
-
-
-
-    const hilchotFocusData = [{"n": 1, "book": "Madda", "hebrew": "ספר המדע", "img": "madda.jpeg", "hilchot": ["Yesodei HaTorah", "De'ot", "Talmud Torah", "Avodat Kochavim", "Teshuvah"]}, {"n": 2, "book": "Ahavah", "hebrew": "ספר אהבה", "img": "ahava.jpg", "hilchot": ["Kri'at Shema", "Tefilah and Birkat Kohanim", "Tefillin, Mezuzah and Sefer Torah", "Tzitzit", "Berachot", "Milah", "Seder Tefilot"]}, {"n": 3, "book": "Zemanim", "hebrew": "ספר זמנים", "img": "zmanim.jpg", "hilchot": ["Shabbat", "Eruvin", "Shevitat Asor", "Shevitat Yom Tov", "Chametz U'Matzah", "Shofar, Sukkah and Lulav", "Shekalim", "Kiddush HaChodesh", "Ta'aniyot", "Megillah and Chanukah"]}, {"n": 4, "book": "Nashim", "hebrew": "ספר נשים", "img": "nashim.jpg", "hilchot": ["Ishut", "Gerushin", "Yibbum and Chalitzah", "Na'arah Betulah", "Sotah"]}, {"n": 5, "book": "Kedushah", "hebrew": "ספר קדושה", "img": "kedusha.jpg", "hilchot": ["Issurei Biah", "Ma'achalot Assurot", "Shechitah"]}, {"n": 6, "book": "Haflaah", "hebrew": "ספר הפלאה", "img": "haflaah.jpg", "hilchot": ["Shevuot", "Nedarim", "Nezirut", "Arachin and Charamin"]}, {"n": 7, "book": "Zeraim", "hebrew": "ספר זרעים", "img": "zeraim.jpg", "hilchot": ["Kilayim", "Matanot Aniyim", "Terumot", "Ma'aser", "Ma'aser Sheni and Neta Revai", "Bikkurim", "Shemittah and Yovel"]}, {"n": 8, "book": "Avodah", "hebrew": "ספר עבודה", "img": "avodah.jpg", "hilchot": ["Beit HaBechirah", "Klei HaMikdash", "Bi'at HaMikdash", "Issurei Mizbeach", "Ma'aseh HaKorbanot", "Temidin U'Musafin", "Pesulei HaMukdashin", "Avodat Yom HaKippurim", "Me'ilah"]}, {"n": 9, "book": "Korbanot", "hebrew": "ספר קרבנות", "img": "korbanos.jpg", "hilchot": ["Korban Pesach", "Chagigah", "Bechorot", "Shegagot", "Mechusrei Kapparah", "Temurah"]}, {"n": 10, "book": "Taharah", "hebrew": "ספר טהרה", "img": "taharah.jpg", "hilchot": ["Tum'at Met", "Parah Adumah", "Tum'at Tzara'at", "Metamei Mishkav U'Moshav", "She'ar Avot HaTum'ah", "Tum'at Ochalin", "Kelim", "Mikvaot"]}, {"n": 11, "book": "Nezikin", "hebrew": "ספר נזיקין", "img": "nezikin.jpg", "hilchot": ["Nizkei Mamon", "Geneivah", "Gezeilah Va'Aveidah", "Chovel U'Mazik", "Rotzeach U'Shemirat HaNefesh"]}, {"n": 12, "book": "Kinyan", "hebrew": "ספר קנין", "img": "kinyan.jpg", "hilchot": ["Mechirah", "Zechiyah U'Matanah", "Shechenim", "Sheluchin VeShutafin", "Avadim"]}, {"n": 13, "book": "Mishpatim", "hebrew": "ספר משפטים", "img": "mishpatim.png", "hilchot": ["Sechirut", "She'eilah U'Pikadon", "Malveh VeLoveh", "To'en VeNit'an", "Nachalot"]}, {"n": 14, "book": "Shoftim", "hebrew": "ספר שופטים", "img": "shoftim.jpg", "hilchot": ["Sanhedrin", "Edut", "Mamrim", "Evel", "Melachim U'Milchamot"]}];
-
-    function focusHilchotSefer(num) {
-      const sefer = hilchotFocusData.find(function(item) {
-        return item.n === num;
-      });
-
-      if (!sefer) return;
-
-      document.querySelectorAll(".sefer-row").forEach(function(row) {
-        row.classList.remove("active");
-      });
-
-      const activeRow = document.getElementById("seferRow" + num);
-      if (activeRow) activeRow.classList.add("active");
-
-      document.getElementById("focusHilchotImg").src = sefer.img;
-      document.getElementById("focusHilchotImg").alt = sefer.book;
-      document.getElementById("focusHilchotNum").textContent = sefer.n;
-      document.getElementById("focusHilchotHebrew").textContent = sefer.hebrew;
-      document.getElementById("focusHilchotEnglish").textContent = sefer.book;
-      document.getElementById("focusHilchotCount").textContent = sefer.hilchot.length + " Hilchot";
-      document.getElementById("focusHilchotList").innerHTML =
-        sefer.hilchot.map(function(name) {
-          return "<li>" + name + "</li>";
-        }).join("");
-    }
-
-
-
-    function attachHilchotFocusHandlers() {
-      document.querySelectorAll(".sefer-row").forEach(function(row) {
-        const num = Number(row.getAttribute("data-sefer"));
-        row.addEventListener("mouseenter", function() {
-          focusHilchotSefer(num);
-        });
-        row.addEventListener("click", function() {
-          focusHilchotSefer(num);
-        });
-        row.addEventListener("focus", function() {
-          focusHilchotSefer(num);
-        });
-      });
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-      attachHilchotFocusHandlers();
-      focusHilchotSefer(1);
-    });
-
-    renderExplore();
-    renderHilchotSort();
-    }
 
     function capitalize(value) {
       return value.charAt(0).toUpperCase() + value.slice(1);
@@ -1524,4 +1560,5 @@
     renderOrder();
   </script>
 </body>
+
 </html>
