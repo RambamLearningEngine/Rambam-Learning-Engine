@@ -636,13 +636,162 @@
 
     .focus-list {
       margin: 0;
-      padding-left: 24px;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
     }
 
     .focus-list li {
-      margin: 9px 0;
-      font-weight: 800;
+      margin: 0;
+    }
+
+    .hilchah-link {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 13px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+      font-weight: 850;
       line-height: 1.35;
+    }
+
+    .hilchah-link:hover,
+    .hilchah-link.active {
+      border-color: var(--gold);
+      background: var(--soft);
+    }
+
+    .hilchah-address,
+    .mitzvah-address {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border-radius: 999px;
+      background: var(--navy);
+      color: white;
+      padding: 5px 9px;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+    }
+
+    .hilchah-count {
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .mitzvah-detail-panel {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .mitzvah-detail-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .mitzvah-detail-header h3 {
+      margin: 0 0 4px;
+      font-size: 22px;
+    }
+
+    .mitzvah-detail-header p,
+    .mitzvah-empty {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .mitzvah-cue-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .mitzvah-cue-card {
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .mitzvah-cue-button {
+      width: 100%;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .mitzvah-cue-button:hover,
+    .mitzvah-cue-card.open .mitzvah-cue-button {
+      background: var(--soft);
+    }
+
+    .mitzvah-cue-hebrew {
+      display: block;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .mitzvah-cue-english {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .mitzvah-chevron {
+      color: var(--muted);
+      font-size: 18px;
+      transition: transform 0.18s ease;
+    }
+
+    .mitzvah-cue-card.open .mitzvah-chevron {
+      transform: rotate(180deg);
+    }
+
+    .mitzvah-meaning {
+      display: none;
+      padding: 0 14px 14px 66px;
+      color: #374151;
+      line-height: 1.5;
+    }
+
+    .mitzvah-cue-card.open .mitzvah-meaning {
+      display: block;
+    }
+
+    .mitzvah-type {
+      display: inline-flex;
+      margin-top: 8px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 12px;
+      font-weight: 800;
     }
 
     .focus-instruction {
@@ -663,6 +812,10 @@
       .focus-panel img {
         max-width: 280px;
         margin: 0 auto;
+      }
+
+      .mitzvah-meaning {
+        padding-left: 14px;
       }
     }
   </style>
@@ -1031,6 +1184,9 @@
                   <li>Avodat Kochavim</li>
                   <li>Teshuvah</li>
                 </ol>
+                <div id="mitzvahDetailPanel" class="mitzvah-detail-panel" aria-live="polite">
+                  <p class="mitzvah-empty">Click a section to see its numbered mitzvah cues.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -1250,6 +1406,85 @@
 
       const hilchotFocusData = [{ "n": 1, "book": "Madda", "hebrew": "ספר המדע", "img": "madda.jpeg", "hilchot": ["Yesodei HaTorah", "De'ot", "Talmud Torah", "Avodat Kochavim", "Teshuvah"] }, { "n": 2, "book": "Ahavah", "hebrew": "ספר אהבה", "img": "ahava.jpg", "hilchot": ["Kri'at Shema", "Tefilah and Birkat Kohanim", "Tefillin, Mezuzah and Sefer Torah", "Tzitzit", "Berachot", "Milah"] }, { "n": 3, "book": "Zemanim", "hebrew": "ספר זמנים", "img": "zmanim.jpg", "hilchot": ["Shabbat", "Eruvin", "Shevitat Asor", "Shevitat Yom Tov", "Chametz U'Matzah", "Shofar, Sukkah and Lulav", "Shekalim", "Kiddush HaChodesh", "Ta'aniyot", "Megillah and Chanukah"] }, { "n": 4, "book": "Nashim", "hebrew": "ספר נשים", "img": "nashim.jpg", "hilchot": ["Ishut", "Gerushin", "Yibbum and Chalitzah", "Na'arah Betulah", "Sotah"] }, { "n": 5, "book": "Kedushah", "hebrew": "ספר קדושה", "img": "kedusha.jpg", "hilchot": ["Issurei Biah", "Ma'achalot Assurot", "Shechitah"] }, { "n": 6, "book": "Haflaah", "hebrew": "ספר הפלאה", "img": "haflaah.jpg", "hilchot": ["Shevuot", "Nedarim", "Nezirut", "Arachin and Charamin"] }, { "n": 7, "book": "Zeraim", "hebrew": "ספר זרעים", "img": "zeraim.jpg", "hilchot": ["Kilayim", "Matanot Aniyim", "Terumot", "Ma'aser", "Ma'aser Sheni and Neta Revai", "Bikkurim", "Shemittah and Yovel"] }, { "n": 8, "book": "Avodah", "hebrew": "ספר עבודה", "img": "avodah.jpg", "hilchot": ["Beit HaBechirah", "Klei HaMikdash", "Bi'at HaMikdash", "Issurei Mizbeach", "Ma'aseh HaKorbanot", "Temidin U'Musafin", "Pesulei HaMukdashin", "Avodat Yom HaKippurim", "Me'ilah"] }, { "n": 9, "book": "Korbanot", "hebrew": "ספר קרבנות", "img": "korbanos.jpg", "hilchot": ["Korban Pesach", "Chagigah", "Bechorot", "Shegagot", "Mechusrei Kapparah", "Temurah"] }, { "n": 10, "book": "Taharah", "hebrew": "ספר טהרה", "img": "taharah.jpg", "hilchot": ["Tum'at Met", "Parah Adumah", "Tum'at Tzara'at", "Metamei Mishkav U'Moshav", "She'ar Avot HaTum'ah", "Tum'at Ochalin", "Kelim", "Mikvaot"] }, { "n": 11, "book": "Nezikin", "hebrew": "ספר נזיקין", "img": "nezikin.jpg", "hilchot": ["Nizkei Mamon", "Geneivah", "Gezeilah Va'Aveidah", "Chovel U'Mazik", "Rotzeach U'Shemirat HaNefesh"] }, { "n": 12, "book": "Kinyan", "hebrew": "ספר קנין", "img": "kinyan.jpg", "hilchot": ["Mechirah", "Zechiyah U'Matanah", "Shechenim", "Sheluchin VeShutafin", "Avadim"] }, { "n": 13, "book": "Mishpatim", "hebrew": "ספר משפטים", "img": "mishpatim.png", "hilchot": ["Sechirut", "She'eilah U'Pikadon", "Malveh VeLoveh", "To'en VeNit'an", "Nachalot"] }, { "n": 14, "book": "Shoftim", "hebrew": "ספר שופטים", "img": "shoftim.jpg", "hilchot": ["Sanhedrin", "Edut", "Mamrim", "Evel", "Melachim U'Milchamot"] }];
 
+      const mitzvahCountsByHilchah = {
+        "1.1": 10,
+        "1.2": 11,
+        "1.3": 2,
+        "1.4": 51,
+        "1.5": 1
+      };
+
+      const mitzvotByHilchah = {
+        "1.1": {
+          title: "Yesodei HaTorah",
+          summary: "10 mitzvot · 6 positive · 4 negative",
+          items: [
+            { id: "1.1.1", hebrewCue: "Emunah", englishCue: "Know Hashem", meaning: "To know that Hashem exists and is the Creator and Sustainer of all existence.", type: "Positive" },
+            { id: "1.1.2", hebrewCue: "Zulaso", englishCue: "No other god", meaning: "Not to believe that any other deity exists besides Hashem.", type: "Negative" },
+            { id: "1.1.3", hebrewCue: "Echad", englishCue: "Hashem is One", meaning: "To affirm that there is only one God and that Hashem's unity is absolute and indivisible.", type: "Positive" },
+            { id: "1.1.4", hebrewCue: "Ahavas Hashem", englishCue: "Love Hashem", meaning: "To love Hashem.", type: "Positive" },
+            { id: "1.1.5", hebrewCue: "Yiras Hashem", englishCue: "Fear Hashem", meaning: "To fear and stand in awe of Hashem.", type: "Positive" },
+            { id: "1.1.6", hebrewCue: "Kiddush Hashem", englishCue: "Sanctify His Name", meaning: "To sanctify Hashem's name.", type: "Positive" },
+            { id: "1.1.7", hebrewCue: "Chillul Hashem", englishCue: "Do not desecrate His Name", meaning: "Not to profane or desecrate Hashem's name.", type: "Negative" },
+            { id: "1.1.8", hebrewCue: "L'abeid", englishCue: "Do not destroy", meaning: "Not to destroy anything upon which Hashem's name is called.", type: "Negative" },
+            { id: "1.1.9", hebrewCue: "Lishmo-ah", englishCue: "Listen to the prophet", meaning: "To listen to and obey a true Navi of Hashem.", type: "Positive" },
+            { id: "1.1.10", hebrewCue: "L'nasos", englishCue: "Do not over-test", meaning: "Not to over-test Hashem or repeatedly test an established true Navi.", type: "Negative" }
+          ]
+        }
+      };
+
+      function selectHilchah(seferNumber, hilchahIndex) {
+        const sefer = hilchotFocusData.find(function(item) { return item.n === seferNumber; });
+        if (!sefer) return;
+
+        const address = seferNumber + "." + (hilchahIndex + 1);
+        const title = sefer.hilchot[hilchahIndex];
+        const data = mitzvotByHilchah[address];
+
+        document.querySelectorAll(".hilchah-link").forEach(function(button) {
+          button.classList.toggle("active", button.getAttribute("data-address") === address);
+        });
+
+        const panel = document.getElementById("mitzvahDetailPanel");
+        if (!data) {
+          const count = mitzvahCountsByHilchah[address];
+          panel.innerHTML =
+            '<div class="mitzvah-detail-header">' +
+              '<div><h3>' + address + ' · ' + title + '</h3>' +
+              '<p>' + (count ? count + ' mitzvot in this section.' : 'Mitzvah count and cues will be added here.') + '</p></div>' +
+            '</div>' +
+            '<p class="mitzvah-empty">The cue set for this section has not been added yet.</p>';
+          return;
+        }
+
+        panel.innerHTML =
+          '<div class="mitzvah-detail-header">' +
+            '<div><h3>' + address + ' · ' + data.title + '</h3><p>' + data.summary + '</p></div>' +
+          '</div>' +
+          '<div class="mitzvah-cue-list">' +
+            data.items.map(function(item) {
+              return '<div class="mitzvah-cue-card" id="cueCard-' + item.id.replaceAll('.', '-') + '">' +
+                '<button class="mitzvah-cue-button" type="button" aria-expanded="false" onclick="toggleMitzvahCue(\'' + item.id + '\')">' +
+                  '<span class="mitzvah-address">' + item.id + '</span>' +
+                  '<span><span class="mitzvah-cue-hebrew">' + item.hebrewCue + '</span>' +
+                  '<span class="mitzvah-cue-english">' + item.englishCue + '</span></span>' +
+                  '<span class="mitzvah-chevron" aria-hidden="true">⌄</span>' +
+                '</button>' +
+                '<div class="mitzvah-meaning"><div>' + item.meaning + '</div>' +
+                  '<span class="mitzvah-type">' + item.type + '</span></div>' +
+              '</div>';
+            }).join('') +
+          '</div>';
+      }
+
+      function toggleMitzvahCue(id) {
+        const card = document.getElementById("cueCard-" + id.replaceAll('.', '-'));
+        if (!card) return;
+        const isOpen = card.classList.toggle("open");
+        const button = card.querySelector(".mitzvah-cue-button");
+        if (button) button.setAttribute("aria-expanded", String(isOpen));
+      }
+
       function focusHilchotSefer(num) {
         console.log("focusHilchotSefer called:", num);
 
@@ -1273,9 +1508,17 @@
         document.getElementById("focusHilchotEnglish").textContent = sefer.book;
         document.getElementById("focusHilchotCount").textContent = sefer.hilchot.length + " Hilchot";
         document.getElementById("focusHilchotList").innerHTML =
-          sefer.hilchot.map(function (name) {
-            return "<li>" + name + "</li>";
+          sefer.hilchot.map(function (name, index) {
+            const address = sefer.n + "." + (index + 1);
+            const count = mitzvahCountsByHilchah[address];
+            return '<li><button type="button" class="hilchah-link" data-address="' + address + '" onclick="selectHilchah(' + sefer.n + ', ' + index + ')">' +
+              '<span><span class="hilchah-address">' + address + '</span> &nbsp;' + name + '</span>' +
+              '<span class="hilchah-count">' + (count ? count + ' mitzvot' : 'Open') + '</span>' +
+            '</button></li>';
           }).join("");
+
+        document.getElementById("mitzvahDetailPanel").innerHTML =
+          '<p class="mitzvah-empty">Click a section to see its numbered mitzvah cues.</p>';
       }
 
 
