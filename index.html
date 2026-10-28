@@ -667,6 +667,7 @@
     .hilchah-link.active {
       border-color: var(--gold);
       background: var(--soft);
+      color: var(--ink);
     }
 
     .hilchah-address,
@@ -688,6 +689,26 @@
       color: var(--muted);
       font-size: 13px;
       white-space: nowrap;
+    }
+
+    .hilchah-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .hilchah-name {
+      display: grid;
+      gap: 1px;
+    }
+
+    .hilchah-hebrew {
+      color: var(--muted);
+      font-size: 16px;
+      font-weight: 800;
+      direction: rtl;
+      text-align: left;
     }
 
     .mitzvah-detail-panel {
@@ -748,10 +769,25 @@
       background: var(--soft);
     }
 
-    .mitzvah-cue-hebrew {
+    .mitzvah-cue-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .mitzvah-cue-translit {
       display: block;
       font-size: 17px;
       font-weight: 900;
+    }
+
+    .mitzvah-cue-hebrew {
+      display: block;
+      direction: rtl;
+      font-size: 19px;
+      font-weight: 900;
+      text-align: right;
     }
 
     .mitzvah-cue-english {
@@ -760,6 +796,16 @@
       color: var(--muted);
       font-size: 14px;
       font-weight: 700;
+    }
+
+    .mitzvah-cue-translation {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      direction: rtl;
+      font-size: 15px;
+      font-weight: 700;
+      text-align: right;
     }
 
     .mitzvah-chevron {
@@ -781,6 +827,14 @@
 
     .mitzvah-cue-card.open .mitzvah-meaning {
       display: block;
+    }
+
+    .mitzvah-meaning-hebrew {
+      margin-top: 6px;
+      color: #475569;
+      direction: rtl;
+      font-size: 16px;
+      text-align: right;
     }
 
     .mitzvah-type {
@@ -1414,21 +1468,31 @@
         "1.5": 1
       };
 
+      const hilchotHebrewByAddress = {
+        "1.1": "יסודי התורה",
+        "1.2": "דעות",
+        "1.3": "תלמוד תורה",
+        "1.4": "עבודה זרה וחוקות הגויים",
+        "1.5": "תשובה"
+      };
+
       const mitzvotByHilchah = {
         "1.1": {
           title: "Yesodei HaTorah",
+          titleHebrew: "יסודי התורה",
           summary: "10 mitzvot · 6 positive · 4 negative",
+          summaryHebrew: "10 מצוות · 6 מצוות עשה · 4 מצוות לא תעשה",
           items: [
-            { id: "1.1.1", hebrewCue: "Emunah", englishCue: "Know Hashem", meaning: "To know that Hashem exists and is the Creator and Sustainer of all existence.", type: "Positive" },
-            { id: "1.1.2", hebrewCue: "Zulaso", englishCue: "No other god", meaning: "Not to believe that any other deity exists besides Hashem.", type: "Negative" },
-            { id: "1.1.3", hebrewCue: "Echad", englishCue: "Hashem is One", meaning: "To affirm that there is only one God and that Hashem's unity is absolute and indivisible.", type: "Positive" },
-            { id: "1.1.4", hebrewCue: "Ahavas Hashem", englishCue: "Love Hashem", meaning: "To love Hashem.", type: "Positive" },
-            { id: "1.1.5", hebrewCue: "Yiras Hashem", englishCue: "Fear Hashem", meaning: "To fear and stand in awe of Hashem.", type: "Positive" },
-            { id: "1.1.6", hebrewCue: "Kiddush Hashem", englishCue: "Sanctify His Name", meaning: "To sanctify Hashem's name.", type: "Positive" },
-            { id: "1.1.7", hebrewCue: "Chillul Hashem", englishCue: "Do not desecrate His Name", meaning: "Not to profane or desecrate Hashem's name.", type: "Negative" },
-            { id: "1.1.8", hebrewCue: "L'abeid", englishCue: "Do not destroy", meaning: "Not to destroy anything upon which Hashem's name is called.", type: "Negative" },
-            { id: "1.1.9", hebrewCue: "Lishmo-ah", englishCue: "Listen to the prophet", meaning: "To listen to and obey a true Navi of Hashem.", type: "Positive" },
-            { id: "1.1.10", hebrewCue: "L'nasos", englishCue: "Do not over-test", meaning: "Not to over-test Hashem or repeatedly test an established true Navi.", type: "Negative" }
+            { id: "1.1.1", cue: "Emunah", cueHebrew: "אמונה", englishCue: "Know Hashem", shortHebrew: "לדעת את ה׳", meaning: "To know that Hashem exists and is the Creator and Sustainer of all existence.", meaningHebrew: "לדעת שיש שם אלוה, והוא בורא ומקיים את כל המציאות.", type: "Positive", typeHebrew: "עשה" },
+            { id: "1.1.2", cue: "Zulaso", cueHebrew: "זולתו", englishCue: "No other god", shortHebrew: "אין אלוה זולתו", meaning: "Not to believe that any other deity exists besides Hashem.", meaningHebrew: "שלא להעלות במחשבה שיש אלוה אחר זולתי ה׳.", type: "Negative", typeHebrew: "לא תעשה" },
+            { id: "1.1.3", cue: "Echad", cueHebrew: "אחד", englishCue: "Hashem is One", shortHebrew: "ה׳ אחד", meaning: "To affirm that there is only one God and that Hashem's unity is absolute and indivisible.", meaningHebrew: "לייחד את ה׳ ולדעת שאחדותו מוחלטת ואינה מתחלקת.", type: "Positive", typeHebrew: "עשה" },
+            { id: "1.1.4", cue: "Ahavas Hashem", cueHebrew: "אהבת ה׳", englishCue: "Love Hashem", shortHebrew: "לאהוב את ה׳", meaning: "To love Hashem.", meaningHebrew: "לאהוב את ה׳.", type: "Positive", typeHebrew: "עשה" },
+            { id: "1.1.5", cue: "Yiras Hashem", cueHebrew: "יראת ה׳", englishCue: "Fear Hashem", shortHebrew: "לירא את ה׳", meaning: "To fear and stand in awe of Hashem.", meaningHebrew: "לירא מה׳ ולעמוד לפניו ביראה.", type: "Positive", typeHebrew: "עשה" },
+            { id: "1.1.6", cue: "Kiddush Hashem", cueHebrew: "קידוש ה׳", englishCue: "Sanctify His Name", shortHebrew: "לקדש את שמו", meaning: "To sanctify Hashem's name.", meaningHebrew: "לקדש את שמו של ה׳.", type: "Positive", typeHebrew: "עשה" },
+            { id: "1.1.7", cue: "Chillul Hashem", cueHebrew: "חילול ה׳", englishCue: "Do not desecrate His Name", shortHebrew: "לא לחלל את שמו", meaning: "Not to profane or desecrate Hashem's name.", meaningHebrew: "שלא לחלל את שמו של ה׳.", type: "Negative", typeHebrew: "לא תעשה" },
+            { id: "1.1.8", cue: "L'abeid", cueHebrew: "לאבד", englishCue: "Do not destroy", shortHebrew: "לא לאבד", meaning: "Not to destroy anything upon which Hashem's name is called.", meaningHebrew: "שלא לאבד דבר שנקרא עליו שמו של ה׳.", type: "Negative", typeHebrew: "לא תעשה" },
+            { id: "1.1.9", cue: "Lishmo-ah", cueHebrew: "לשמוע", englishCue: "Listen to the prophet", shortHebrew: "לשמוע לנביא", meaning: "To listen to and obey a true Navi of Hashem.", meaningHebrew: "לשמוע ולציית לנביא אמת המדבר בשם ה׳.", type: "Positive", typeHebrew: "עשה" },
+            { id: "1.1.10", cue: "L'nasos", cueHebrew: "לנסות", englishCue: "Do not over-test", shortHebrew: "לא לנסות יותר מדי", meaning: "Not to over-test Hashem or repeatedly test an established true Navi.", meaningHebrew: "שלא לנסות את ה׳ או לבחון שוב ושוב נביא אמת שהוחזק.", type: "Negative", typeHebrew: "לא תעשה" }
           ]
         }
       };
@@ -1439,6 +1503,7 @@
 
         const address = seferNumber + "." + (hilchahIndex + 1);
         const title = sefer.hilchot[hilchahIndex];
+        const titleHebrew = hilchotHebrewByAddress[address];
         const data = mitzvotByHilchah[address];
 
         document.querySelectorAll(".hilchah-link").forEach(function(button) {
@@ -1450,7 +1515,7 @@
           const count = mitzvahCountsByHilchah[address];
           panel.innerHTML =
             '<div class="mitzvah-detail-header">' +
-              '<div><h3>' + address + ' · ' + title + '</h3>' +
+              '<div><h3>' + address + ' · ' + title + (titleHebrew ? ' · <span dir="rtl">' + titleHebrew + '</span>' : '') + '</h3>' +
               '<p>' + (count ? count + ' mitzvot in this section.' : 'Mitzvah count and cues will be added here.') + '</p></div>' +
             '</div>' +
             '<p class="mitzvah-empty">The cue set for this section has not been added yet.</p>';
@@ -1459,19 +1524,23 @@
 
         panel.innerHTML =
           '<div class="mitzvah-detail-header">' +
-            '<div><h3>' + address + ' · ' + data.title + '</h3><p>' + data.summary + '</p></div>' +
+            '<div><h3>' + address + ' · ' + data.title + ' · <span dir="rtl">' + data.titleHebrew + '</span></h3>' +
+            '<p>' + data.summary + '</p><p dir="rtl">' + data.summaryHebrew + '</p></div>' +
           '</div>' +
           '<div class="mitzvah-cue-list">' +
             data.items.map(function(item) {
               return '<div class="mitzvah-cue-card" id="cueCard-' + item.id.replaceAll('.', '-') + '">' +
                 '<button class="mitzvah-cue-button" type="button" aria-expanded="false" onclick="toggleMitzvahCue(\'' + item.id + '\')">' +
                   '<span class="mitzvah-address">' + item.id + '</span>' +
-                  '<span><span class="mitzvah-cue-hebrew">' + item.hebrewCue + '</span>' +
-                  '<span class="mitzvah-cue-english">' + item.englishCue + '</span></span>' +
+                  '<span><span class="mitzvah-cue-heading"><span class="mitzvah-cue-translit">' + item.cue + '</span>' +
+                  '<span class="mitzvah-cue-hebrew" dir="rtl">' + item.cueHebrew + '</span></span>' +
+                  '<span class="mitzvah-cue-english">' + item.englishCue + '</span>' +
+                  '<span class="mitzvah-cue-translation" dir="rtl">' + item.shortHebrew + '</span></span>' +
                   '<span class="mitzvah-chevron" aria-hidden="true">⌄</span>' +
                 '</button>' +
                 '<div class="mitzvah-meaning"><div>' + item.meaning + '</div>' +
-                  '<span class="mitzvah-type">' + item.type + '</span></div>' +
+                  '<div class="mitzvah-meaning-hebrew" dir="rtl">' + item.meaningHebrew + '</div>' +
+                  '<span class="mitzvah-type">' + item.type + ' · ' + item.typeHebrew + '</span></div>' +
               '</div>';
             }).join('') +
           '</div>';
@@ -1506,14 +1575,17 @@
         document.getElementById("focusHilchotNum").textContent = sefer.n;
         document.getElementById("focusHilchotHebrew").textContent = sefer.hebrew;
         document.getElementById("focusHilchotEnglish").textContent = sefer.book;
-        document.getElementById("focusHilchotCount").textContent = sefer.hilchot.length + " Hilchot";
+        document.getElementById("focusHilchotCount").textContent = sefer.hilchot.length + " Hilchot · " + sefer.hilchot.length + " הלכות";
         document.getElementById("focusHilchotList").innerHTML =
           sefer.hilchot.map(function (name, index) {
             const address = sefer.n + "." + (index + 1);
             const count = mitzvahCountsByHilchah[address];
+            const hebrewName = hilchotHebrewByAddress[address];
             return '<li><button type="button" class="hilchah-link" data-address="' + address + '" onclick="selectHilchah(' + sefer.n + ', ' + index + ')">' +
-              '<span><span class="hilchah-address">' + address + '</span> &nbsp;' + name + '</span>' +
-              '<span class="hilchah-count">' + (count ? count + ' mitzvot' : 'Open') + '</span>' +
+              '<span class="hilchah-label"><span class="hilchah-address">' + address + '</span>' +
+              '<span class="hilchah-name"><span>' + name + '</span>' +
+              (hebrewName ? '<span class="hilchah-hebrew" dir="rtl">' + hebrewName + '</span>' : '') + '</span></span>' +
+              '<span class="hilchah-count">' + (count ? (count === 1 ? '1 mitzvah · מצווה אחת' : count + ' mitzvot · ' + count + ' מצוות') : 'Open') + '</span>' +
             '</button></li>';
           }).join("");
 
