@@ -539,77 +539,63 @@
 
 
     .hilchot-focus-layout {
-      display: grid;
-      grid-template-columns: 310px minmax(0, 1fr);
-      gap: 18px;
-      align-items: start;
+      max-width: 940px;
+      margin: 0 auto;
     }
 
     .sefer-list {
-      display: grid;
-      gap: 8px;
+      display: none;
     }
 
-    .sefer-row {
-      width: 100%;
+    .sefer-picker {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      text-align: left;
-      border-radius: 16px;
+      gap: 12px;
+      margin-bottom: 16px;
       padding: 12px 14px;
-      background: var(--panel);
       border: 1px solid var(--line);
-      cursor: pointer;
-    }
-
-    .sefer-row:hover,
-    .sefer-row.active {
-      background: var(--navy);
-      color: white;
-      border-color: var(--navy);
-    }
-
-    .sefer-row:hover .trans,
-    .sefer-row.active .trans {
-      color: #cbd5e1;
-    }
-
-    .sefer-row-main {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .mini-num {
-      width: 32px;
-      height: 32px;
-      border-radius: 999px;
+      border-radius: 14px;
       background: var(--soft);
+      font-weight: 850;
+    }
+
+    .sefer-picker select {
+      min-width: 0;
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
       color: var(--ink);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      flex-shrink: 0;
+      font: inherit;
+      cursor: pointer;
     }
 
     .focus-panel {
       min-height: 520px;
-      display: grid;
-      grid-template-columns: 260px minmax(0, 1fr);
-      gap: 22px;
-      align-items: start;
+      display: block;
     }
 
-    .focus-panel img {
-      width: 100%;
-      aspect-ratio: 1 / 1;
+    .sefer-focus-header {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .focus-panel .sefer-focus-header img {
+      width: 170px;
+      height: 170px;
+      flex: 0 0 170px;
       object-fit: contain;
       background: white;
-      border-radius: 24px;
+      border-radius: 20px;
       border: 1px solid var(--line);
+    }
+
+    .sefer-focus-copy {
+      min-width: 0;
     }
 
     .focus-title {
@@ -634,16 +620,52 @@
       margin-bottom: 18px;
     }
 
+    .hilchot-tree {
+      max-width: 760px;
+      margin: 0 auto;
+      padding-top: 22px;
+    }
+
+    .tree-heading {
+      margin: 0 0 14px 30px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 850;
+    }
+
     .focus-list {
       margin: 0;
-      padding: 0;
+      padding: 0 0 0 30px;
       list-style: none;
       display: grid;
-      gap: 8px;
+      gap: 10px;
+      position: relative;
+    }
+
+    .focus-list::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 22px;
+      left: 10px;
+      width: 2px;
+      border-radius: 2px;
+      background: var(--line);
     }
 
     .focus-list li {
       margin: 0;
+      position: relative;
+    }
+
+    .focus-list li::before {
+      content: "";
+      position: absolute;
+      top: 24px;
+      left: -20px;
+      width: 20px;
+      height: 2px;
+      background: var(--line);
     }
 
     .hilchah-link {
@@ -668,6 +690,23 @@
       border-color: var(--gold);
       background: var(--soft);
       color: var(--ink);
+    }
+
+    .hilchah-link[aria-expanded="true"] {
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+
+    .hilchah-inline-detail {
+      margin: 8px 0 16px 18px;
+      padding: 16px;
+      border-left: 3px solid var(--gold);
+      border-radius: 0 14px 14px 0;
+      background: #fbfaf7;
+    }
+
+    .hilchah-inline-detail[hidden] {
+      display: none;
     }
 
     .hilchah-address,
@@ -709,12 +748,6 @@
       font-weight: 800;
       direction: rtl;
       text-align: left;
-    }
-
-    .mitzvah-detail-panel {
-      margin-top: 18px;
-      padding-top: 18px;
-      border-top: 1px solid var(--line);
     }
 
     .mitzvah-detail-header {
@@ -855,17 +888,48 @@
     }
 
     @media (max-width: 900px) {
-      .hilchot-focus-layout {
-        grid-template-columns: 1fr;
+      .sefer-picker {
+        align-items: stretch;
+        flex-direction: column;
       }
 
-      .focus-panel {
-        grid-template-columns: 1fr;
+      .sefer-focus-header {
+        gap: 14px;
       }
 
-      .focus-panel img {
-        max-width: 280px;
-        margin: 0 auto;
+      .focus-panel .sefer-focus-header img {
+        width: 112px;
+        height: 112px;
+        flex-basis: 112px;
+        border-radius: 16px;
+      }
+
+      .focus-title {
+        font-size: 28px;
+      }
+
+      .focus-subtitle {
+        font-size: 21px;
+      }
+
+      .focus-count {
+        margin-bottom: 0;
+        padding: 7px 10px;
+        font-size: 13px;
+      }
+
+      .hilchah-link {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .hilchah-count {
+        padding-left: 49px;
+      }
+
+      .hilchah-inline-detail {
+        margin-left: 6px;
+        padding: 12px;
       }
 
       .mitzvah-meaning {
@@ -1049,10 +1113,30 @@
       <section id="hilchotOverview" class="section active">
         <div class="card">
           <p class="focus-instruction">
-            Hover over or click a sefer on the left. The selected sefer takes focus and reveals its hilchot.
+            Choose a sefer, then click one of its branches. Its mitzvot will open directly beneath that section.
           </p>
 
           <div class="hilchot-focus-layout">
+            <label class="sefer-picker" for="hilchotSeferSelect">
+              <span>Choose a Sefer</span>
+              <select id="hilchotSeferSelect" onchange="focusHilchotSefer(Number(this.value))">
+                <option value="1">1 · Madda · ספר המדע</option>
+                <option value="2">2 · Ahavah · ספר אהבה</option>
+                <option value="3">3 · Zemanim · ספר זמנים</option>
+                <option value="4">4 · Nashim · ספר נשים</option>
+                <option value="5">5 · Kedushah · ספר קדושה</option>
+                <option value="6">6 · Haflaah · ספר הפלאה</option>
+                <option value="7">7 · Zeraim · ספר זרעים</option>
+                <option value="8">8 · Avodah · ספר עבודה</option>
+                <option value="9">9 · Korbanot · ספר קרבנות</option>
+                <option value="10">10 · Taharah · ספר טהרה</option>
+                <option value="11">11 · Nezikin · ספר נזיקין</option>
+                <option value="12">12 · Kinyan · ספר קנין</option>
+                <option value="13">13 · Mishpatim · ספר משפטים</option>
+                <option value="14">14 · Shoftim · ספר שופטים</option>
+              </select>
+            </label>
+
             <div class="sefer-list">
 
               <button class="sefer-row" id="seferRow1" data-sefer="1">
@@ -1159,7 +1243,7 @@
                     <span class="trans">Korbanot</span>
                   </span>
                 </span>
-                <span class="trans">5</span>
+                <span class="trans">6</span>
               </button>
 
 
@@ -1183,7 +1267,7 @@
                     <span class="trans">Nezikin</span>
                   </span>
                 </span>
-                <span class="trans">6</span>
+                <span class="trans">5</span>
               </button>
 
 
@@ -1225,22 +1309,25 @@
             </div>
 
             <div class="card focus-panel">
-              <img id="focusHilchotImg" src="madda.jpeg" alt="Madda">
-              <div>
-                <div class="num" id="focusHilchotNum">1</div>
-                <div id="focusHilchotHebrew" class="focus-title">ספר המדע</div>
-                <div id="focusHilchotEnglish" class="focus-subtitle">Madda</div>
-                <div id="focusHilchotCount" class="focus-count">5 Hilchot</div>
-                <ol id="focusHilchotList" class="focus-list">
+              <div class="sefer-focus-header">
+                <img id="focusHilchotImg" src="madda.jpeg" alt="Madda">
+                <div class="sefer-focus-copy">
+                  <div class="num" id="focusHilchotNum">1</div>
+                  <div id="focusHilchotHebrew" class="focus-title">ספר המדע</div>
+                  <div id="focusHilchotEnglish" class="focus-subtitle">Madda</div>
+                  <div id="focusHilchotCount" class="focus-count">5 Hilchot · 5 הלכות</div>
+                </div>
+              </div>
+
+              <div class="hilchot-tree">
+                <p class="tree-heading">Sections branching from this Sefer</p>
+                <ol id="focusHilchotList" class="focus-list" aria-live="polite">
                   <li>Yesodei HaTorah</li>
                   <li>De'ot</li>
                   <li>Talmud Torah</li>
                   <li>Avodat Kochavim</li>
                   <li>Teshuvah</li>
                 </ol>
-                <div id="mitzvahDetailPanel" class="mitzvah-detail-panel" aria-live="polite">
-                  <p class="mitzvah-empty">Click a section to see its numbered mitzvah cues.</p>
-                </div>
               </div>
             </div>
           </div>
@@ -1505,12 +1592,27 @@
         const title = sefer.hilchot[hilchahIndex];
         const titleHebrew = hilchotHebrewByAddress[address];
         const data = mitzvotByHilchah[address];
+        const button = document.querySelector('.hilchah-link[data-address="' + address + '"]');
+        const panelId = "mitzvahDetail-" + address.replaceAll('.', '-');
+        const panel = document.getElementById(panelId);
+        const wasOpen = button && button.getAttribute("aria-expanded") === "true";
 
         document.querySelectorAll(".hilchah-link").forEach(function(button) {
-          button.classList.toggle("active", button.getAttribute("data-address") === address);
+          button.classList.remove("active");
+          button.setAttribute("aria-expanded", "false");
         });
 
-        const panel = document.getElementById("mitzvahDetailPanel");
+        document.querySelectorAll(".hilchah-inline-detail").forEach(function(detail) {
+          detail.hidden = true;
+          detail.innerHTML = "";
+        });
+
+        if (wasOpen || !button || !panel) return;
+
+        button.classList.add("active");
+        button.setAttribute("aria-expanded", "true");
+        panel.hidden = false;
+
         if (!data) {
           const count = mitzvahCountsByHilchah[address];
           panel.innerHTML =
@@ -1555,20 +1657,14 @@
       }
 
       function focusHilchotSefer(num) {
-        console.log("focusHilchotSefer called:", num);
-
         const sefer = hilchotFocusData.find(function (item) {
           return item.n === num;
         });
 
         if (!sefer) return;
 
-        document.querySelectorAll(".sefer-row").forEach(function (row) {
-          row.classList.remove("active");
-        });
-
-        const activeRow = document.getElementById("seferRow" + num);
-        if (activeRow) activeRow.classList.add("active");
+        const picker = document.getElementById("hilchotSeferSelect");
+        if (picker) picker.value = String(num);
 
         document.getElementById("focusHilchotImg").src = sefer.img;
         document.getElementById("focusHilchotImg").alt = sefer.book;
@@ -1581,16 +1677,14 @@
             const address = sefer.n + "." + (index + 1);
             const count = mitzvahCountsByHilchah[address];
             const hebrewName = hilchotHebrewByAddress[address];
-            return '<li><button type="button" class="hilchah-link" data-address="' + address + '" onclick="selectHilchah(' + sefer.n + ', ' + index + ')">' +
+            const panelId = 'mitzvahDetail-' + address.replaceAll('.', '-');
+            return '<li><button type="button" class="hilchah-link" data-address="' + address + '" aria-expanded="false" aria-controls="' + panelId + '" onclick="selectHilchah(' + sefer.n + ', ' + index + ')">' +
               '<span class="hilchah-label"><span class="hilchah-address">' + address + '</span>' +
               '<span class="hilchah-name"><span>' + name + '</span>' +
               (hebrewName ? '<span class="hilchah-hebrew" dir="rtl">' + hebrewName + '</span>' : '') + '</span></span>' +
               '<span class="hilchah-count">' + (count ? (count === 1 ? '1 mitzvah · מצווה אחת' : count + ' mitzvot · ' + count + ' מצוות') : 'Open') + '</span>' +
-            '</button></li>';
+            '</button><div id="' + panelId + '" class="hilchah-inline-detail" hidden></div></li>';
           }).join("");
-
-        document.getElementById("mitzvahDetailPanel").innerHTML =
-          '<p class="mitzvah-empty">Click a section to see its numbered mitzvah cues.</p>';
       }
 
 
@@ -1611,7 +1705,6 @@
       }
 
       document.addEventListener("DOMContentLoaded", function () {
-        attachHilchotFocusHandlers();
         focusHilchotSefer(1);
       });
 
