@@ -709,8 +709,7 @@
       display: none;
     }
 
-    .hilchah-address,
-    .mitzvah-address {
+    .hilchah-address {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -785,7 +784,7 @@
     .mitzvah-cue-button {
       width: 100%;
       display: grid;
-      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-columns: minmax(0, 1fr) auto;
       align-items: center;
       gap: 12px;
       padding: 12px;
@@ -841,6 +840,23 @@
       text-align: right;
     }
 
+    .mitzvah-basic-meaning {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 9px;
+      padding-bottom: 9px;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink);
+      font-weight: 850;
+    }
+
+    .mitzvah-basic-meaning span {
+      direction: rtl;
+      text-align: right;
+    }
+
     .mitzvah-chevron {
       color: var(--muted);
       font-size: 18px;
@@ -853,7 +869,7 @@
 
     .mitzvah-meaning {
       display: none;
-      padding: 0 14px 14px 66px;
+      padding: 0 14px 14px;
       color: #374151;
       line-height: 1.5;
     }
@@ -879,6 +895,16 @@
       color: #475569;
       font-size: 12px;
       font-weight: 800;
+    }
+
+    .mitzvah-progress-note {
+      margin: 12px 0 0;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: var(--soft);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 750;
     }
 
     .focus-instruction {
@@ -979,6 +1005,11 @@
 
       .mitzvah-meaning {
         padding-left: 14px;
+      }
+
+      .mitzvah-basic-meaning {
+        align-items: flex-start;
+        flex-direction: column;
       }
     }
   </style>
@@ -1639,6 +1670,19 @@
             { id: "1.1.9", cue: "Lishmo-ah", cueHebrew: "לשמוע", englishCue: "Listen to the prophet", shortHebrew: "לשמוע לנביא", meaning: "To listen to and obey a true Navi of Hashem.", meaningHebrew: "לשמוע ולציית לנביא אמת המדבר בשם ה׳.", type: "Positive", typeHebrew: "עשה" },
             { id: "1.1.10", cue: "L'nasos", cueHebrew: "לנסות", englishCue: "Do not over-test", shortHebrew: "לא לנסות יותר מדי", meaning: "Not to over-test Hashem or repeatedly test an established true Navi.", meaningHebrew: "שלא לנסות את ה׳ או לבחון שוב ושוב נביא אמת שהוחזק.", type: "Negative", typeHebrew: "לא תעשה" }
           ]
+        },
+        "1.2": {
+          title: "De'ot",
+          titleHebrew: "דעות",
+          summary: "11 mitzvot · 5 positive · 6 negative",
+          summaryHebrew: "11 מצוות · 5 מצוות עשה · 6 מצוות לא תעשה",
+          note: "4 cue words added so far · 7 more to learn next",
+          items: [
+            { id: "1.2.1", cue: "L'hidmos", cueHebrew: "להידמות", englishCue: "Emulate Hashem's ways", shortHebrew: "להידמות בדרכיו", meaning: "To learn from and emulate Hashem's ways and good middot.", meaningHebrew: "ללמוד מדרכי ה׳ ולהידמות למידותיו הטובות.", type: "Positive", typeHebrew: "עשה" },
+            { id: "1.2.2", cue: "L'hidabek", cueHebrew: "להידבק", englishCue: "Cling through Torah scholars", shortHebrew: "להידבק ביודעיו", meaning: "To cling to Hashem by keeping close to Torah scholars and learning from them.", meaningHebrew: "להידבק בה׳ על ידי קרבה לתלמידי חכמים ולימוד ממעשיהם.", type: "Positive", typeHebrew: "עשה" },
+            { id: "1.2.3", cue: "Ahavas Yisroel", cueHebrew: "אהבת ישראל", englishCue: "Love every Jew", shortHebrew: "לאהוב כל יהודי", meaning: "To love every fellow Jew as oneself.", meaningHebrew: "לאהוב כל אחד מישראל כמותו.", type: "Positive", typeHebrew: "עשה" },
+            { id: "1.2.4", cue: "Ahavas Gayrim", cueHebrew: "אהבת גרים", englishCue: "Love the ger tzedek", shortHebrew: "לאהוב גר צדק", meaning: "To love the ger tzedek—the convert who has joined the Jewish people.", meaningHebrew: "לאהוב את גר הצדק שנכנס תחת כנפי השכינה.", type: "Positive", typeHebrew: "עשה" }
+          ]
         }
       };
 
@@ -1685,25 +1729,24 @@
         panel.innerHTML =
           '<div class="mitzvah-detail-header">' +
             '<div><h3>' + address + ' · ' + data.title + ' · <span dir="rtl">' + data.titleHebrew + '</span></h3>' +
-            '<p>' + data.summary + '</p><p dir="rtl">' + data.summaryHebrew + '</p></div>' +
+            '<p>' + data.summary + '</p></div>' +
           '</div>' +
           '<div class="mitzvah-cue-list">' +
             data.items.map(function(item) {
               return '<div class="mitzvah-cue-card" id="cueCard-' + item.id.replaceAll('.', '-') + '">' +
                 '<button class="mitzvah-cue-button" type="button" aria-expanded="false" onclick="toggleMitzvahCue(\'' + item.id + '\')">' +
-                  '<span class="mitzvah-address">' + item.id + '</span>' +
                   '<span><span class="mitzvah-cue-heading"><span class="mitzvah-cue-translit">' + item.cue + '</span>' +
-                  '<span class="mitzvah-cue-hebrew" dir="rtl">' + item.cueHebrew + '</span></span>' +
-                  '<span class="mitzvah-cue-english">' + item.englishCue + '</span>' +
-                  '<span class="mitzvah-cue-translation" dir="rtl">' + item.shortHebrew + '</span></span>' +
+                  '<span class="mitzvah-cue-hebrew" dir="rtl">' + item.cueHebrew + '</span></span></span>' +
                   '<span class="mitzvah-chevron" aria-hidden="true">⌄</span>' +
                 '</button>' +
-                '<div class="mitzvah-meaning"><div>' + item.meaning + '</div>' +
+                '<div class="mitzvah-meaning"><div class="mitzvah-basic-meaning"><strong>' + item.englishCue + '</strong>' +
+                  '<span dir="rtl">' + item.shortHebrew + '</span></div><div>' + item.meaning + '</div>' +
                   '<div class="mitzvah-meaning-hebrew" dir="rtl">' + item.meaningHebrew + '</div>' +
                   '<span class="mitzvah-type">' + item.type + ' · ' + item.typeHebrew + '</span></div>' +
               '</div>';
             }).join('') +
-          '</div>';
+          '</div>' +
+          (data.note ? '<p class="mitzvah-progress-note">' + data.note + '</p>' : '');
       }
 
       function toggleMitzvahCue(id) {
