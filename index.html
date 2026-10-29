@@ -68,28 +68,6 @@
       letter-spacing: -0.04em;
     }
 
-    .rambam-number {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 18px;
-      padding: 9px 14px;
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.08);
-      color: #d7dce5;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .rambam-number strong {
-      color: white;
-      font-size: 19px;
-      letter-spacing: 0.08em;
-    }
-
     .page {
       display: none;
     }
@@ -909,6 +887,42 @@
       line-height: 1.5;
     }
 
+    .phone-number-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 0 0 16px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--soft);
+    }
+
+    .phone-number-label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .phone-number-label strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    .phone-number-sequence {
+      color: var(--navy);
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 0.035em;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+      font-variant-numeric: tabular-nums;
+    }
+
     @media (max-width: 900px) {
       .sefer-picker {
         align-items: stretch;
@@ -969,10 +983,6 @@
         <div>
           <div class="hebrew-title"> משנה תורה</div>
           <h1>Rambam Learning Engine</h1>
-          <div class="rambam-number">
-            <span>The Rambam’s “phone number”</span>
-            <strong>14 · 83 · 613</strong>
-          </div>
         </div>
       </header>
 
@@ -1138,6 +1148,14 @@
 
       <section id="hilchotOverview" class="section active">
         <div class="card">
+          <div class="phone-number-strip">
+            <div class="phone-number-label">
+              <strong>The Rambam’s “phone number”</strong>
+              Hilchot in Sefarim 1–14 · total 83
+            </div>
+            <div class="phone-number-sequence">5–6–10–5–3–4–7–9–6–8–5–5–5–5</div>
+          </div>
+
           <p class="focus-instruction">
             Choose a sefer, then click one of its branches. Its mitzvot will open directly beneath that section.
           </p>
