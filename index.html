@@ -914,6 +914,11 @@
     }
 
     .phone-number-sequence {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 16px;
+      flex-wrap: wrap;
       color: var(--navy);
       font-size: 18px;
       font-weight: 900;
@@ -921,6 +926,10 @@
       line-height: 1.45;
       overflow-wrap: anywhere;
       font-variant-numeric: tabular-nums;
+    }
+
+    .phone-number-sequence span {
+      white-space: nowrap;
     }
 
     @media (max-width: 900px) {
@@ -1153,7 +1162,12 @@
               <strong>The Rambam’s “phone number”</strong>
               Hilchot in Sefarim 1–14 · total 83
             </div>
-            <div class="phone-number-sequence">5–6–10–5–3–4–7–9–6–8–5–5–5–5</div>
+            <div class="phone-number-sequence" aria-label="5, 6, 10; 5, 3, 4; 7, 9, 6; 8, 5, 5, 5, 5">
+              <span>5–6–10</span>
+              <span>5–3–4</span>
+              <span>7–9–6</span>
+              <span>8–5–5–5–5</span>
+            </div>
           </div>
 
           <p class="focus-instruction">
