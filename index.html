@@ -1125,6 +1125,53 @@ button.hm-row:hover{background:rgba(176,141,87,.07)}
 #hmSef .hm-chip .bk-fhe{font-size:.66rem;border-width:1.5px;border-radius:5px;padding:0 4px;white-space:nowrap}
 #hmSef .hm-chip .bk-pg{right:-6px;top:4px;bottom:4px;width:4px;border-width:2px}
 </style>
+
+<style>/* Nov 17: jazzed Test Yourself + new Hilchot games + instant test */
+.ty-grid .game-tile{flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:7px;padding:22px 14px 18px;min-height:132px;border-radius:20px;font-size:16.5px;box-shadow:0 3px 12px rgba(17,24,39,.06)}
+.ty-grid .game-tile .gi{font-size:32px;width:auto;line-height:1}
+.ty-grid .game-tile:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(176,141,87,.22);border-color:var(--gold)}
+.gt-sub{display:block;font-size:12.5px;font-weight:600;color:var(--muted);line-height:1.4;max-width:230px}
+.instant-row{display:block;margin-top:10px}
+.instant-btn{display:inline-flex;align-items:center;justify-content:center;padding:9px 16px;border-radius:999px;border:2px solid #1f2a44;background:var(--gold,#b08d57);color:#fff;font-size:.82rem;font-weight:800;cursor:pointer;box-shadow:2px 2px 0 #1f2a44}
+.instant-btn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 #1f2a44}
+.instant-btn2{margin-top:0!important;background:#fffaf0!important;color:#1f2a44!important;border:2px solid var(--gold)}
+.pick-grid{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 4px}
+.pick-chip{padding:9px 12px;border-radius:999px;font-size:13.5px;display:inline-flex;gap:7px;align-items:center}
+.pick-chip .pc-n{display:inline-grid;place-items:center;width:21px;height:21px;border-radius:50%;background:var(--soft);font-size:11.5px;font-weight:900}
+.pick-chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.pick-chip.on .pc-n{background:var(--gold);color:#fff}
+.ct-page{background:#fffdf7;border:3px solid #1f2a44;border-radius:8px 16px 16px 8px;box-shadow:6px 6px 0 #1f2a44;padding:16px 16px 12px;margin-top:12px;text-align:left}
+.ct-ph{font-family:"Frank Ruhl Libre","SBL Hebrew","Times New Roman",serif;font-size:1.35rem;font-weight:700;text-align:center}
+.ct-pt{text-align:center;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold,#b08d57);font-weight:700;margin:2px 0 10px}
+.ct-slot{display:flex;align-items:center;gap:10px;min-height:50px;padding:6px 8px;border:2px dashed var(--line);border-radius:12px;margin-bottom:7px;background:#fff}
+.ct-slot .ct-num{flex:0 0 26px;width:26px;height:26px;border-radius:50%;background:var(--soft);color:#8a6a2f;font-weight:900;font-size:.8rem;display:flex;align-items:center;justify-content:center}
+.ct-slot.hot{border-color:var(--gold);background:#fbf5ea}
+.ct-slot.ok{border-style:solid;border-color:var(--good-border);background:var(--good-bg)}
+.ct-slot.no{border-style:solid;border-color:var(--bad-border);background:var(--bad-bg)}
+.ct-slot .ct-empty{color:var(--muted);font-size:13px;font-style:italic}
+.ct-pool{display:flex;flex-wrap:wrap;gap:7px;min-height:52px;padding:10px;border:2px dashed var(--line);border-radius:16px;margin-top:12px;background:#fffdf9}
+.ct-pool.hot{border-color:var(--gold);background:#fbf5ea}
+.ct-pool:empty::after{content:"Every section is on the contents page. Click Check.";color:var(--muted);font-size:14px;align-self:center}
+.ct-tile{touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border:2px solid var(--line);border-radius:12px;background:var(--panel);font-weight:800;font-size:14px}
+.ct-tile .rc-he{direction:rtl;font-size:15px}
+.ct-tile.sel{border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,141,87,.35)}
+.ct-tile.lift{opacity:.25}
+.ct-slot .ct-tile{border:0;background:transparent;padding:2px 4px;box-shadow:none!important}
+.fall-stage{min-height:150px;display:flex;align-items:flex-start;justify-content:center;padding-top:6px}
+.fall-card{touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;background:linear-gradient(160deg,#fff,#f8f3ea);border:2.5px solid #1f2a44;border-radius:16px;box-shadow:5px 5px 0 #1f2a44;padding:18px 22px;text-align:center;max-width:340px;width:100%;animation:fallDrop .55s cubic-bezier(.2,.9,.3,1.15)}
+.fall-card .fc-he{font-family:"Frank Ruhl Libre","SBL Hebrew","Times New Roman",serif;font-size:1.6rem;font-weight:700;line-height:1.2}
+.fall-card .fc-en{font-weight:800;margin-top:3px}
+.fall-card .fc-drag{font-size:12px;color:var(--muted);font-weight:700;margin-top:7px}
+.fall-card.good{border-color:var(--good-border);background:var(--good-bg);box-shadow:5px 5px 0 var(--good-border)}
+.fall-card.bad{animation:shake .35s ease;border-color:var(--bad-border);background:var(--bad-bg)}
+@keyframes fallDrop{from{transform:translateY(-64px);opacity:0}to{transform:none;opacity:1}}
+.fall-buckets{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px;margin-top:8px}
+.fall-bucket{display:flex;flex-direction:column;align-items:center;gap:2px;padding:14px 8px;border-radius:16px;border:2.5px solid #1f2a44;color:#fff;font-weight:800;box-shadow:3px 3px 0 #1f2a44;cursor:pointer}
+.fall-bucket .fb-he{font-family:"Frank Ruhl Libre","SBL Hebrew","Times New Roman",serif;font-size:1.15rem;line-height:1.15}
+.fall-bucket .fb-en{font-size:12.5px;opacity:.92}
+.fall-bucket.hot{outline:3px solid var(--gold);outline-offset:2px}
+.fall-bucket:disabled{opacity:.85;cursor:default}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -2151,7 +2198,7 @@ function tyDone() { if (!tyGame || RLE_PREVIEW) return; if (!S.tyDone || typeof 
 /* Nov 11: Test yourself in 3 stages (easy, medium, hard); the next stage opens when every item in the one before has been done once */
 var TY_STAGES = {
   1: [["explore", "palace", "match", "name"], ["number", "theme", "order", "shelf"], ["dorder", "missing", "words", "typeit"]],
-  2: [SHOW_PHONE ? ["phone", "hsort"] : ["hsort"], ["horder", "hdrag", "tsort"], ["hmissing", "hcount"]],
+  2: [SHOW_PHONE ? ["phone", "hsort"] : ["hsort"], ["horder", "hdrag", "tsort", "hcontents", "hfall"], ["hmissing", "hcount"]],
   3: [["mtype", "msef"], ["mhil"], ["mdrag"]]
 };
 var TY_NAMES = [["Stage 1", "Easy", "Recognize and match"], ["Stage 2", "Medium", "Numbers and order"], ["Stage 3", "Hard", "From memory"]];
@@ -2175,7 +2222,7 @@ function renderTest() {
     var locked = k > curSt, isOpen = k === openSt && !locked, nDone = a.filter(function (id) { return D[id]; }).length;
     var badge = locked ? '<span class="ty-lock" aria-label="Locked">🔒</span>' : (done[k] ? '<span class="ty-ok" aria-label="Done">✓</span>' : '<span class="ty-cnt">' + nDone + ' of ' + a.length + '</span>');
     return '<section class="ty-stage' + (isOpen ? ' open' : '') + (locked ? ' locked' : '') + (done[k] ? ' done' : '') + '"><button type="button" class="ty-row" data-tystage="' + k + '"' + (locked ? ' aria-disabled="true"' : ' aria-expanded="' + isOpen + '"') + '><span class="ty-sn">' + (k + 1) + '</span><span class="ty-st"><b>' + TY_NAMES[k][0] + ' · ' + TY_NAMES[k][1] + '</b><small>' + TY_NAMES[k][2] + '</small></span>' + badge + '</button>' +
-      (isOpen ? '<div class="ty-body"><div class="games-grid ty-grid">' + a.map(function (id) { var g = GMAP[id]; return '<button type="button" class="game-tile' + (D[id] ? ' ty-did' : '') + '" data-game="' + g.id + '">' + (D[id] ? '<span class="ty-tick" aria-label="Done">✓</span>' : '') + '<span class="gi">' + g.icon + "</span><span>" + g.title + "</span></button>"; }).join("") + '</div></div>' : '') + '</section>';
+      (isOpen ? '<div class="ty-body"><div class="games-grid ty-grid">' + a.map(function (id) { var g = GMAP[id]; return '<button type="button" class="game-tile' + (D[id] ? ' ty-did' : '') + '" data-game="' + g.id + '">' + (D[id] ? '<span class="ty-tick" aria-label="Done">✓</span>' : '') + '<span class="gi">' + g.icon + "</span><span>" + g.title + '</span><span class="gt-sub">' + esc((g.intro || "").split(". ")[0]) + "</span></button>"; }).join("") + '</div></div>' : '') + '</section>';
   }).join("") + '</div><button type="button" class="link-btn ty-rev" data-game="review">↻ Smart Review: the ones you missed</button></div>';
   $$("[data-tystage]", host).forEach(function (b) { b.onclick = function () {
     var k = +b.getAttribute("data-tystage");
@@ -2430,6 +2477,119 @@ function rcTypeIt(host) {
   next();
 }
 
+
+
+/* ---------- instant test: test the page you are viewing, right now ---------- */
+function instantRun(title, keys, backPage) {
+  if (!keys.length) { toast("Nothing to test here yet."); return; }
+  gameFrom = backPage || "home"; tyGame = null;
+  go("play", gameFrom);
+  $("#sbTitle").textContent = title;
+  var host = $("#playHost");
+  host.innerHTML = '<div class="play-head"><h2>' + esc(title) + '</h2></div><div id="gBody"></div>';
+  var body = $("#gBody", host);
+  var r = new Runner(body, { kickerFor: function () { return "Lock it in · " + title; }, again: function () { r.start(shuffle(keys.slice())); }, done: function () { rcDone(); } });
+  r.start(shuffle(keys.slice()));
+  window.scrollTo(0, 0);
+}
+function testSeferNow(n) { var keys = keysForSefer(n).concat(shuffle(hilOfSefer(n).map(function (h) { return "H.sefer." + h.a; })).slice(0, 4)); instantRun("Sefer " + n + " · " + seferOf(n).translit, keys, "books"); }
+function testSeferHilchotNow(n) { var hs = hilOfSefer(n); var keys = shuffle(hs.map(function (h) { return "H.sefer." + h.a; }).concat(hs.map(function (h) { return "H.name." + h.a; }))); instantRun(seferOf(n).translit + " — its hilchot", keys.slice(0, 8), "hilchot"); }
+function testHilchahNow(a, backPage) { var h = HMAP[a]; if (!h) return; var keys = shuffle(["H.name." + a].concat(keysForHilchah(a))); instantRun("Hilchot " + h.tr, keys.slice(0, 8), backPage || "hilchot"); }
+
+/* ---------- NEW: Fill the Contents Page — order a sefer's hilchot inside its book ---------- */
+var rcContSef = 3;
+function rcContentsOrder(host) {
+  if (HM[2] && HM[2].s) rcContSef = HM[2].s;
+  var hs = hilOfSefer(rcContSef), b = seferOf(rcContSef), first = true, shown = false, selEl = null;
+  var picker = '<div style="margin-top:10px"><label class="trans" style="display:block;margin-bottom:6px;font-weight:800">Choose a sefer</label><select id="ctSel" style="font:inherit;padding:10px;border-radius:12px;border:1px solid var(--line);width:100%;max-width:360px">' + BOOKS.map(function (x) { return '<option value="' + x.n + '"' + (x.n === rcContSef ? " selected" : "") + ">" + x.n + " · " + esc(x.translit) + " (" + hilOfSefer(x.n).length + " hilchot)</option>"; }).join("") + "</select></div>";
+  host.innerHTML = '<div class="card"><h3 style="margin:0 0 4px">Fill the contents page</h3><p class="trans" style="margin:0">Sefer ' + esc(b.translit) + ' is open at its contents page, but every section is missing. Drag each hilchah into its numbered place — or tap a hilchah, then tap its place.</p>' + picker +
+    '<div class="ct-page"><div class="ct-ph" lang="he" dir="rtl">' + esc(b.hebrew) + '</div><div class="ct-pt">Contents · ' + hs.length + (hs.length === 1 ? " hilchah" : " hilchot") + '</div>' +
+    hs.map(function (h, i) { return '<div class="ct-slot" data-slot="' + i + '"><span class="ct-num">' + (i + 1) + '</span><span class="ct-empty">— empty —</span></div>'; }).join("") + '</div>' +
+    '<div class="ct-pool" id="ctPool">' + rcShuffleNot(hs).map(function (h) { return '<div class="ct-tile" data-a="' + h.a + '" role="button" aria-label="Hilchot ' + esc(h.tr) + '"><span class="rc-he" lang="he" dir="rtl">' + esc(h.he) + '</span><span>' + esc(h.tr) + "</span></div>"; }).join("") + '</div>' +
+    '<div class="rc-msg" id="ctMsg" aria-live="polite"></div><div class="row-actions"><button type="button" class="primary" id="ctCheck">Check the contents page</button><button type="button" id="ctShow">Show the contents</button><button type="button" id="ctNew">Shuffle again</button></div></div>';
+  var card = $(".card", host), pool = $("#ctPool", host), msg = $("#ctMsg", host);
+  $("#ctSel", host).onchange = function () { rcContSef = +this.value; rcContentsOrder(host); };
+  function deselect() { if (selEl) { selEl.classList.remove("sel"); selEl = null; } }
+  function clearMarks() { $$(".ct-slot", card).forEach(function (s) { s.classList.remove("ok", "no"); }); msg.innerHTML = ""; }
+  function hot(t) { $$(".hot", card).forEach(function (x) { x.classList.remove("hot"); }); if (t) t.classList.add("hot"); }
+  function place(tile, slot) {
+    if (!tile || !slot) return;
+    var occ = $(".ct-tile", slot); if (occ && occ !== tile) pool.appendChild(occ);
+    var em = $(".ct-empty", slot); if (em) em.remove();
+    slot.appendChild(tile); deselect(); clearMarks();
+  }
+  rcDrag(card, ".ct-tile", {
+    start: function () { deselect(); },
+    move: function (el, t) { var s = t && t.closest(".ct-slot"); hot(s || (t && t.closest("#ctPool") ? pool : null)); },
+    drop: function (el, t) { var s = t && t.closest(".ct-slot"); var pl = t && t.closest("#ctPool"); hot(null); if (s) place(el, s); else if (pl) { pool.appendChild(el); deselect(); clearMarks(); } },
+    tap: function (el) {
+      if (selEl === el) { deselect(); return; }
+      if (selEl) { var toSlot = el.closest(".ct-slot"); if (toSlot) { place(selEl, toSlot); return; } deselect(); }
+      selEl = el; el.classList.add("sel");
+    }
+  });
+  $$(".ct-slot", card).forEach(function (s) { s.addEventListener("click", function (e) { if (!selEl || e.target.closest(".ct-tile")) return; place(selEl, s); }); });
+  pool.addEventListener("click", function (e) { if (!selEl || e.target.closest(".ct-tile")) return; pool.appendChild(selEl); deselect(); clearMarks(); });
+  $("#ctCheck", host).onclick = function () {
+    var left = $$(".ct-tile", pool).length;
+    if (left) { msg.innerHTML = '<div class="bad"><strong>' + left + (left === 1 ? " hilchah is" : " hilchot are") + ' still off the page.</strong></div>'; return; }
+    var right = 0;
+    $$(".ct-slot", card).forEach(function (s, i) { var t = $(".ct-tile", s), ok = !!t && t.getAttribute("data-a") === hs[i].a; if (ok) right++; s.classList.toggle("ok", ok); s.classList.toggle("no", !ok); if (first) grade("H.sefer." + hs[i].a, ok); });
+    var all = right === hs.length; tyDone();
+    if (first && all && !shown) { addXP(20); confetti(); }
+    first = false; sfx(all);
+    msg.innerHTML = '<div class="' + (all ? "good" : "bad") + '"><strong>' + (all ? "The contents page is complete — every hilchah in its place." : right + " of " + hs.length + " in the right place.") + "</strong>" + (all ? "" : ' <span class="trans">Move the red ones and check again.</span>') + "</div>";
+  };
+  $("#ctShow", host).onclick = function () { shown = true; deselect(); hs.forEach(function (h, i) { var t = $('.ct-tile[data-a="' + h.a + '"]', card); if (t) place(t, $$(".ct-slot", card)[i]); }); $$(".ct-slot", card).forEach(function (s) { s.classList.remove("no"); s.classList.add("ok"); }); msg.innerHTML = '<div class="good"><strong>Here is the full contents page.</strong> <span class="trans">Click Shuffle again to try it yourself.</span></div>'; };
+  $("#ctNew", host).onclick = function () { rcContentsOrder(host); };
+}
+
+/* ---------- NEW: Falling Hilchot — pick your sefarim, catch each hilchah ---------- */
+var fallSel = null, fallCount = 12;
+var FALL_COLORS = ["#2f6db5", "#c0392b", "#2e8b57", "#d4a017", "#7b4fa0", "#e07b39", "#1f8a8a"];
+function rcFallSort(host) {
+  if (!fallSel) { var s0 = (HM[2] && HM[2].s) || 1; fallSel = [s0, s0 % 14 + 1, (s0 + 1) % 14 + 1].filter(function (v, i, a) { return a.indexOf(v) === i; }); }
+  host.innerHTML = '<div class="card"><h3 style="margin:0 0 4px">Falling Hilchot</h3><p class="trans" style="margin:0">Choose the sefarim you want to be tested on, and how many hilchot fall. Each hilchah drops in from the top — drag it onto its sefer, or just tap the sefer.</p>' +
+    '<p style="margin:14px 0 0"><b>Which sefarim?</b> <span class="trans">(' + fallSel.length + ' chosen — pick at least 2)</span></p><div class="pick-grid">' +
+    BOOKS.map(function (b) { return '<button type="button" class="pick-chip' + (fallSel.indexOf(b.n) >= 0 ? " on" : "") + '" data-pick="' + b.n + '" aria-pressed="' + (fallSel.indexOf(b.n) >= 0) + '"><span class="pc-n">' + b.n + '</span><span>' + esc(b.translit) + "</span></button>"; }).join("") + '</div>' +
+    '<p style="margin:12px 0 0"><b>How many hilchot?</b></p><div class="rc-opts">' + [8, 12, 20].map(function (n) { return '<button type="button" class="' + (fallCount === n ? "active" : "") + '" data-cnt="' + n + '">' + n + "</button>"; }).join("") + '</div>' +
+    '<div class="row-actions"><button type="button" class="primary" id="fallGo"' + (fallSel.length < 2 ? " disabled" : "") + '>Start — ' + fallCount + ' hilchot from ' + fallSel.length + ' sefarim</button></div></div>';
+  $$("[data-pick]", host).forEach(function (ch) { ch.onclick = function () { var n = +ch.getAttribute("data-pick"), at = fallSel.indexOf(n); if (at >= 0) fallSel.splice(at, 1); else fallSel.push(n); fallSel.sort(function (a, b2) { return a - b2; }); rcFallSort(host); }; });
+  $$("[data-cnt]", host).forEach(function (ch) { ch.onclick = function () { fallCount = +ch.getAttribute("data-cnt"); rcFallSort(host); }; });
+  var goBtn = $("#fallGo", host); if (goBtn) goBtn.onclick = function () { fallPlay(host, fallSel.slice(), fallCount); };
+}
+function fallPlay(host, books, count) {
+  var poolAll = []; books.forEach(function (n) { hilOfSefer(n).forEach(function (h) { poolAll.push(h); }); });
+  var queue = shuffle(poolAll).slice(0, Math.min(count, poolAll.length));
+  if (queue.length < count) { var extra = shuffle(poolAll); for (var e = 0; queue.length < count && e < extra.length * 2; e++) queue.push(extra[e % extra.length]); }
+  var i = 0, right = 0, busy = false, curH = null;
+  host.innerHTML = '<div class="card" id="fallCard"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h3 style="margin:0">Falling Hilchot</h3><span class="chip" id="fallProg"></span></div><p class="trans" style="margin:4px 0 0">Drag the falling hilchah onto its sefer — or tap the sefer.</p><div class="fall-stage" id="fallStage"></div><div class="fall-buckets" id="fallBuckets">' +
+    books.map(function (n) { var b = seferOf(n); return '<button type="button" class="fall-bucket" data-bucket="' + n + '" style="background:' + FALL_COLORS[n % 7] + '"><span class="fb-he" lang="he" dir="rtl">' + esc(b.shortHebrew || b.hebrew) + '</span><span class="fb-en">' + n + " · " + esc(b.translit) + "</span></button>"; }).join("") + '</div><div class="rc-msg" id="fallMsg" aria-live="polite"></div></div>';
+  var wrap = $("#fallCard", host), stage = $("#fallStage", host), msg = $("#fallMsg", host), prog = $("#fallProg", host);
+  function render() {
+    busy = false; curH = queue[i];
+    prog.textContent = (i + 1) + " of " + queue.length + " · " + right + " caught";
+    msg.innerHTML = "";
+    stage.innerHTML = '<div class="fall-card" id="fallOne" role="img" aria-label="Hilchot ' + esc(curH.tr) + '"><div class="fc-he" lang="he" dir="rtl">הלכות ' + esc(curH.he) + '</div><div class="fc-en">Hilchot ' + esc(curH.tr) + '</div><div class="fc-drag">Which sefer does this belong to?</div></div>';
+    $$(".fall-bucket", wrap).forEach(function (bk) { bk.disabled = false; bk.classList.remove("hot"); });
+  }
+  function answer(n) {
+    if (busy || !curH) return; busy = true;
+    var ok = curH.s === n; grade("H.sefer." + curH.a, ok); sfx(ok);
+    var cardEl = $("#fallOne", wrap); if (cardEl) cardEl.classList.add(ok ? "good" : "bad");
+    $$(".fall-bucket", wrap).forEach(function (bk) { bk.disabled = true; });
+    if (ok) { right++; addXP(8); msg.innerHTML = '<div class="good"><strong>Caught it.</strong> Hilchot ' + esc(curH.tr) + " belongs to Sefer " + esc(seferOf(curH.s).translit) + ".</div>"; }
+    else msg.innerHTML = '<div class="bad"><strong>Not that sefer.</strong> Hilchot ' + esc(curH.tr) + " belongs to Sefer " + esc(seferOf(curH.s).translit) + ".</div>";
+    setTimeout(function () { i++; if (i >= queue.length) { rcSummary(host, right, queue.length, function () { rcFallSort(host); }); } else render(); }, ok ? 620 : 1250);
+  }
+  $$(".fall-bucket", wrap).forEach(function (bk) { bk.onclick = function () { answer(+bk.getAttribute("data-bucket")); }; });
+  rcDrag(wrap, ".fall-card", {
+    move: function (el, t) { var bk = t && t.closest(".fall-bucket"); $$(".fall-bucket", wrap).forEach(function (x) { x.classList.toggle("hot", x === bk); }); },
+    drop: function (el, t) { var bk = t && t.closest(".fall-bucket"); $$(".fall-bucket", wrap).forEach(function (x) { x.classList.remove("hot"); }); if (bk) answer(+bk.getAttribute("data-bucket")); },
+    tap: function () { }
+  });
+  render();
+}
 
 window.RLE_T = { go: function (p) { go(p); }, test: function (l) { openTest(l); }, cur: function () { return current; }, openGame: function (id) { openGame(id); }, games: function (g) { go("home"); homeTab("games"); gamesSel = g; renderGames(); }, typeOk: function (t, v) { return rcTypeOk(BOOKS.filter(function (b) { return b.translit === t; })[0], v); }, books: function () { return BOOKS; }, nL: function () { return Object.keys(S.L).length; } };
 /* ================= v2.1: calm learning flow ================= */
@@ -2687,15 +2847,15 @@ function hlWheelWire(host, st) {
     var x = HMAP[a];
     if (!x) { bk.classList.remove("hl-reading"); pg.innerHTML = '<span class="hl-pg-p">Pick a section from the contents to turn to its page</span>'; return; }
     bk.classList.add("hl-reading");
-    pg.innerHTML = '<span class="hl-pg-h" lang="he" dir="rtl">הלכות ' + esc(x.he) + '</span><span class="hl-pg-s">Hilchot ' + esc(x.tr) + ' · ' + esc(x.en) + '</span>' + (x.d ? '<span class="hl-pg-d" lang="en">' + esc(x.d) + '</span>' : '') + '<span class="hl-pg-a"><span class="hl-pg-b hl-pg-b1" role="button" tabindex="0" data-learn="' + x.a + '">Learn this hilchah</span>' + '</span>';
+    pg.innerHTML = '<span class="hl-pg-h" lang="he" dir="rtl">הלכות ' + esc(x.he) + '</span><span class="hl-pg-s">Hilchot ' + esc(x.tr) + ' · ' + esc(x.en) + '</span>' + (x.d ? '<span class="hl-pg-d" lang="en">' + esc(x.d) + '</span>' : '') + '<span class="hl-pg-a"><span class="hl-pg-b hl-pg-b1" role="button" tabindex="0" data-learn="' + x.a + '">Learn this hilchah</span><span class="hl-pg-b" role="button" tabindex="0" data-testh="' + x.a + '">⚡ Test it now</span>' + '</span>';
   }
-  function pgAct(t) { if (!t) return false; var la = t.getAttribute("data-learn"), ta = t.getAttribute("data-tomz"); if (la) { hmStartAt(2, la); return true; } if (ta) { HM[3].s = HMAP[ta].s; HM[3].a = ta; go("mitzvot"); return true; } return false; }
+  function pgAct(t) { if (!t) return false; var la = t.getAttribute("data-learn"), ta = t.getAttribute("data-tomz"), te = t.getAttribute("data-testh"), ts = t.getAttribute("data-testsf"); if (te) { testHilchahNow(te, "hilchot"); return true; } if (ts) { testSeferHilchotNow(+ts); return true; } if (la) { hmStartAt(2, la); return true; } if (ta) { HM[3].s = HMAP[ta].s; HM[3].a = ta; go("mitzvot"); return true; } return false; }
   function flip(bk) { var pp = bk.querySelector(".bk-pages"); if (!pp) return; var o = pp.querySelector(".bk-flip"); if (o) o.remove(); var f = document.createElement("span"); f.className = "bk-flip"; f.innerHTML = "<i></i>"; pp.appendChild(f); setTimeout(function () { if (f.parentNode) f.remove(); }, 500); }
   function fit(bk) { var pg2 = bk.querySelector(".bk-pages"), n2 = bk.querySelectorAll(".bk-list li").length; if (!pg2) return; var ul2 = pg2.querySelector(".bk-list"); pg2.style.setProperty("--n", n2); pg2.style.setProperty("--bkh", Math.max(240, (ul2 ? ul2.offsetHeight : 0) + 28) + "px"); if (bk.classList.contains("open")) setTimeout(function () { bkFitTabs(bk); pg2.style.setProperty("--bkh", Math.max(240, (ul2 ? ul2.offsetHeight : 0) + 28) + "px"); }, 30); }
   function show(k, dir, keepOpen) {
     cur = (k + 14) % 14; var b = BOOKS[cur], HL = hilOfSefer(b.n);
     if (st.s !== b.n) { st.s = b.n; st.a = ""; st.open = ""; }
-    card.innerHTML = '<span class="sf-num">' + b.n + ' <small>of 14</small></span><button type="button" class="sf-book" aria-label="Open the book"><span class="bk-cover bk-c' + (b.n % 7) + '"><span class="bk-spine"></span><span class="bk-front"><span class="bk-fn">' + b.n + '</span><span class="bk-pic"><img src="' + b.img + '" alt=""></span><span class="bk-fhe" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="bk-fen">' + esc(b.english) + '</span></span><span class="bk-pg"></span></span><span class="bk-hint2">Click the book to see its hilchot</span><span class="bk-pages"><span class="bk-ph" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="bk-pt">Contents · ' + HL.length + (HL.length === 1 ? ' hilchah' : ' hilchot') + '</span><ol class="bk-list">' + HL.map(function (x, xi) { return '<li data-a="' + esc(x.a) + '"' + (st.open === x.a ? ' class="on"' : '') + '><span class="bk-ln">' + (xi + 1) + '</span><span class="bk-lmain"><span class="bk-lhe" lang="he" dir="rtl">' + esc(x.he) + '</span><span class="bk-len">' + esc(x.tr) + (x.en ? ' · ' + esc(x.en) : '') + '</span></span></li>'; }).join("") + '</ol><span class="hl-pg" aria-live="polite"></span><span class="bk-close">Click to close</span></span></button><span class="sf-he" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="sf-en">' + esc(b.english) + '</span>';
+    card.innerHTML = '<span class="sf-num">' + b.n + ' <small>of 14</small></span><button type="button" class="sf-book" aria-label="Open the book"><span class="bk-cover bk-c' + (b.n % 7) + '"><span class="bk-spine"></span><span class="bk-front"><span class="bk-fn">' + b.n + '</span><span class="bk-pic"><img src="' + b.img + '" alt=""></span><span class="bk-fhe" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="bk-fen">' + esc(b.english) + '</span></span><span class="bk-pg"></span></span><span class="bk-hint2">Click the book to see its hilchot</span><span class="bk-pages"><span class="bk-ph" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="bk-pt">Contents · ' + HL.length + (HL.length === 1 ? ' hilchah' : ' hilchot') + '</span><ol class="bk-list">' + HL.map(function (x, xi) { return '<li data-a="' + esc(x.a) + '"' + (st.open === x.a ? ' class="on"' : '') + '><span class="bk-ln">' + (xi + 1) + '</span><span class="bk-lmain"><span class="bk-lhe" lang="he" dir="rtl">' + esc(x.he) + '</span><span class="bk-len">' + esc(x.tr) + (x.en ? ' · ' + esc(x.en) : '') + '</span></span></li>'; }).join("") + '</ol><span class="hl-pg" aria-live="polite"></span><span class="hl-pg-a"><span class="hl-pg-b" role="button" tabindex="0" data-testsf="' + b.n + '">⚡ Test this sefer\'s hilchot</span></span><span class="bk-close">Click to close</span></span></button><span class="sf-he" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="sf-en">' + esc(b.english) + '</span>';
     card.classList.remove("in-l", "in-r"); void card.offsetWidth; if (dir) card.classList.add(dir > 0 ? "in-r" : "in-l");
     $$(".sf-dot", dots).forEach(function (d, i) { d.classList.toggle("on", i === cur); });
     if (shf && shf.classList.contains("picked")) $$(".sh-bk", shf).forEach(function (s2, i) { s2.classList.toggle("on", i === cur); });
@@ -2707,13 +2867,13 @@ function hlWheelWire(host, st) {
   $("#hlNext", host).onclick = function () { show(cur + 1, 1); };
   card.addEventListener("click", function (ev) {
     var bk = ev.target.closest(".sf-book"); if (!bk) return;
-    if (bk.classList.contains("open") && pgAct(ev.target.closest(".hl-pg [data-learn], .hl-pg [data-tomz]"))) { ev.preventDefault(); return; }
+    if (bk.classList.contains("open") && pgAct(ev.target.closest("[data-learn], [data-tomz], [data-testh], [data-testsf]"))) { ev.preventDefault(); return; }
     var tb = ev.target.closest(".bk-list li");
     if (tb && bk.classList.contains("open")) { var xa = tb.getAttribute("data-a"); if (!HMAP[xa]) return; var chg = st.open !== xa; st.a = xa; st.open = xa; bk.querySelectorAll(".bk-list li").forEach(function (l) { l.classList.toggle("on", l === tb); }); if (chg) flip(bk); detail(st.open); fit(bk); var pp = bk.querySelector(".bk-pages"); if (pp) setTimeout(function () { var r = pp.getBoundingClientRect(); if (r.top < 0 || r.bottom > innerHeight) pp.scrollIntoView({ behavior: "smooth", block: r.height > innerHeight ? "start" : "nearest" }); }, 60); return; }
     if (bk.classList.contains("open") && ev.target.closest(".hl-pg") && !ev.target.closest(".hl-pg-p")) return;
     bk.classList.toggle("open"); fit(bk); if (!bk.classList.contains("open")) { st.open = ""; detail(""); }
   });
-  card.addEventListener("keydown", function (ev) { if (ev.key !== "Enter" && ev.key !== " ") return; var t = ev.target.closest && ev.target.closest(".hl-pg [data-learn], .hl-pg [data-tomz]"); if (t && pgAct(t)) { ev.preventDefault(); ev.stopPropagation(); } });
+  card.addEventListener("keydown", function (ev) { if (ev.key !== "Enter" && ev.key !== " ") return; var t = ev.target.closest && ev.target.closest("[data-learn], [data-tomz], [data-testh], [data-testsf]"); if (t && pgAct(t)) { ev.preventDefault(); ev.stopPropagation(); } });
   $$(".sf-dot", dots).forEach(function (d) { d.onclick = function () { var k = +d.getAttribute("data-k"); show(k, k > cur ? 1 : -1); }; });
   var x0 = null; card.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
   card.addEventListener("touchend", function (e) { if (x0 === null) return; var dx = e.changedTouches[0].clientX - x0; x0 = null; if (Math.abs(dx) > 40) { show(cur + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1); } });
@@ -2743,7 +2903,7 @@ function renderHM(lvl) {
       '<div class="hm-card"><div class="hm-kick" lang="he" dir="rtl">' + esc(B.hebrew) + '</div><div class="hm-title" lang="he" dir="rtl">הלכות ' + esc(H.he) + '</div><div class="hm-sub">Hilchot ' + esc(H.tr) + ' · ' + esc(H.en) + '</div>' +
       (H.n ? '<div class="hm-tags"><span class="tag">' + H.n + (H.n === 1 ? ' mitzvah' : ' mitzvot') + '</span>' + (c.p ? '<span class="tag pos">' + c.p + ' aseh · עשה</span>' : '') + (c.g ? '<span class="tag neg">' + c.g + ' lo taaseh · לא תעשה</span>' : '') + '</div>' +
         '<ol class="hm-list hm-mz" dir="rtl">' + H.m.map(function (m, k) { var cu = cues && cues.items[k]; return '<li class="hm-item"><div class="hm-row hm-mrow"><span class="hr-n ' + (m[0] === "+" ? "pos" : "neg") + '">' + (k + 1) + '</span><span class="hr-t"><span class="hr-he" lang="he" dir="rtl">' + esc(m[1]) + '</span>' + (m[3] ? '<span class="hr-x" lang="he" dir="rtl">' + esc(m[3]) + '</span>' : '') + '<span class="hr-en" dir="ltr">' + esc(cap(m[2])) + (m[4] ? ' <span class="hr-xen">' + esc(m[4]) + '</span>' : '') + '</span>' + (cu ? '<span class="hr-cue" dir="ltr">Memory cue: <b>' + esc(cu.cue) + '</b> <span lang="he" dir="rtl">' + esc(cu.cueHebrew) + '</span></span>' : '') + '</span><span class="hr-c ' + (m[0] === "+" ? "pos" : "neg") + '" lang="he" dir="rtl">' + (m[0] === "+" ? "עשה" : "לא תעשה") + '</span></div></li>'; }).join("") + '</ol>' +
-        '<button type="button" class="primary hm-go" data-learn="' + H.a + '">Learn these ' + (H.n === 1 ? 'one' : H.n) + ' &rarr;</button>'
+        '<button type="button" class="hm-go instant-btn2" data-testnow="' + H.a + '">⚡ Test this hilchah now — lock it in</button><button type="button" class="primary hm-go" data-learn="' + H.a + '">Learn these ' + (H.n === 1 ? 'one' : H.n) + ' &rarr;</button>'
         : '<p class="hm-none">' + (H.rab ? "This hilchah has no mitzvah from the 613. Its laws are rabbinic." : "No counted mitzvah in this hilchah.") + '</p>' + (H.d ? '<p class="hm-d">' + esc(H.d) + '</p>' : '')) +
       '</div>';
   }
@@ -2762,6 +2922,7 @@ function renderHM(lvl) {
   $$("#hmHil .hm-chip", host).forEach(function (b) { b.onclick = function () { st.a = b.getAttribute("data-a"); renderHM(lvl); }; });
   $$(".hm-row[data-a]", host).forEach(function (b) { b.onclick = function () { var a = b.getAttribute("data-a"); st.open = st.open === a ? "" : a; renderHM(lvl); }; });
   $$("[data-learn]", host).forEach(function (b) { b.onclick = function () { hmStartAt(lvl, b.getAttribute("data-learn")); }; });
+  $$("[data-testnow]", host).forEach(function (b) { b.onclick = function () { testHilchahNow(b.getAttribute("data-testnow"), "mitzvot"); }; });
   $$("[data-tomz]", host).forEach(function (b) { b.onclick = function () { var a = b.getAttribute("data-tomz"); HM[3].s = HMAP[a].s; HM[3].a = a; go("mitzvot"); }; });
   var _lvlGo = $("#lvlGo", host); if (_lvlGo) _lvlGo.onclick = function () { markIntro("level" + lvl); if (done) { S.flow.ipos[lvl] = 0; S.flow.bite = null; save(); } startBite(lvl); };
   $("#lvlBrowse", host).onclick = function () { if (lvl === 2) browseState[2] = st.s; else { browseState[3].s = st.s; browseState[3].a = st.a; } openBrowse(lvl); };
@@ -2801,14 +2962,14 @@ function renderLevel(lvl) {
     dots.innerHTML = BOOKS.map(function (b, k) { return '<button type="button" class="sf-dot" data-k="' + k + '" aria-label="Sefer ' + b.n + '"></button>'; }).join("");
     function show(k, dir) {
       cur = (k + 14) % 14; var b = BOOKS[cur];
-      card.innerHTML = '<span class="sf-num">' + b.n + ' <small>of 14</small></span><button type="button" class="sf-book" aria-label="Open the book"><span class="bk-cover bk-c' + (b.n % 7) + '"><span class="bk-spine"></span><span class="bk-front"><span class="bk-fn">' + b.n + '</span><span class="bk-pic"><img src="' + b.img + '" alt=""></span><span class="bk-fhe" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="bk-fen">' + esc(b.english) + '</span></span><span class="bk-pg"></span></span><span class="bk-hint2">Click the book to open it</span><span class="bk-pages"><span class="bk-ph" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="bk-pt">Summary</span><span class="bk-sum">' + esc(SF_BRIEF[b.n] || b.theme) + '</span><span class="bk-close">Click to close</span></span></button><span class="sf-he" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="sf-en">' + esc(b.english) + '</span>';
+      card.innerHTML = '<span class="sf-num">' + b.n + ' <small>of 14</small></span><button type="button" class="sf-book" aria-label="Open the book"><span class="bk-cover bk-c' + (b.n % 7) + '"><span class="bk-spine"></span><span class="bk-front"><span class="bk-fn">' + b.n + '</span><span class="bk-pic"><img src="' + b.img + '" alt=""></span><span class="bk-fhe" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="bk-fen">' + esc(b.english) + '</span></span><span class="bk-pg"></span></span><span class="bk-hint2">Click the book to open it</span><span class="bk-pages"><span class="bk-ph" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="bk-pt">Summary</span><span class="bk-sum">' + esc(SF_BRIEF[b.n] || b.theme) + '</span><span class="instant-row"><span class="instant-btn" role="button" tabindex="0" data-test-sefer="' + b.n + '">⚡ Test this sefer now</span></span><span class="bk-close">Click to close</span></span></button><span class="sf-he" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="sf-en">' + esc(b.english) + '</span>';
       card.classList.remove("in-l", "in-r"); void card.offsetWidth; if (dir) card.classList.add(dir > 0 ? "in-r" : "in-l");
       $$(".sf-dot", dots).forEach(function (d, i) { d.classList.toggle("on", i === cur); });
       var shf = $("#sfShelf", host); if (shf && shf.classList.contains("picked")) $$(".sh-bk", shf).forEach(function (s, i) { s.classList.toggle("on", i === cur); });
     }
     (function () { var shf = $("#sfShelf", host); if (!shf) return; shf.addEventListener("click", function (ev) { var s = ev.target.closest(".sh-bk"); if (!s) return; var k = +s.getAttribute("data-k"); if (shf.classList.contains("picked") && k === cur) { shf.classList.remove("picked"); s.classList.remove("on"); return; } shf.classList.add("picked"); show(k, k > cur ? 1 : -1); var w = $("#sfWheel", host); if (w && w.scrollIntoView) setTimeout(function () { w.scrollIntoView({ behavior: "smooth", block: "start" }); }, 350); }); })();
     $("#sfPrev", host).onclick = function () { show(cur - 1, -1); };
-    $("#sfNext", host).onclick = function () { show(cur + 1, 1); }; card.addEventListener("click", function (ev) { var bk = ev.target.closest(".sf-book"); if (!bk) return; bk.classList.toggle("open"); }); document.addEventListener("keydown", function (e) { var d = $("#sfDetail"); if (!d || d.hidden || /INPUT|TEXTAREA|SELECT/.test((e.target||{}).tagName||"")) return; if (e.key === "ArrowLeft") show(cur - 1, -1); else if (e.key === "ArrowRight") show(cur + 1, 1); });
+    $("#sfNext", host).onclick = function () { show(cur + 1, 1); }; card.addEventListener("click", function (ev) { var bk = ev.target.closest(".sf-book"); if (!bk) return; var tsb = ev.target.closest("[data-test-sefer]"); if (tsb && bk.classList.contains("open")) { ev.preventDefault(); ev.stopPropagation(); testSeferNow(+tsb.getAttribute("data-test-sefer")); return; } bk.classList.toggle("open"); }); document.addEventListener("keydown", function (e) { var d = $("#sfDetail"); if (!d || d.hidden || /INPUT|TEXTAREA|SELECT/.test((e.target||{}).tagName||"")) return; if (e.key === "ArrowLeft") show(cur - 1, -1); else if (e.key === "ArrowRight") show(cur + 1, 1); });
     $$(".sf-dot", dots).forEach(function (d) { d.onclick = function () { var k = +d.getAttribute("data-k"); show(k, k > cur ? 1 : -1); }; });
     var x0 = null; card.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
     card.addEventListener("touchend", function (e) { if (x0 === null) return; var dx = e.changedTouches[0].clientX - x0; x0 = null; if (Math.abs(dx) > 40) { card._swiped = true; show(cur + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1); } });
@@ -3032,6 +3193,8 @@ var GAMES = [
   { id: "hdrag", group: "Hilchot", icon: "⇅", title: "Hilchot in Order", intro: "One sefer's hilchot, shuffled. Drag them back into the Rambam's order. Order turns a list into a story you can retell.", run: function (h) { rcHilOrder(h); } },
   { id: "hmissing", group: "Hilchot", icon: "▢", title: "Missing Hilchah", intro: "A run of hilchot from one sefer with one left blank. Pick the one that fills the gap.", run: function (h) { rcMissing(h, "h"); } },
   { id: "hcount", group: "Hilchot", icon: "613", title: "Mitzvah Counts", intro: "Guess how many mitzvot each hilchah holds. The counts are the Rambam's own.", run: quizGame(function () { return POOL.hmc; }, 10) },
+  { id: "hcontents", group: "Hilchot", icon: "📖", title: "Fill the Contents Page", intro: "One sefer, opened to its contents page — but the sections are missing. Drag each hilchah into its numbered place in the book, in the Rambam's order.", run: function (h) { rcContentsOrder(h); } },
+  { id: "hfall", group: "Hilchot", icon: "↓", title: "Falling Hilchot", intro: "You choose which sefarim, and how many. Hilchot drop in from the top of the page — drag each one onto its sefer before the next one falls.", run: function (h) { rcFallSort(h); } },
   { id: "mtype", group: "Mitzvot", icon: "±", title: "Aseh or Lo Taaseh", intro: "Read a mitzvah and decide: aseh (do) or lo taaseh (don't). A quick first sort for all 613.", run: quizGame(function () { return POOL.mtype; }, 10) },
   { id: "mhil", group: "Mitzvot", icon: "⌖", title: "Which Hilchah?", intro: "Read a mitzvah and pick the hilchah that counts it. This ties each mitzvah to its home.", run: quizGame(function () { return POOL.mhil; }, 10) },
   { id: "msef", group: "Mitzvot", icon: "📖", title: "Which Sefer?", intro: "Read a mitzvah and pick its sefer. Big picture first, details later.", run: quizGame(function () { return POOL.msef; }, 10) },
