@@ -1664,7 +1664,12 @@ function go(page, backTo) {
   if (LEVEL_PAGE[page]) renderLevel(LEVEL_PAGE[page]);
   if (page === "test") renderTest();
   window.scrollTo(0, 0);
-  if (location.hash.replace("#", "") !== page) history.replaceState(null, "", "#" + page);
+  /* The hash sync is best-effort only: inside the sandboxed artifact iframe
+     history.replaceState throws a SecurityError, and if it propagated it would
+     abort callers that render after go() returns — openGame() and instantRun()
+     fill #playHost after go("play"), so every game and instant test died on a
+     blank Games page. Never let the hash write break navigation. */
+  try { if (location.hash.replace("#", "") !== page) history.replaceState(null, "", "#" + page); } catch (e) { }
 }
 var tabRender = {};
 function showTab(group, tab) {
