@@ -1256,6 +1256,13 @@ button.hm-row:hover{background:rgba(176,141,87,.07)}
 .mc-tile.sf-cur .bk-cover{transform:scale(1.16);outline:3px solid var(--gold,#c9a227);outline-offset:4px}
 .mc-tile.sf-cur .bk-fen{font-size:.72rem}
 </style>
+<style>/* Nov 19: Books page — a tapped sefer pops out over the shelf; tapping the shelf caption puts it back */
+#sfStage{position:relative;max-width:560px;margin:0 auto}
+#sfStage:not(.sf-pop) #sfWheel{display:none!important}
+#sfStage.sf-pop #sfWheel{position:absolute;inset:0;z-index:10;display:flex!important;align-items:center;justify-content:center;background:rgba(24,18,8,.52);border-radius:10px;padding:12px;animation:fadeIn .2s ease}
+#sfStage.sf-pop #sfCard{margin:0;width:100%;max-height:100%;overflow-y:auto}
+#sfStage.sf-pop .sh-cap{position:relative;z-index:12;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -3137,7 +3144,7 @@ function renderLevel(lvl) {
     (lvl === 1 ? "" : introBox("level" + lvl, info.intro)) +
     (lvl === 1 ? '<div class="sf-bar" id="sfBar"></div>' : "") +
     (lvl === 1 ? '<div class="sf-grid" id="sfGrid">' + BOOKS.map(function (b, k) { return '<button type="button" class="sf-tile mc-tile' + (k < p ? ' sf-learned' : '') + '" data-k="' + k + '" aria-label="Sefer ' + b.n + ', ' + esc(b.translit) + '"><span class="sf-chk" aria-hidden="true">✓</span><span class="mc-book"><span class="bk-cover bk-c' + (b.n % 7) + '"><span class="bk-spine"></span><span class="bk-front"><span class="bk-fn">' + b.n + '</span><span class="bk-pic"><img src="' + b.img + '" alt="" loading="lazy"></span><span class="bk-fhe" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="bk-fen">' + esc(b.english) + '</span></span><span class="bk-pg"></span></span></span></button>'; }).join("") + '</div>' : "") +
-    (lvl === 1 ? '<div class="sf-detail" id="sfDetail" hidden><button type="button" class="sf-back" id="sfBack">&larr; All 14 sefarim</button><div class="sf-case" id="sfShelf"><div class="sh-row">' + BOOKS.map(function (b, k) { return '<button type="button" class="sh-bk sh-c' + (b.n % 7) + '" data-k="' + k + '" aria-label="' + esc(b.english) + '"><span class="sh-n">' + b.n + '</span><span class="sh-he" lang="he" dir="rtl">' + (b.shortHebrew || b.hebrew).replace(/\s+/g, "").split("").map(function (ch) { return "<i>" + esc(ch) + "</i>"; }).join("") + '</span></button>'; }).join("") + '</div><div class="sh-board"></div><div class="sh-cap">Click a sefer to take it off the shelf</div></div><div class="sf-wheel sf-simple" id="sfWheel"><button type="button" class="sf-arr" id="sfPrev" aria-label="Previous sefer">‹</button><div class="sf-card" id="sfCard"></div><button type="button" class="sf-arr" id="sfNext" aria-label="Next sefer">›</button></div><div class="sf-dots" id="sfDots"></div><details class="mt-about intro-sec sf-all" id="sfAll"><summary>View all 14 sefarim</summary><div class="mt-about-body" id="sfAllHost"></div></details></div>' : "") +
+    (lvl === 1 ? '<div class="sf-detail" id="sfDetail" hidden><button type="button" class="sf-back" id="sfBack">&larr; All 14 sefarim</button><div class="sf-stage" id="sfStage"><div class="sf-case" id="sfShelf"><div class="sh-row">' + BOOKS.map(function (b, k) { return '<button type="button" class="sh-bk sh-c' + (b.n % 7) + '" data-k="' + k + '" aria-label="' + esc(b.english) + '"><span class="sh-n">' + b.n + '</span><span class="sh-he" lang="he" dir="rtl">' + (b.shortHebrew || b.hebrew).replace(/\s+/g, "").split("").map(function (ch) { return "<i>" + esc(ch) + "</i>"; }).join("") + '</span></button>'; }).join("") + '</div><div class="sh-board"></div><div class="sh-cap">Click a sefer to take it off the shelf</div></div><div class="sf-wheel sf-simple" id="sfWheel"><div class="sf-card" id="sfCard"></div></div><div class="sf-dots" id="sfDots"></div></div><details class="mt-about intro-sec sf-all" id="sfAll"><summary>View all 14 sefarim</summary><div class="mt-about-body" id="sfAllHost"></div></details></div>' : "") +
     (lvl === 1 ? practiceBox(1) : "") +
     (lvl === 1 ? '<div class="sf-nextsec"><button type="button" class="sf-nextbtn" id="sfNextSec" data-go="hilchot"><span class="sf-nx-en">Next section: Hilchot ›</span><span class="sf-nx-he" lang="he" dir="rtl">הלכות</span></button></div>' : "") +
     '<div' + (lvl === 1 ? ' hidden' : '') + '>' + '<button type="button" class="continue-btn" id="lvlGo"><span class="cb-label">' + (done ? "Go through it again" : (p ? "Continue" : "Start")) + '</span><span class="cb-sub">' + esc(nextTxt) + "</span></button>" +
@@ -3162,10 +3169,12 @@ function renderLevel(lvl) {
       var shf = $("#sfShelf", host); if (shf) $$(".sh-bk", shf).forEach(function (s, i) { s.classList.toggle("on", i === cur); });
       $$(".sf-tile", host).forEach(function (t, i) { t.classList.toggle("sf-cur", i === cur); });
     }
-    (function () { var shf = $("#sfShelf", host); if (!shf) return; shf.addEventListener("click", function (ev) { var s = ev.target.closest(".sh-bk"); if (!s) return; var k = +s.getAttribute("data-k"); if (shf.classList.contains("picked") && k === cur) { shf.classList.remove("picked"); return; } shf.classList.add("picked"); show(k, k > cur ? 1 : -1); var w = $("#sfWheel", host); if (w && w.scrollIntoView) setTimeout(function () { w.scrollIntoView({ behavior: "smooth", block: "start" }); }, 350); }); })();
-    $("#sfPrev", host).onclick = function () { show(cur - 1, -1); };
-    $("#sfNext", host).onclick = function () { show(cur + 1, 1); }; card.addEventListener("click", function (ev) { var bk = ev.target.closest(".sf-book"); if (!bk) return; var tsb = ev.target.closest("[data-test-sefer]"); if (tsb && bk.classList.contains("open")) { ev.preventDefault(); ev.stopPropagation(); testSeferNow(+tsb.getAttribute("data-test-sefer")); return; } bk.classList.toggle("open"); }); document.addEventListener("keydown", function (e) { var d = $("#sfDetail"); if (!d || d.hidden || /INPUT|TEXTAREA|SELECT/.test((e.target||{}).tagName||"")) return; if (e.key === "ArrowLeft") show(cur - 1, -1); else if (e.key === "ArrowRight") show(cur + 1, 1); });
-    $$(".sf-dot", dots).forEach(function (d) { d.onclick = function () { var k = +d.getAttribute("data-k"); show(k, k > cur ? 1 : -1); }; });
+    var stage = $("#sfStage", host);
+    function popBook(k) { var shf = $("#sfShelf", host); if (shf) shf.classList.add("picked"); if (stage) stage.classList.add("sf-pop"); show(k, k > cur ? 1 : -1); }
+    function putBookBack() { var shf = $("#sfShelf", host); if (shf) shf.classList.remove("picked"); if (stage) stage.classList.remove("sf-pop"); }
+    (function () { var shf = $("#sfShelf", host); if (!shf) return; shf.addEventListener("click", function (ev) { if (ev.target.closest(".sh-cap")) { putBookBack(); return; } var s = ev.target.closest(".sh-bk"); if (!s) return; popBook(+s.getAttribute("data-k")); }); var w = $("#sfWheel", host); if (w) w.addEventListener("click", function (ev) { if (ev.target === w) putBookBack(); }); })();
+    card.addEventListener("click", function (ev) { var bk = ev.target.closest(".sf-book"); if (!bk) return; var tsb = ev.target.closest("[data-test-sefer]"); if (tsb && bk.classList.contains("open")) { ev.preventDefault(); ev.stopPropagation(); testSeferNow(+tsb.getAttribute("data-test-sefer")); return; } bk.classList.toggle("open"); }); document.addEventListener("keydown", function (e) { var d = $("#sfDetail"); if (!d || d.hidden || /INPUT|TEXTAREA|SELECT/.test((e.target||{}).tagName||"")) return; if (e.key === "ArrowLeft") show(cur - 1, -1); else if (e.key === "ArrowRight") show(cur + 1, 1); });
+    $$(".sf-dot", dots).forEach(function (d) { d.onclick = function () { popBook(+d.getAttribute("data-k")); }; });
     var x0 = null; card.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
     card.addEventListener("touchend", function (e) { if (x0 === null) return; var dx = e.changedTouches[0].clientX - x0; x0 = null; if (Math.abs(dx) > 40) { card._swiped = true; show(cur + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1); } });
     card.onclick = function () { card._swiped = false; };
@@ -3197,11 +3206,11 @@ function renderLevel(lvl) {
       if (picking) { var f = focusGet(), n0 = BOOKS[k].n, at = f.indexOf(n0); if (at >= 0) f.splice(at, 1); else f.push(n0); focusSet(f); paintFocus(); return; }
       grid.hidden = true; bar.hidden = true; det.hidden = false; var lp = $("#lvlPractice", host); if (lp) lp.hidden = true; show(k, 0); window.scrollTo(0, 0);
     }; });
-    $("#sfBack", host).onclick = function () { det.hidden = true; grid.hidden = false; bar.hidden = false; var lp = $("#lvlPractice", host); if (lp) lp.hidden = false; window.scrollTo(0, 0); };
+    $("#sfBack", host).onclick = function () { putBookBack(); det.hidden = true; grid.hidden = false; bar.hidden = false; var lp = $("#lvlPractice", host); if (lp) lp.hidden = false; window.scrollTo(0, 0); };
     paintFocus();
     /* Nov 9: Sefarim page opens straight on the wheel (no grid) */
     grid.hidden = true; bar.hidden = true; det.hidden = false; var bk0 = $("#sfBack", host); if (bk0) bk0.hidden = true; var allH = $("#sfAllHost", host), allD = $("#sfAll", host); allH.appendChild(bar); allH.appendChild(grid); grid.hidden = false; bar.hidden = false;
-    $$(".sf-tile", grid).forEach(function (t) { var o = t.onclick; t.onclick = function () { if (picking) return o.call(t); show(+t.getAttribute("data-k"), 0); allD.open = false; det.scrollIntoView({ behavior: "smooth", block: "start" }); }; });
+    $$(".sf-tile", grid).forEach(function (t) { var o = t.onclick; t.onclick = function () { if (picking) return o.call(t); popBook(+t.getAttribute("data-k")); allD.open = false; det.scrollIntoView({ behavior: "smooth", block: "start" }); }; });
   })();
   $("#lvlGo", host).onclick = function () { markIntro("level" + lvl); if (done) { S.flow.ipos[lvl] = 0; S.flow.bite = null; save(); } startBite(lvl); };
   $("#lvlBrowse", host).onclick = function () { openBrowse(lvl); };
