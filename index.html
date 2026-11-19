@@ -958,6 +958,13 @@ button.tag:hover{filter:brightness(.96)}
 .mzpic.mz-auto{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold)}
 .mzpic.mz-wrong{border-color:var(--bad-border);box-shadow:0 0 0 2px var(--bad-border)}
 .mz-stuck{position:absolute;left:4px;right:4px;bottom:4px;font-family:"Frank Ruhl Libre","SBL Hebrew","Times New Roman",serif;font-size:.82rem;font-weight:700;line-height:1.25;background:rgba(16,24,39,.88);color:#fff;border-radius:8px;padding:4px 6px;pointer-events:none}
+/* while matching, a plain white strip covers the keyword printed at the top of each
+   picture; once its keyword is matched back, the word shows in place on that strip */
+.mz-cover{position:absolute;top:0;left:0;right:0;height:17%;background:#fff;z-index:2;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.mz-cover.mz-cover-on{font-family:"Frank Ruhl Libre","SBL Hebrew","Times New Roman",serif;font-size:.95rem;font-weight:700;line-height:1.2;color:var(--ink);text-align:center;padding:0 4px}
+/* waiting keyword chips live in the side test panel while matching */
+.mz-ptray{margin-top:10px;justify-content:flex-start;max-height:46vh;overflow-y:auto;padding:2px}
+.mz-ptray[hidden]{display:none}
 @keyframes mzShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
 .mz-shake{animation:mzShake .4s ease}
 @media (max-width:760px){
@@ -2858,6 +2865,16 @@ function hmStartAt(lvl, a) {
 function hmTypeCount(h) { var p = 0, g = 0; (h.m || []).forEach(function (m) { if (m[0] === "+") p++; else g++; }); return { p: p, g: g }; }
 /* memory picture for a hilchah's mitzvah: mz-{sefer}-{hilchah}-{index}.webp, index 1-based, zero-padded */
 function mzPicURL(a, k) { var p = String(a).split("."), i = String(k + 1); if (i.length < 2) i = "0" + i; return "https://rambamlearningengine.github.io/Rambam-Learning-Engine/images/mitzvot/mz-" + p[0] + "-" + p[1] + "-" + i + ".webp"; }
+/* Short Hebrew keyword printed at the top of each mitzvah memory picture, by hilchah
+   ("sefer.hilchah") and the mitzvah's 0-based position in that hilchah — the pieces
+   of the in-page matching test. Only Sefer HaMadda (sefer 1) has keyword data so far. */
+var MZKW = {
+  "1.1": ["אנכי ה׳", "לא יהיה", "אחד", "אהבה", "יראה", "קידוש", "לא תחלל", "לא תעשון", "תשמעון", "לא תנסו"],
+  "1.2": ["להדמות", "להדבק", "לאהוב", "לאהוב הגר", "לא תשנא", "להוכיח", "לא תלבין", "לא תענה", "לא תלך רכיל", "לא תקום", "לא תטור"],
+  "1.3": ["ללמוד תורה", "לכבד"],
+  "1.4": ["לא תפנה", "לא תתורו", "לא תגדף", "לא תעבד", "לא תשתחוה", "לא תעשה פסל", "לא תעשה לאחרים", "לא תעשה צורות", "לא תדיח", "שרוף", "לא תבנה", "לא תהנה", "לא תסית", "לא תאהב", "לא תעזוב שנאתו", "לא תציל", "לא תלמד זכות", "לא תמנע", "לא תתנבא", "לא תשמע", "לא תתנבא בשקר", "לא תגור", "לא תשבע", "לא תשאל אוב", "לא תשאל ידעוני", "לא תעביר", "לא תקים מצבה", "לא תשתחוה", "לא תטע אשרה", "אבד תאבדון", "לא תהנה", "לא תחמוד", "לא תכרת ברית", "לא תחון", "לא ישבו", "לא תדמה", "לא תנחש", "לא תקסום", "לא תעונן", "לא תחבור", "לא תדרוש", "באוב", "ידעוני", "לא תכשף", "לא תקיף", "לא תשחית", "לא ילבש", "לא תלבש", "לא תכתבו", "לא תתגדדו", "קרחה"],
+  "1.5": ["תשובה"]
+};
 /* full detail of one mitzvah — the same content the mitzvah list rows showed before the picture cards */
 function mzDetailHTML(h, k) {
   var m = h.m[k], cues = CUES[h.a], cu = cues && cues.items[k];
@@ -2953,7 +2970,7 @@ function renderHM(lvl) {
         '<div class="mz-grid" dir="rtl">' + mzShown.map(function (x) { return '<button type="button" class="mzpic" data-mzk="' + x.k + '" aria-label="Mitzvah ' + (x.k + 1) + '"><img src="' + mzPicURL(H.a, x.k) + '" alt="" loading="lazy"><span class="mzpic-fb" hidden><span class="hr-he" lang="he" dir="rtl">' + esc(x.m[1]) + '</span></span></button>'; }).join("") + '</div><div class="mz-det" id="hmMzDet" dir="rtl" hidden></div>' +
         ''
         : '<p class="hm-none">' + (H.rab ? "This hilchah has no mitzvah from the 613. Its laws are rabbinic." : "No counted mitzvah in this hilchah.") + '</p>' + (H.d ? '<p class="hm-d">' + esc(H.d) + '</p>' : '')) +
-      '</div>' + (H.n ? '<aside class="mz-panel" id="mzPanel"><div class="mz-panel-h">Test on this page</div><p class="mz-panel-p">The names of these mitzvot wait along the borders of the picture grid. Drag each Hebrew name onto the picture it belongs to — a right match sticks, a wrong one bounces back.</p><button type="button" class="mz-pbtn primary" id="mzMatchBtn">Match the word to the picture</button><button type="button" class="mz-pbtn" id="mzShuffleBtn" disabled>Shuffle</button><button type="button" class="mz-pbtn" id="mzFixBtn" disabled>Correct the order</button><p class="mz-status" id="mzStatus" aria-live="polite"></p></aside>' : '') + '</div>';
+      '</div>' + (H.n && MZKW[H.a] ? '<aside class="mz-panel" id="mzPanel"><div class="mz-panel-h">Test on this page</div><p class="mz-panel-p">The keyword at the top of each picture has come off — the keywords wait here in this panel, beside the pictures. Drag each keyword back onto the picture it belongs to — a right match sticks, a wrong one bounces back.</p><button type="button" class="mz-pbtn primary" id="mzMatchBtn">Match the keyword to the picture</button><button type="button" class="mz-pbtn" id="mzShuffleBtn" disabled>Shuffle</button><button type="button" class="mz-pbtn" id="mzFixBtn" disabled>Correct the order</button><p class="mz-status" id="mzStatus" aria-live="polite"></p><div class="mz-tray mz-ptray" id="mzTray" dir="rtl" hidden></div></aside>' : '') + '</div>';
   }
   html += practiceBox(lvl) + '</div>';
   host.innerHTML = html;
@@ -3000,18 +3017,18 @@ function renderHM(lvl) {
         if (mzDet) { mzDet.innerHTML = mzDetailHTML(H, k); mzDet.hidden = false; }
       };
     });
-    /* In-page matching test: the mitzvot's Hebrew names wait along the top and bottom
-       borders of the picture grid; drag (or tap, then tap a picture) to match them. */
+    /* In-page matching test: each picture's keyword comes off it (the printed keyword
+       is covered by a white strip) and the keyword chips wait in the side panel;
+       drag (or tap, then tap a picture) to put each keyword back on its picture.
+       Matching is by keyword text, so a repeated keyword fits any picture needing it. */
     var mzMT = { on: false, waiting: [], placed: 0, bySelf: 0, total: 0, sel: null };
+    var KW = MZKW[H.a] || [];
     var mzStatusEl = $("#mzStatus", host);
     function mzStatus(msg) { if (mzStatusEl) mzStatusEl.textContent = msg; }
     function mzShuf(arr) { for (var i = arr.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = arr[i]; arr[i] = arr[j]; arr[j] = t; } }
     function mzPaintChips() {
-      var tt = $("#mzTrayT", host), tb = $("#mzTrayB", host); if (!tt || !tb) return;
-      var half = Math.ceil(mzMT.waiting.length / 2);
-      var chip = function (k) { return '<button type="button" class="mz-nchip" data-ck="' + k + '" lang="he" dir="rtl">' + esc(H.m[k][1]) + '</button>'; };
-      tt.innerHTML = mzMT.waiting.slice(0, half).map(chip).join("");
-      tb.innerHTML = mzMT.waiting.slice(half).map(chip).join("");
+      var tray = $("#mzTray", host); if (!tray) return;
+      tray.innerHTML = mzMT.waiting.map(function (k) { return '<button type="button" class="mz-nchip" data-ck="' + k + '" lang="he" dir="rtl">' + esc(KW[k]) + '</button>'; }).join("");
       $$(".mz-nchip", host).forEach(function (ch) { mzChipWire(ch); });
     }
     function mzScore() { mzStatus(mzMT.placed + " of " + mzMT.total + " matched" + (mzMT.placed === mzMT.total ? " — all correct!" : ".")); }
@@ -3019,18 +3036,18 @@ function renderHM(lvl) {
       var i = mzMT.waiting.indexOf(k); if (i >= 0) mzMT.waiting.splice(i, 1);
       mzMT.placed++; if (!auto) mzMT.bySelf++;
       card.classList.add("mz-done"); if (auto) card.classList.add("mz-auto");
-      var s = document.createElement("span"); s.className = "mz-stuck"; s.setAttribute("lang", "he"); s.setAttribute("dir", "rtl"); s.textContent = H.m[k][1]; card.appendChild(s);
+      var cv = card.querySelector(".mz-cover"); if (cv) { cv.textContent = KW[k]; cv.setAttribute("lang", "he"); cv.setAttribute("dir", "rtl"); cv.classList.add("mz-cover-on"); }
       mzMT.sel = null; mzPaintChips(); mzScore();
       if (!mzMT.waiting.length) { var sh = $("#mzShuffleBtn", host), fx = $("#mzFixBtn", host); if (sh) sh.disabled = true; if (fx) fx.disabled = true; }
     }
     function mzTry(card, k) {
       if (!mzMT.on || card.classList.contains("mz-done")) return;
       var tk = +card.getAttribute("data-mzk");
-      if (H.m[k][1] === H.m[tk][1]) mzPlace(card, k, false);
+      if (KW[k] === KW[tk]) mzPlace(card, k, false);
       else {
         card.classList.add("mz-wrong"); setTimeout(function () { card.classList.remove("mz-wrong"); }, 450);
         var ch = $('.mz-nchip[data-ck="' + k + '"]', host); if (ch) { ch.classList.add("mz-shake"); setTimeout(function () { ch.classList.remove("mz-shake"); }, 450); }
-        mzStatus("Not that picture — the name bounced back. Try another.");
+        mzStatus("Not that picture — the keyword bounced back. Try another.");
       }
     }
     function mzChipWire(ch) {
@@ -3059,11 +3076,10 @@ function renderHM(lvl) {
     if (mzMatchBtn) mzMatchBtn.onclick = function () {
       var grid = $(".mz-grid", host); if (!grid) return;
       if (mzMT.on) {
-        var arena = $("#mzArena", host);
-        if (arena) { arena.parentNode.insertBefore(grid, arena); arena.remove(); }
-        $$(".mzpic", host).forEach(function (x) { x.classList.remove("mz-done", "mz-auto", "mz-wrong"); var s = x.querySelector(".mz-stuck"); if (s) s.remove(); });
+        var tray0 = $("#mzTray", host); if (tray0) { tray0.hidden = true; tray0.innerHTML = ""; }
+        $$(".mzpic", host).forEach(function (x) { x.classList.remove("mz-done", "mz-auto", "mz-wrong"); var s = x.querySelector(".mz-stuck"); if (s) s.remove(); var cv = x.querySelector(".mz-cover"); if (cv) cv.remove(); });
         mzMT.on = false; mzMT.waiting = []; mzMT.placed = 0; mzMT.sel = null;
-        mzMatchBtn.textContent = "Match the word to the picture";
+        mzMatchBtn.textContent = "Match the keyword to the picture";
         $("#mzShuffleBtn", host).disabled = true; $("#mzFixBtn", host).disabled = true; mzStatus("");
         return;
       }
@@ -3071,26 +3087,24 @@ function renderHM(lvl) {
       mzMT.waiting = mzShown.map(function (x) { return x.k; }); mzMT.total = mzMT.waiting.length; mzShuf(mzMT.waiting);
       mzSel = -1; $$(".mzpic", host).forEach(function (x) { x.classList.remove("on"); });
       if (mzDet) { mzDet.hidden = true; mzDet.innerHTML = ""; }
-      var arena2 = document.createElement("div"); arena2.className = "mz-arena"; arena2.id = "mzArena";
-      var tt = document.createElement("div"); tt.className = "mz-tray"; tt.id = "mzTrayT"; tt.setAttribute("dir", "rtl");
-      var tb = document.createElement("div"); tb.className = "mz-tray"; tb.id = "mzTrayB"; tb.setAttribute("dir", "rtl");
-      grid.parentNode.insertBefore(arena2, grid); arena2.appendChild(tt); arena2.appendChild(grid); arena2.appendChild(tb);
+      $$(".mzpic", host).forEach(function (x) { if (!x.querySelector(".mz-cover")) { var cv = document.createElement("span"); cv.className = "mz-cover"; cv.setAttribute("aria-hidden", "true"); x.appendChild(cv); } });
+      var tray = $("#mzTray", host); if (tray) tray.hidden = false;
       mzPaintChips();
       mzMatchBtn.textContent = "✕ Stop matching";
       $("#mzShuffleBtn", host).disabled = false; $("#mzFixBtn", host).disabled = false;
-      mzStatus("Drag each name onto its picture — " + mzMT.total + " to match.");
+      mzStatus("Drag each keyword onto its picture — " + mzMT.total + " to match.");
     };
     var mzShuffleBtn = $("#mzShuffleBtn", host);
-    if (mzShuffleBtn) mzShuffleBtn.onclick = function () { if (!mzMT.on) return; mzShuf(mzMT.waiting); mzMT.sel = null; mzPaintChips(); mzStatus(mzMT.waiting.length + (mzMT.waiting.length === 1 ? " name" : " names") + " still waiting — shuffled."); };
+    if (mzShuffleBtn) mzShuffleBtn.onclick = function () { if (!mzMT.on) return; mzShuf(mzMT.waiting); mzMT.sel = null; mzPaintChips(); mzStatus(mzMT.waiting.length + (mzMT.waiting.length === 1 ? " keyword" : " keywords") + " still waiting — shuffled."); };
     var mzFixBtn = $("#mzFixBtn", host);
     if (mzFixBtn) mzFixBtn.onclick = function () {
       if (!mzMT.on) return;
       mzMT.waiting.slice().forEach(function (k) {
         var card = null;
-        $$(".mzpic", host).forEach(function (x) { if (!card && !x.classList.contains("mz-done") && H.m[+x.getAttribute("data-mzk")][1] === H.m[k][1]) card = x; });
+        $$(".mzpic", host).forEach(function (x) { if (!card && !x.classList.contains("mz-done") && KW[+x.getAttribute("data-mzk")] === KW[k]) card = x; });
         if (card) mzPlace(card, k, true);
       });
-      mzStatus("Corrected — every name is on its picture. You matched " + mzMT.bySelf + " of " + mzMT.total + " yourself.");
+      mzStatus("Corrected — every keyword is back on its picture. You matched " + mzMT.bySelf + " of " + mzMT.total + " yourself.");
     };
   }
   $$("[data-tomz]", host).forEach(function (b) { b.onclick = function () { var a = b.getAttribute("data-tomz"); HM[3].s = HMAP[a].s; HM[3].a = a; go("mitzvot"); }; });
