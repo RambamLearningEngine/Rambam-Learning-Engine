@@ -959,8 +959,11 @@ button.tag:hover{filter:brightness(.96)}
 .mzpic.mz-wrong{border-color:var(--bad-border);box-shadow:0 0 0 2px var(--bad-border)}
 .mz-stuck{position:absolute;left:4px;right:4px;bottom:4px;font-family:"Frank Ruhl Libre","SBL Hebrew","Times New Roman",serif;font-size:.82rem;font-weight:700;line-height:1.25;background:rgba(16,24,39,.88);color:#fff;border-radius:8px;padding:4px 6px;pointer-events:none}
 /* while matching, a plain white strip covers the keyword printed at the top of each
-   picture; once its keyword is matched back, the word shows in place on that strip */
-.mz-cover{position:absolute;top:0;left:0;right:0;height:17%;background:#fff;z-index:2;display:flex;align-items:center;justify-content:center;pointer-events:none}
+   picture; once its keyword is matched back, the word shows in place on that strip.
+   The keyword ink on the square pictures runs from ~6% to ~19.5% of the picture height;
+   the card's content box is exactly the picture (padding:0, square img filling it), so
+   this strip is sized to the picture: 0 to 24% covers the whole band with margin */
+.mz-cover{position:absolute;top:0;left:0;right:0;height:24%;background:#fff;z-index:2;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .mz-cover.mz-cover-on{font-family:"Frank Ruhl Libre","SBL Hebrew","Times New Roman",serif;font-size:.95rem;font-weight:700;line-height:1.2;color:var(--ink);text-align:center;padding:0 4px}
 /* waiting keyword chips live in the side test panel while matching */
 .mz-ptray{margin-top:10px;justify-content:flex-start;max-height:46vh;overflow-y:auto;padding:2px}
