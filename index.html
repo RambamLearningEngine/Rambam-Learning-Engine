@@ -1186,6 +1186,32 @@ button.hm-row:hover{background:rgba(176,141,87,.07)}
 .fall-bucket.hot{outline:3px solid var(--gold);outline-offset:2px}
 .fall-bucket:disabled{opacity:.85;cursor:default}
 </style>
+<style>/* Nov 19: the sefer you are up to stands out — a bigger book and a bigger name wherever it is picked */
+/* the open sefer on the wheel (Books + Hilchot): larger number, larger name, larger cover */
+.sf-card .sf-num{font-size:2.7rem}
+.sf-card .sf-he{font-size:2.35rem}
+#sfWheel .sf-book .bk-cover,#hlWheel .sf-book .bk-cover{width:198px;height:256px}
+#sfWheel .sf-book .bk-fhe,#hlWheel .sf-book .bk-fhe{font-size:1.6rem}
+#sfWheel .sf-book .bk-pic,#hlWheel .sf-book .bk-pic{width:92px;height:92px}
+/* the bookshelf (Books + Hilchot): the current sefer sits larger on the shelf, and pops right out once picked */
+.sf-case .sh-bk.on{transform:translateY(-6px) scale(1.16);z-index:2;box-shadow:0 8px 16px rgba(0,0,0,.35)}
+.sf-case .sh-bk.on .sh-he{font-size:.95rem!important}
+.sf-case.picked .sh-bk.on{transform:translateY(-12px) scale(1.34);z-index:3;box-shadow:0 12px 22px rgba(0,0,0,.4);outline:3px solid var(--gold,#c9a227);outline-offset:-3px}
+.sf-case.picked .sh-bk.on .sh-he{font-size:1.08rem!important;background:rgba(255,255,255,.35)}
+.sf-case.picked .sh-bk.on .sh-n{width:23px;height:23px;line-height:23px;font-size:.88rem}
+@media (min-width:700px){.sf-case .sh-bk.on .sh-he{font-size:1.25rem!important}.sf-case.picked .sh-bk.on .sh-he{font-size:1.45rem!important}}
+/* Mitzvot "Choose a sefer" strip: the selected sefer's cover grows, with a gold ring */
+#hmSef .hm-chip .bk-cover{transition:width .25s ease,height .25s ease}
+#hmSef .hm-chip.on{border-color:var(--gold,#c9a227);box-shadow:0 0 0 2px var(--gold,#c9a227),0 8px 18px rgba(17,24,39,.2);z-index:1}
+#hmSef .hm-chip.on .bk-cover{width:92px;height:122px}
+#hmSef .hm-chip.on .bk-pic{width:50px;height:50px}
+#hmSef .hm-chip.on .bk-fn{width:23px;height:23px;font-size:.78rem}
+#hmSef .hm-chip.on .bk-fhe{font-size:.88rem}
+/* "View all 14 sefarim" grid: the sefer you are up to is bigger, focus picks grow too */
+.mc-tile.sf-sel .bk-cover{transform:scale(1.1)}
+.mc-tile.sf-cur .bk-cover{transform:scale(1.16);outline:3px solid var(--gold,#c9a227);outline-offset:4px}
+.mc-tile.sf-cur .bk-fen{font-size:.72rem}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -2884,11 +2910,11 @@ function hlWheelWire(host, st) {
     card.innerHTML = '<span class="sf-num">' + b.n + ' <small>of 14</small></span><button type="button" class="sf-book" aria-label="Open the book"><span class="bk-cover bk-c' + (b.n % 7) + '"><span class="bk-spine"></span><span class="bk-front"><span class="bk-fn">' + b.n + '</span><span class="bk-pic"><img src="' + b.img + '" alt=""></span><span class="bk-fhe" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="bk-fen">' + esc(b.english) + '</span></span><span class="bk-pg"></span></span><span class="bk-pages"><span class="bk-ph" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="bk-pt">Contents · ' + HL.length + (HL.length === 1 ? ' hilchah' : ' hilchot') + '</span><ol class="bk-list">' + HL.map(function (x, xi) { return '<li data-a="' + esc(x.a) + '"' + (st.open === x.a ? ' class="on"' : '') + '><span class="bk-ln">' + (xi + 1) + '</span><span class="bk-lmain"><span class="bk-lhe" lang="he" dir="rtl">' + esc(x.he) + '</span><span class="bk-len">' + esc(x.tr) + (x.en ? ' · ' + esc(x.en) : '') + '</span></span></li>'; }).join("") + '</ol><span class="hl-pg" aria-live="polite"></span><span class="hl-pg-a"><span class="hl-pg-b" role="button" tabindex="0" data-testsf="' + b.n + '">⚡ Test this sefer\'s hilchot</span></span></span></button><span class="sf-he" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="sf-en">' + esc(b.english) + '</span>';
     card.classList.remove("in-l", "in-r"); void card.offsetWidth; if (dir) card.classList.add(dir > 0 ? "in-r" : "in-l");
     $$(".sf-dot", dots).forEach(function (d, i) { d.classList.toggle("on", i === cur); });
-    if (shf && shf.classList.contains("picked")) $$(".sh-bk", shf).forEach(function (s2, i) { s2.classList.toggle("on", i === cur); });
+    if (shf) $$(".sh-bk", shf).forEach(function (s2, i) { s2.classList.toggle("on", i === cur); });
     if (keepOpen) { var bk0 = $(".sf-book", card); bk0.classList.add("open"); fit(bk0); }
     detail(st.open);
   }
-  shf.addEventListener("click", function (ev) { var s2 = ev.target.closest(".sh-bk"); if (!s2) return; var k = +s2.getAttribute("data-k"); if (shf.classList.contains("picked") && k === cur) { shf.classList.remove("picked"); s2.classList.remove("on"); return; } shf.classList.add("picked"); show(k, k > cur ? 1 : -1); var w = $("#hlWheel", host); if (w && w.scrollIntoView) setTimeout(function () { w.scrollIntoView({ behavior: "smooth", block: "start" }); }, 350); });
+  shf.addEventListener("click", function (ev) { var s2 = ev.target.closest(".sh-bk"); if (!s2) return; var k = +s2.getAttribute("data-k"); if (shf.classList.contains("picked") && k === cur) { shf.classList.remove("picked"); return; } shf.classList.add("picked"); show(k, k > cur ? 1 : -1); var w = $("#hlWheel", host); if (w && w.scrollIntoView) setTimeout(function () { w.scrollIntoView({ behavior: "smooth", block: "start" }); }, 350); });
   $("#hlPrev", host).onclick = function () { show(cur - 1, -1); };
   $("#hlNext", host).onclick = function () { show(cur + 1, 1); };
   card.addEventListener("click", function (ev) {
@@ -2929,22 +2955,16 @@ function renderHM(lvl) {
     var mzf = st.f || "all"; if (mzf === "pos" && !c.p) mzf = "all"; if (mzf === "neg" && !c.g) mzf = "all"; st.f = mzf;
     var mzShown = (H.m || []).map(function (m, k) { return { m: m, k: k }; }).filter(function (x) { return mzf === "all" || (mzf === "pos" ? x.m[0] === "+" : x.m[0] === "-"); });
     html += '<div class="hm-label">Choose a hilchah</div><div class="hm-strip hm-strip2" id="hmHil" dir="rtl">' + HL.map(function (x) { return '<button type="button" class="hm-chip hm-chip2' + (x.a === st.a ? ' on' : '') + '" data-a="' + x.a + '"' + (x.a === st.a ? ' aria-pressed="true"' : '') + '><span class="hc-he" lang="he" dir="rtl">' + esc(x.he) + '</span><span class="hc-c">' + (x.n || 0) + '</span></button>'; }).join("") + '</div>' +
-      '<div class="hm-card"><div class="hm-kick" lang="he" dir="rtl">' + esc(B.hebrew) + '</div><div class="hm-title" lang="he" dir="rtl">הלכות ' + esc(H.he) + '</div><div class="hm-sub">Hilchot ' + esc(H.tr) + ' · ' + esc(H.en) + '</div>' +
+      '<div class="hm-card"><div class="hm-title" lang="he" dir="rtl">הלכות ' + esc(H.he) + '</div><div class="hm-sub">Hilchot ' + esc(H.tr) + ' · ' + esc(H.en) + '</div>' +
       (H.n ? '<div class="hm-tags" role="group" aria-label="Show mitzvot"><button type="button" class="tag' + (mzf === "all" ? " on" : "") + '" data-mzf="all" aria-pressed="' + (mzf === "all") + '">' + H.n + (H.n === 1 ? ' mitzvah' : ' mitzvot') + '</button>' + (c.p ? '<button type="button" class="tag pos' + (mzf === "pos" ? " on" : "") + '" data-mzf="pos" aria-pressed="' + (mzf === "pos") + '">' + c.p + ' aseh · עשה</button>' : '') + (c.g ? '<button type="button" class="tag neg' + (mzf === "neg" ? " on" : "") + '" data-mzf="neg" aria-pressed="' + (mzf === "neg") + '">' + c.g + ' lo taaseh · לא תעשה</button>' : '') + '</div>' +
         '<div class="mz-grid" dir="rtl">' + mzShown.map(function (x) { return '<button type="button" class="mzpic" data-mzk="' + x.k + '" aria-label="Mitzvah ' + (x.k + 1) + '"><img src="' + mzPicURL(H.a, x.k) + '" alt="" loading="lazy"><span class="mzpic-fb" hidden><span class="hr-he" lang="he" dir="rtl">' + esc(x.m[1]) + '</span></span></button>'; }).join("") + '</div><div class="mz-det" id="hmMzDet" dir="rtl" hidden></div>' +
-        '<button type="button" class="hm-go instant-btn2" data-testnow="' + H.a + '">⚡ Test this hilchah now — lock it in</button><button type="button" class="primary hm-go" data-learn="' + H.a + '">Learn these ' + (H.n === 1 ? 'one' : H.n) + ' &rarr;</button>'
+        ''
         : '<p class="hm-none">' + (H.rab ? "This hilchah has no mitzvah from the 613. Its laws are rabbinic." : "No counted mitzvah in this hilchah.") + '</p>' + (H.d ? '<p class="hm-d">' + esc(H.d) + '</p>' : '')) +
       '</div>';
   }
-  html += '<details class="mt-about intro-sec hm-more"><summary>Your progress</summary><div class="mt-about-body">' +
-    '<p class="trans" style="margin-top:0">' + Math.min(p, n) + " of " + n + (lvl === 2 ? " hilchot" : " mitzvot") + " learned so far.</p>" +
-    '<div class="bar-label"><span>Mastery</span><span>' + mm + '%</span></div><div class="bar"><i style="width:' + mm + '%"></i></div>' +
-    (lvl === 2 && SHOW_PHONE ? '<div class="phone-number-strip"><div class="phone-number-label"><strong>The Rambam\'s phone number</strong>Hilchot in sefarim 1 to 14 · total 83</div><div class="phone-number-sequence"><span>5-6-10</span><span>5-3-4</span><span>7-9-6</span><span>8-5-5-5-5</span></div></div>' : '') +
-    '<button type="button" class="link-btn" id="lvlBrowse">Flip through this sefer as flashcards</button>' +
-    '<button type="button" class="link-btn" id="lvlReset">Start the ' + (lvl === 2 ? "hilchot" : "mitzvot") + ' again from the first</button>' +
-    '</div></details>' + practiceBox(lvl) + '</div>';
+  html += practiceBox(lvl) + '</div>';
   host.innerHTML = html;
-  var chipOn = function (wrap) { var on = wrap && $(".hm-chip.on", wrap); if (on && wrap.scrollWidth > wrap.clientWidth) { wrap.scrollLeft += on.getBoundingClientRect().left - wrap.getBoundingClientRect().left - (wrap.clientWidth - on.offsetWidth) / 2; } };
+  var chipOn = function (wrap) { var on = wrap && $(".hm-chip.on", wrap); if (!on || wrap.scrollWidth <= wrap.clientWidth) return; if (on.scrollIntoView) { try { on.scrollIntoView({ block: "nearest", inline: "center" }); return; } catch (e) { } } wrap.scrollLeft += on.getBoundingClientRect().left - wrap.getBoundingClientRect().left - (wrap.clientWidth - on.offsetWidth) / 2; };
   chipOn($("#hmSef", host)); chipOn($("#hmHil", host)); hmWheelWire(host, lvl);
   if (lvl === 2) hlWheelWire(host, st);
   $$("#hmSef .hm-chip", host).forEach(function (b) { b.onclick = function () { var s = +b.getAttribute("data-s"); if (s === st.s) return; st.s = s; st.a = ""; st.open = ""; renderHM(lvl); }; });
@@ -2970,8 +2990,8 @@ function renderHM(lvl) {
   }
   $$("[data-tomz]", host).forEach(function (b) { b.onclick = function () { var a = b.getAttribute("data-tomz"); HM[3].s = HMAP[a].s; HM[3].a = a; go("mitzvot"); }; });
   var _lvlGo = $("#lvlGo", host); if (_lvlGo) _lvlGo.onclick = function () { markIntro("level" + lvl); if (done) { S.flow.ipos[lvl] = 0; S.flow.bite = null; save(); } startBite(lvl); };
-  $("#lvlBrowse", host).onclick = function () { if (lvl === 2) browseState[2] = st.s; else { browseState[3].s = st.s; browseState[3].a = st.a; } openBrowse(lvl); };
-  $("#lvlReset", host).onclick = function () { S.flow.ipos[lvl] = 0; S.flow.bite = null; save(); st.s = 0; renderHM(lvl); toast("Back to the first " + (lvl === 2 ? "hilchah." : "mitzvah.")); };
+  var _lvlBrowse = $("#lvlBrowse", host); if (_lvlBrowse) _lvlBrowse.onclick = function () { if (lvl === 2) browseState[2] = st.s; else { browseState[3].s = st.s; browseState[3].a = st.a; } openBrowse(lvl); };
+  var _lvlReset = $("#lvlReset", host); if (_lvlReset) _lvlReset.onclick = function () { S.flow.ipos[lvl] = 0; S.flow.bite = null; save(); st.s = 0; renderHM(lvl); toast("Back to the first " + (lvl === 2 ? "hilchah." : "mitzvah.")); };
   if (lvl === 2 && $("#phoneHelp", host)) { $("#phoneHelp", host).onclick = openPhone; }
 }
 
@@ -3010,9 +3030,10 @@ function renderLevel(lvl) {
       card.innerHTML = '<span class="sf-num">' + b.n + ' <small>of 14</small></span><button type="button" class="sf-book" aria-label="Open the book"><span class="bk-cover bk-c' + (b.n % 7) + '"><span class="bk-spine"></span><span class="bk-front"><span class="bk-fn">' + b.n + '</span><span class="bk-pic"><img src="' + b.img + '" alt=""></span><span class="bk-fhe" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="bk-fen">' + esc(b.english) + '</span></span><span class="bk-pg"></span></span><span class="bk-pages"><span class="bk-ph" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="bk-sum">' + esc(SF_BRIEF[b.n] || b.theme) + '</span><span class="instant-row"><span class="instant-btn" role="button" tabindex="0" data-test-sefer="' + b.n + '">⚡ Test this sefer now</span></span></span></button><span class="sf-he" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="sf-en">' + esc(b.english) + '</span>';
       card.classList.remove("in-l", "in-r"); void card.offsetWidth; if (dir) card.classList.add(dir > 0 ? "in-r" : "in-l");
       $$(".sf-dot", dots).forEach(function (d, i) { d.classList.toggle("on", i === cur); });
-      var shf = $("#sfShelf", host); if (shf && shf.classList.contains("picked")) $$(".sh-bk", shf).forEach(function (s, i) { s.classList.toggle("on", i === cur); });
+      var shf = $("#sfShelf", host); if (shf) $$(".sh-bk", shf).forEach(function (s, i) { s.classList.toggle("on", i === cur); });
+      $$(".sf-tile", host).forEach(function (t, i) { t.classList.toggle("sf-cur", i === cur); });
     }
-    (function () { var shf = $("#sfShelf", host); if (!shf) return; shf.addEventListener("click", function (ev) { var s = ev.target.closest(".sh-bk"); if (!s) return; var k = +s.getAttribute("data-k"); if (shf.classList.contains("picked") && k === cur) { shf.classList.remove("picked"); s.classList.remove("on"); return; } shf.classList.add("picked"); show(k, k > cur ? 1 : -1); var w = $("#sfWheel", host); if (w && w.scrollIntoView) setTimeout(function () { w.scrollIntoView({ behavior: "smooth", block: "start" }); }, 350); }); })();
+    (function () { var shf = $("#sfShelf", host); if (!shf) return; shf.addEventListener("click", function (ev) { var s = ev.target.closest(".sh-bk"); if (!s) return; var k = +s.getAttribute("data-k"); if (shf.classList.contains("picked") && k === cur) { shf.classList.remove("picked"); return; } shf.classList.add("picked"); show(k, k > cur ? 1 : -1); var w = $("#sfWheel", host); if (w && w.scrollIntoView) setTimeout(function () { w.scrollIntoView({ behavior: "smooth", block: "start" }); }, 350); }); })();
     $("#sfPrev", host).onclick = function () { show(cur - 1, -1); };
     $("#sfNext", host).onclick = function () { show(cur + 1, 1); }; card.addEventListener("click", function (ev) { var bk = ev.target.closest(".sf-book"); if (!bk) return; var tsb = ev.target.closest("[data-test-sefer]"); if (tsb && bk.classList.contains("open")) { ev.preventDefault(); ev.stopPropagation(); testSeferNow(+tsb.getAttribute("data-test-sefer")); return; } bk.classList.toggle("open"); }); document.addEventListener("keydown", function (e) { var d = $("#sfDetail"); if (!d || d.hidden || /INPUT|TEXTAREA|SELECT/.test((e.target||{}).tagName||"")) return; if (e.key === "ArrowLeft") show(cur - 1, -1); else if (e.key === "ArrowRight") show(cur + 1, 1); });
     $$(".sf-dot", dots).forEach(function (d) { d.onclick = function () { var k = +d.getAttribute("data-k"); show(k, k > cur ? 1 : -1); }; });
