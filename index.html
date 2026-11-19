@@ -922,6 +922,20 @@ background:#fffaf0 repeating-linear-gradient(180deg,#fffaf0 0 2px,#8f846c 2px 3p
 .hm-sub{font-size:.95rem;font-weight:600;opacity:.7;margin-top:2px}
 .hm-count{font-size:.8rem;color:var(--muted);font-weight:700;margin:10px 0 2px}
 .hm-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:12px 0 4px}
+button.tag{font:inherit;cursor:pointer;border:1px solid transparent}
+button.tag:hover{filter:brightness(.96)}
+.hm-tags button.tag.on{border-color:currentColor;box-shadow:inset 0 0 0 1px currentColor,0 2px 7px rgba(17,24,39,.16)}
+.mz-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px;margin:14px 0 4px}
+.mzpic{display:block;width:100%;padding:0;border:1px solid rgba(176,141,87,.35);border-radius:14px;background:#fff;overflow:hidden;cursor:pointer;font:inherit}
+.mzpic img{display:block;width:100%;aspect-ratio:1;object-fit:contain;background:#fff}
+.mzpic-fb{display:flex;align-items:center;justify-content:center;aspect-ratio:1;padding:10px;text-align:center}
+.mzpic-fb[hidden]{display:none}
+.mzpic img[hidden]{display:none}
+.mz-det[hidden]{display:none}
+.mzpic-fb .hr-he{font-size:1.05rem}
+.mzpic.on{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold)}
+.mz-det{margin-top:12px;border:1px solid rgba(176,141,87,.3);border-radius:14px;background:rgba(255,255,255,.65);padding:12px 14px}
+.mz-det .hm-row{padding:0}
 .hm-list{list-style:none;margin:12px 0 0;padding:0;text-align:right;border-top:1px solid rgba(176,141,87,.25)}
 .hm-item{border-bottom:1px solid rgba(176,141,87,.2)}
 .hm-row{display:flex;align-items:center;gap:12px;width:100%;padding:12px 4px;border:0;border-radius:0;background:transparent;text-align:right;font-weight:400}
@@ -2823,6 +2837,13 @@ function hmStartAt(lvl, a) {
   if (k < 0) return false; S.flow.ipos[lvl] = k; S.flow.bite = null; S.flow.card = 0; markIntro("level" + lvl); save(); startBite(lvl); return true;
 }
 function hmTypeCount(h) { var p = 0, g = 0; (h.m || []).forEach(function (m) { if (m[0] === "+") p++; else g++; }); return { p: p, g: g }; }
+/* memory picture for a hilchah's mitzvah: mz-{sefer}-{hilchah}-{index}.webp, index 1-based, zero-padded */
+function mzPicURL(a, k) { var p = String(a).split("."), i = String(k + 1); if (i.length < 2) i = "0" + i; return "https://rambamlearningengine.github.io/Rambam-Learning-Engine/images/mitzvot/mz-" + p[0] + "-" + p[1] + "-" + i + ".webp"; }
+/* full detail of one mitzvah — the same content the mitzvah list rows showed before the picture cards */
+function mzDetailHTML(h, k) {
+  var m = h.m[k], cues = CUES[h.a], cu = cues && cues.items[k];
+  return '<div class="hm-row hm-mrow"><span class="hr-n ' + (m[0] === "+" ? "pos" : "neg") + '">' + (k + 1) + '</span><span class="hr-t"><span class="hr-he" lang="he" dir="rtl">' + esc(m[1]) + '</span>' + (m[3] ? '<span class="hr-x" lang="he" dir="rtl">' + esc(m[3]) + '</span>' : '') + '<span class="hr-en" dir="ltr">' + esc(cap(m[2])) + (m[4] ? ' <span class="hr-xen">' + esc(m[4]) + '</span>' : '') + '</span>' + (cu ? '<span class="hr-cue" dir="ltr">Memory cue: <b>' + esc(cu.cue) + '</b> <span lang="he" dir="rtl">' + esc(cu.cueHebrew) + '</span></span>' : '') + '</span><span class="hr-c ' + (m[0] === "+" ? "pos" : "neg") + '" lang="he" dir="rtl">' + (m[0] === "+" ? "עשה" : "לא תעשה") + '</span></div>';
+}
 function hmHeCount(h) { if (h.rab) return "דרבנן"; if (!h.n) return "—"; return h.n + (h.n === 1 ? " מצוה" : " מצוות"); }
 function hmBiteHe(lvl, items) {
   var hs = []; items.forEach(function (it) { var a = lvl === 2 ? it : mzKey(it).a; if (hs.indexOf(a) < 0) hs.push(a); });
@@ -2904,10 +2925,13 @@ function renderHM(lvl) {
       '<div class="sf-wheel sf-simple" id="hlWheel"><button type="button" class="sf-arr" id="hlPrev" aria-label="Previous sefer">‹</button><div class="sf-card" id="hlCard"></div><button type="button" class="sf-arr" id="hlNext" aria-label="Next sefer">›</button></div><div class="sf-dots" id="hlDots"></div></div>';
   } else {
     var H = HMAP[st.a], c = hmTypeCount(H), cues = CUES[H.a];
+    if (st.fa !== H.a) { st.fa = H.a; st.f = "all"; }
+    var mzf = st.f || "all"; if (mzf === "pos" && !c.p) mzf = "all"; if (mzf === "neg" && !c.g) mzf = "all"; st.f = mzf;
+    var mzShown = (H.m || []).map(function (m, k) { return { m: m, k: k }; }).filter(function (x) { return mzf === "all" || (mzf === "pos" ? x.m[0] === "+" : x.m[0] === "-"); });
     html += '<div class="hm-label">Choose a hilchah</div><div class="hm-strip hm-strip2" id="hmHil" dir="rtl">' + HL.map(function (x) { return '<button type="button" class="hm-chip hm-chip2' + (x.a === st.a ? ' on' : '') + '" data-a="' + x.a + '"' + (x.a === st.a ? ' aria-pressed="true"' : '') + '><span class="hc-he" lang="he" dir="rtl">' + esc(x.he) + '</span><span class="hc-c">' + (x.n || 0) + '</span></button>'; }).join("") + '</div>' +
       '<div class="hm-card"><div class="hm-kick" lang="he" dir="rtl">' + esc(B.hebrew) + '</div><div class="hm-title" lang="he" dir="rtl">הלכות ' + esc(H.he) + '</div><div class="hm-sub">Hilchot ' + esc(H.tr) + ' · ' + esc(H.en) + '</div>' +
-      (H.n ? '<div class="hm-tags"><span class="tag">' + H.n + (H.n === 1 ? ' mitzvah' : ' mitzvot') + '</span>' + (c.p ? '<span class="tag pos">' + c.p + ' aseh · עשה</span>' : '') + (c.g ? '<span class="tag neg">' + c.g + ' lo taaseh · לא תעשה</span>' : '') + '</div>' +
-        '<ol class="hm-list hm-mz" dir="rtl">' + H.m.map(function (m, k) { var cu = cues && cues.items[k]; return '<li class="hm-item"><div class="hm-row hm-mrow"><span class="hr-n ' + (m[0] === "+" ? "pos" : "neg") + '">' + (k + 1) + '</span><span class="hr-t"><span class="hr-he" lang="he" dir="rtl">' + esc(m[1]) + '</span>' + (m[3] ? '<span class="hr-x" lang="he" dir="rtl">' + esc(m[3]) + '</span>' : '') + '<span class="hr-en" dir="ltr">' + esc(cap(m[2])) + (m[4] ? ' <span class="hr-xen">' + esc(m[4]) + '</span>' : '') + '</span>' + (cu ? '<span class="hr-cue" dir="ltr">Memory cue: <b>' + esc(cu.cue) + '</b> <span lang="he" dir="rtl">' + esc(cu.cueHebrew) + '</span></span>' : '') + '</span><span class="hr-c ' + (m[0] === "+" ? "pos" : "neg") + '" lang="he" dir="rtl">' + (m[0] === "+" ? "עשה" : "לא תעשה") + '</span></div></li>'; }).join("") + '</ol>' +
+      (H.n ? '<div class="hm-tags" role="group" aria-label="Show mitzvot"><button type="button" class="tag' + (mzf === "all" ? " on" : "") + '" data-mzf="all" aria-pressed="' + (mzf === "all") + '">' + H.n + (H.n === 1 ? ' mitzvah' : ' mitzvot') + '</button>' + (c.p ? '<button type="button" class="tag pos' + (mzf === "pos" ? " on" : "") + '" data-mzf="pos" aria-pressed="' + (mzf === "pos") + '">' + c.p + ' aseh · עשה</button>' : '') + (c.g ? '<button type="button" class="tag neg' + (mzf === "neg" ? " on" : "") + '" data-mzf="neg" aria-pressed="' + (mzf === "neg") + '">' + c.g + ' lo taaseh · לא תעשה</button>' : '') + '</div>' +
+        '<div class="mz-grid" dir="rtl">' + mzShown.map(function (x) { return '<button type="button" class="mzpic" data-mzk="' + x.k + '" aria-label="Mitzvah ' + (x.k + 1) + '"><img src="' + mzPicURL(H.a, x.k) + '" alt="" loading="lazy"><span class="mzpic-fb" hidden><span class="hr-he" lang="he" dir="rtl">' + esc(x.m[1]) + '</span></span></button>'; }).join("") + '</div><div class="mz-det" id="hmMzDet" dir="rtl" hidden></div>' +
         '<button type="button" class="hm-go instant-btn2" data-testnow="' + H.a + '">⚡ Test this hilchah now — lock it in</button><button type="button" class="primary hm-go" data-learn="' + H.a + '">Learn these ' + (H.n === 1 ? 'one' : H.n) + ' &rarr;</button>'
         : '<p class="hm-none">' + (H.rab ? "This hilchah has no mitzvah from the 613. Its laws are rabbinic." : "No counted mitzvah in this hilchah.") + '</p>' + (H.d ? '<p class="hm-d">' + esc(H.d) + '</p>' : '')) +
       '</div>';
@@ -2928,6 +2952,22 @@ function renderHM(lvl) {
   $$(".hm-row[data-a]", host).forEach(function (b) { b.onclick = function () { var a = b.getAttribute("data-a"); st.open = st.open === a ? "" : a; renderHM(lvl); }; });
   $$("[data-learn]", host).forEach(function (b) { b.onclick = function () { hmStartAt(lvl, b.getAttribute("data-learn")); }; });
   $$("[data-testnow]", host).forEach(function (b) { b.onclick = function () { testHilchahNow(b.getAttribute("data-testnow"), "mitzvot"); }; });
+  if (lvl === 3) {
+    $$("[data-mzf]", host).forEach(function (b) { b.onclick = function () { st.f = b.getAttribute("data-mzf"); renderHM(3); }; });
+    var mzDet = $("#hmMzDet", host), mzSel = -1;
+    $$(".mzpic", host).forEach(function (card) {
+      var img = card.querySelector("img"), fb = card.querySelector(".mzpic-fb");
+      var fail = function () { if (img) img.hidden = true; if (fb) fb.hidden = false; };
+      if (img) { if (img.complete && !img.naturalWidth) fail(); else img.addEventListener("error", fail); }
+      card.onclick = function () {
+        var k = +card.getAttribute("data-mzk");
+        if (mzSel === k) { mzSel = -1; card.classList.remove("on"); if (mzDet) { mzDet.hidden = true; mzDet.innerHTML = ""; } return; }
+        mzSel = k;
+        $$(".mzpic", host).forEach(function (x) { x.classList.toggle("on", x === card); });
+        if (mzDet) { mzDet.innerHTML = mzDetailHTML(H, k); mzDet.hidden = false; }
+      };
+    });
+  }
   $$("[data-tomz]", host).forEach(function (b) { b.onclick = function () { var a = b.getAttribute("data-tomz"); HM[3].s = HMAP[a].s; HM[3].a = a; go("mitzvot"); }; });
   var _lvlGo = $("#lvlGo", host); if (_lvlGo) _lvlGo.onclick = function () { markIntro("level" + lvl); if (done) { S.flow.ipos[lvl] = 0; S.flow.bite = null; save(); } startBite(lvl); };
   $("#lvlBrowse", host).onclick = function () { if (lvl === 2) browseState[2] = st.s; else { browseState[3].s = st.s; browseState[3].a = st.a; } openBrowse(lvl); };
