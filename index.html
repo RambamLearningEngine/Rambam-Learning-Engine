@@ -909,6 +909,10 @@ background:#fffaf0 repeating-linear-gradient(180deg,#fffaf0 0 2px,#8f846c 2px 3p
 .hm-strip{display:flex;gap:8px;overflow-x:auto;padding:4px 4px 10px;margin:0 -4px 6px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .hm-strip::-webkit-scrollbar{display:none}
 .hm-chip{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:58px;padding:8px 10px 7px;border-radius:14px;border:1px solid rgba(176,141,87,.35);background:var(--panel);font-weight:700;scroll-snap-align:center;box-shadow:0 1px 3px rgba(17,24,39,.04)}
+/* end spacers in the sefer strip: half a strip wide each, so even the first and
+   last books have scroll room to sit in the middle (scrollLeft clamps at the
+   ends otherwise, leaving books 1-2 pinned to the edge) */
+.hm-spacer{flex:0 0 calc(50% - 4px)}
 .hm-chip .hc-n{font-size:.75rem;font-weight:800;color:var(--gold)}
 .hm-chip .hc-he{font-family:"Frank Ruhl Libre","SBL Hebrew","Times New Roman",serif;font-size:1.05rem;font-weight:700;white-space:nowrap}
 .hm-chip .hc-c{font-size:.7rem;color:var(--muted);font-weight:700}
@@ -2957,7 +2961,7 @@ function renderHM(lvl) {
     '<div class="hm-head"><div class="hm-he" lang="he" dir="rtl">' + (lvl === 2 ? "הלכות" : "מצוות") + '</div><div class="hm-en">' + (lvl === 2 ? "The 83 hilchot" : "The 613 mitzvot") + '</div>' +
     (lvl === 2 && SHOW_PHONE ? '<button type="button" class="hm-link" id="phoneHelp">☎ The Rambam\'s phone number</button>' : '') + '</div>' +
     '' +
-    (lvl === 2 ? '' : '<div class="hm-wheel"><button type="button" class="hm-arr hm-arr-l" data-dir="1" aria-label="Next sefer">‹</button><div class="hm-strip" id="hmSef" dir="rtl">' + BOOKS.map(function (b) { return '<button type="button" class="hm-chip' + (b.n === st.s ? ' on' : '') + '" data-s="' + b.n + '" aria-label="Sefer ' + b.n + ', ' + esc(b.translit) + '"' + (b.n === st.s ? ' aria-pressed="true"' : '') + '><span class="bk-cover bk-c' + (b.n % 7) + '"><span class="bk-spine"></span><span class="bk-front"><span class="bk-fn">' + b.n + '</span><span class="bk-pic"><img src="' + b.img + '" alt=""></span><span class="bk-fhe" lang="he" dir="rtl">' + esc(b.shortHebrew || b.hebrew) + '</span></span><span class="bk-pg"></span></span></button>'; }).join("") + '</div><button type="button" class="hm-arr hm-arr-r" data-dir="-1" aria-label="Previous sefer">›</button></div>');
+    (lvl === 2 ? '' : '<div class="hm-wheel"><button type="button" class="hm-arr hm-arr-l" data-dir="1" aria-label="Next sefer">‹</button><div class="hm-strip" id="hmSef" dir="rtl"><span class="hm-spacer" aria-hidden="true"></span>' + BOOKS.map(function (b) { return '<button type="button" class="hm-chip' + (b.n === st.s ? ' on' : '') + '" data-s="' + b.n + '" aria-label="Sefer ' + b.n + ', ' + esc(b.translit) + '"' + (b.n === st.s ? ' aria-pressed="true"' : '') + '><span class="bk-cover bk-c' + (b.n % 7) + '"><span class="bk-spine"></span><span class="bk-front"><span class="bk-fn">' + b.n + '</span><span class="bk-pic"><img src="' + b.img + '" alt=""></span><span class="bk-fhe" lang="he" dir="rtl">' + esc(b.shortHebrew || b.hebrew) + '</span></span><span class="bk-pg"></span></span></button>'; }).join("") + '<span class="hm-spacer" aria-hidden="true"></span></div><button type="button" class="hm-arr hm-arr-r" data-dir="-1" aria-label="Previous sefer">›</button></div>');
   if (lvl === 2) {
     /* Nov 12: Hilchot learn page in the same format as Sefarim: bookshelf + its own copy of the wheel (#hlWheel). Opening a book shows that sefer's hilchot. */
     html += '<div class="hl-detail" id="hlDetail"><div class="sf-case" id="hlShelf"><div class="sh-row">' + BOOKS.map(function (b, k) { return '<button type="button" class="sh-bk sh-c' + (b.n % 7) + '" data-k="' + k + '" aria-label="' + esc(b.english) + '"><span class="sh-n">' + b.n + '</span><span class="sh-he" lang="he" dir="rtl">' + (b.shortHebrew || b.hebrew).replace(/\s+/g, "").split("").map(function (ch) { return "<i>" + esc(ch) + "</i>"; }).join("") + '</span></button>'; }).join("") + '</div><div class="sh-board"></div><div class="sh-cap">Click a sefer to take it off the shelf</div></div>' +
@@ -2983,7 +2987,10 @@ function renderHM(lvl) {
      The rect delta works the same in every RTL scrollLeft model: shifting
      scrollLeft by the center-to-center gap moves the chip's center to the strip's
      center. Re-applied next frame and after a settle delay so late font/image
-     layout cannot leave it off-center. */
+     layout cannot leave it off-center. The #hmSef strip carries .hm-spacer
+     elements at both ends: without them the scroll range ends before the
+     first/last chips can reach the middle, so books 1-2 (and 13-14) could
+     never center no matter what scrollLeft is set to. */
   var chipOn = function (wrap) {
     var on = wrap && $(".hm-chip.on", wrap); if (!on || wrap.scrollWidth <= wrap.clientWidth) return;
     var center = function () {
