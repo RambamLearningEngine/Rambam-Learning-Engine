@@ -1314,9 +1314,6 @@ button.hm-row:hover{background:rgba(176,141,87,.07)}
   <div id="page-goal" class="page"><div id="goalHost"></div></div>
   <!-- GAMES -->
   <div id="page-play" class="page"><div id="playHost"></div></div>
-  <!-- TEST YOURSELF (games/quizzes per level) -->
-  <div id="page-test" class="page"><div id="testHost"></div></div>
-
   <!-- QUIZ (today / hilchah practice) -->
   <div id="page-quiz" class="page">
     <div class="topbar"><div class="module-title"><h2 id="quizTitle">Practice</h2><p id="quizSub"></p></div></div>
@@ -1684,9 +1681,10 @@ function celebrate(title, sub) {
 }
 
 /* ---------- navigation ---------- */
-var TITLES = { home: "Rambam Learning Engine", intro: "Intro", books: "", hilchot: "", mitzvot: "", quiz: "Practice", lightning: "Lightning Round", learn: "Learning", play: "Games", test: "Test yourself", browse: "Cards", goal: "Daily goal" };
+var TITLES = { home: "Rambam Learning Engine", intro: "Intro", books: "", hilchot: "", mitzvot: "", quiz: "Practice", lightning: "Lightning Round", learn: "Learning", play: "Games", browse: "Cards", goal: "Daily goal" };
 var current = "home";
 function go(page, backTo) {
+  if (!document.getElementById("page-" + page)) page = "home"; /* e.g. the removed Test Yourself page: stale routes land on Home instead of breaking */
   if (page === "test" && !backTo) backTo = LEVEL_INFO[testLvl].page;
   if (lightTimer && page !== "lightning") stopLightning(true);
   $$(".page").forEach(function (p) { p.classList.remove("active"); });
@@ -1702,7 +1700,6 @@ function go(page, backTo) {
   if (page === "home") renderHome();
   if (page === "lightning") renderLightStart();
   if (LEVEL_PAGE[page]) renderLevel(LEVEL_PAGE[page]);
-  if (page === "test") renderTest();
   window.scrollTo(0, 0);
   /* The hash sync is best-effort only: inside the sandboxed artifact iframe
      history.replaceState throws a SecurityError, and if it propagated it would
@@ -2234,47 +2231,13 @@ function practiceGames(lvl) {
   return gs;
 }
 function practiceBox(lvl) {
-  return '<div class="lvl-practice" id="lvlPractice"><button type="button" class="ty-btn" data-testyourself="' + lvl + '"><span class="ty-ic" aria-hidden="true">✎</span><span class="ty-tx"><b>Test yourself</b><small>Games and quizzes</small></span><span class="ty-ar" aria-hidden="true">›</span></button></div>';
+  /* Nov 19: the Test Yourself section was removed at Josh's request — no button on the level pages and no standalone test page. Kept as an empty stub so the render call sites stay as they are. */
+  return "";
 }
 var testLvl = 1;
 function openTest(lvl) { testLvl = +lvl || testLvl; go("test", LEVEL_INFO[testLvl].page); }
 var tyGame = null;
 function tyDone() { if (!tyGame || RLE_PREVIEW) return; if (!S.tyDone || typeof S.tyDone !== "object") S.tyDone = {}; if (!S.tyDone[tyGame]) { S.tyDone[tyGame] = Date.now(); save(); } }
-/* Nov 11: Test yourself in 3 stages (easy, medium, hard); the next stage opens when every item in the one before has been done once */
-var TY_STAGES = {
-  1: [["explore", "palace", "match", "name"], ["number", "theme", "order", "shelf"], ["dorder", "missing", "words", "typeit"]],
-  2: [SHOW_PHONE ? ["phone", "hsort"] : ["hsort"], ["horder", "hdrag", "tsort", "hcontents", "hfall"], ["hmissing", "hcount"]],
-  3: [["mtype", "msef"], ["mhil"], ["mdrag"]]
-};
-var TY_NAMES = [["Stage 1", "Easy", "Recognize and match"], ["Stage 2", "Medium", "Numbers and order"], ["Stage 3", "Hard", "From memory"]];
-var tyOpen = {};
-function tyStages(lvl) {
-  var st = (TY_STAGES[lvl] || [[], [], []]).map(function (a) { return a.filter(function (id) { return GMAP[id]; }); }), seen = {};
-  st.forEach(function (a) { a.forEach(function (id) { seen[id] = 1; }); });
-  GAMES.forEach(function (g) { if (g.group === RC_GROUP[lvl] && !seen[g.id]) st[2].push(g.id); });
-  return st;
-}
-function renderTest() {
-  var host = $("#testHost"), info = LEVEL_INFO[testLvl], st = tyStages(testLvl), D = S.tyDone || {};
-  var done = st.map(function (a) { return a.length > 0 && a.every(function (id) { return D[id]; }); });
-  /* Stages 2 and 3 unlocked for review: every stage is openable regardless of completion.
-     Progress ticks and counts still show as before; the default expanded stage is the first unfinished one. */
-  var firstIncomplete = done.indexOf(false); if (firstIncomplete < 0) firstIncomplete = 2;
-  var curSt = 2;
-  var openSt = tyOpen[testLvl] != null ? tyOpen[testLvl] : firstIncomplete;
-  if (openSt > curSt) openSt = curSt;
-  host.innerHTML = '<div class="ty-page"><button type="button" class="sf-back" data-go="' + info.page + '">&larr; Back to ' + info.name + '</button><p class="ty-kick" lang="he" dir="rtl">' + ({1: "ספרים", 2: "הלכות", 3: "מצוות"}[testLvl] || "") + '</p><h2 class="ty-h">Test yourself</h2><div class="ty-stages">' + st.map(function (a, k) {
-    var locked = k > curSt, isOpen = k === openSt && !locked, nDone = a.filter(function (id) { return D[id]; }).length;
-    var badge = locked ? '<span class="ty-lock" aria-label="Locked">🔒</span>' : (done[k] ? '<span class="ty-ok" aria-label="Done">✓</span>' : '<span class="ty-cnt">' + nDone + ' of ' + a.length + '</span>');
-    return '<section class="ty-stage' + (isOpen ? ' open' : '') + (locked ? ' locked' : '') + (done[k] ? ' done' : '') + '"><button type="button" class="ty-row" data-tystage="' + k + '"' + (locked ? ' aria-disabled="true"' : ' aria-expanded="' + isOpen + '"') + '><span class="ty-sn">' + (k + 1) + '</span><span class="ty-st"><b>' + TY_NAMES[k][0] + ' · ' + TY_NAMES[k][1] + '</b><small>' + TY_NAMES[k][2] + '</small></span>' + badge + '</button>' +
-      (isOpen ? '<div class="ty-body"><div class="games-grid ty-grid">' + a.map(function (id) { var g = GMAP[id]; return '<button type="button" class="game-tile' + (D[id] ? ' ty-did' : '') + '" data-game="' + g.id + '">' + (D[id] ? '<span class="ty-tick" aria-label="Done">✓</span>' : '') + '<span class="gi">' + g.icon + "</span><span>" + g.title + '</span><span class="gt-sub">' + esc((g.intro || "").split(". ")[0]) + "</span></button>"; }).join("") + '</div></div>' : '') + '</section>';
-  }).join("") + '</div><button type="button" class="link-btn ty-rev" data-game="review">↻ Smart Review: the ones you missed</button></div>';
-  $$("[data-tystage]", host).forEach(function (b) { b.onclick = function () {
-    var k = +b.getAttribute("data-tystage");
-    if (k > curSt) { toast("Finish Stage " + k + " first to open this one."); return; }
-    tyOpen[testLvl] = (openSt === k ? -1 : k); renderTest();
-  }; });
-}
 function rcSummary(host, right, total, again) {
   var acc = total ? Math.round(right / total * 100) : 0; tyDone();
   if (acc === 100 && total >= 5) confetti();
@@ -2964,7 +2927,26 @@ function renderHM(lvl) {
   }
   html += practiceBox(lvl) + '</div>';
   host.innerHTML = html;
-  var chipOn = function (wrap) { var on = wrap && $(".hm-chip.on", wrap); if (!on || wrap.scrollWidth <= wrap.clientWidth) return; if (on.scrollIntoView) { try { on.scrollIntoView({ block: "nearest", inline: "center" }); return; } catch (e) { } } wrap.scrollLeft += on.getBoundingClientRect().left - wrap.getBoundingClientRect().left - (wrap.clientWidth - on.offsetWidth) / 2; };
+  /* Center the selected chip in its strip by setting scrollLeft from the rects.
+     scrollIntoView({inline:"center"}) is NOT used: in an RTL strip it lands the
+     chip at the start (right) edge in Chrome and iOS Safari instead of the middle.
+     The rect delta works the same in every RTL scrollLeft model: shifting
+     scrollLeft by the center-to-center gap moves the chip's center to the strip's
+     center. Re-applied next frame and after a settle delay so late font/image
+     layout cannot leave it off-center. */
+  var chipOn = function (wrap) {
+    var on = wrap && $(".hm-chip.on", wrap); if (!on || wrap.scrollWidth <= wrap.clientWidth) return;
+    var center = function () {
+      if (!on.isConnected || !wrap.isConnected) return;
+      var wr = wrap.getBoundingClientRect(), orc = on.getBoundingClientRect();
+      if (!wr.width || !orc.width) return;
+      var d = (orc.left + orc.width / 2) - (wr.left + wr.width / 2);
+      if (Math.abs(d) > 1) wrap.scrollLeft += d;
+    };
+    center();
+    if (window.requestAnimationFrame) requestAnimationFrame(center);
+    setTimeout(center, 350);
+  };
   chipOn($("#hmSef", host)); chipOn($("#hmHil", host)); hmWheelWire(host, lvl);
   if (lvl === 2) hlWheelWire(host, st);
   $$("#hmSef .hm-chip", host).forEach(function (b) { b.onclick = function () { var s = +b.getAttribute("data-s"); if (s === st.s) return; st.s = s; st.a = ""; st.open = ""; renderHM(lvl); }; });
@@ -3644,7 +3626,7 @@ auth.onAuthStateChanged((u) => {
 (function () {
   "use strict";
   var KEY = "rle_time", WPM = 200, IDLE = 120000;
-  var LEARN = { "page-intro": 1, "page-books": 1, "page-hilchot": 1, "page-mitzvot": 1, "page-learn": 1, "page-browse": 1, "page-play": 1, "page-test": 1, "page-quiz": 1, "page-lightning": 1 };
+  var LEARN = { "page-intro": 1, "page-books": 1, "page-hilchot": 1, "page-mitzvot": 1, "page-learn": 1, "page-browse": 1, "page-play": 1, "page-quiz": 1, "page-lightning": 1 };
   function dk() { var d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
   var T; try { T = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { T = null; }
   if (!T || typeof T !== "object") T = { day: dk(), today: 0, total: 0 };
