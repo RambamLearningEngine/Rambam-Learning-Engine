@@ -1306,6 +1306,44 @@ button.hm-row:hover{background:rgba(176,141,87,.07)}
 #hlDetail.hl-pop #hlCard{margin:0;width:100%;max-height:100%;overflow-y:auto}
 #hlDetail.hl-pop .sh-cap{position:relative;z-index:12;cursor:pointer;text-decoration:underline;text-underline-offset:3px;color:#1f2a44}
 </style>
+<style>/* Nov 20: Mitzvot learning section made the main event — the single-card view
+   was squeezed three ways: the page column capped at 560px, the test panel
+   took 220px off the side of the card, and the two nav arrows took another
+   ~150px, leaving the picture itself tiny. Now, while the Mitzvot page is
+   open, the page column widens, the learning card spans it in full, the test
+   panel sits underneath as a toolbar instead of beside the card, and the
+   picture is capped at a large, centred size with real breathing room
+   around it. The Show-all grid and the matching test keep working: the grid
+   uses the full card width and the panel's buttons/tray lay out in rows. */
+body:has(#page-mitzvot.active) .wrap{max-width:1060px}
+#page-mitzvot .level-page{max-width:1020px}
+#page-mitzvot .mz-flex{flex-direction:column;max-width:880px;gap:20px;margin-top:16px}
+#page-mitzvot .mz-flex .hm-card{width:100%;max-width:none;margin:0;padding:36px 38px 32px;border-radius:26px;box-shadow:0 16px 38px rgba(17,24,39,.11)}
+#page-mitzvot .hm-title{font-size:2.35rem}
+#page-mitzvot .hm-sub{font-size:1.05rem}
+#page-mitzvot .mz-viewbar{margin:18px 0 2px}
+#page-mitzvot .mz-pos{font-size:.95rem}
+#page-mitzvot .mz-vbtn{padding:10px 16px;font-size:.92rem}
+#page-mitzvot .mz-pager{gap:24px;margin:24px 0 12px}
+#page-mitzvot .mz-pager:not(.all):not(.mz-test) .mz-grid{max-width:580px;margin:0 auto}
+#page-mitzvot .mz-arr{width:68px;height:68px;font-size:2.6rem}
+#page-mitzvot .mzpic{border-radius:18px}
+#page-mitzvot .mzpic-n{min-width:30px;height:30px;font-size:.9rem;top:10px;inset-inline-start:10px}
+#page-mitzvot .mz-grid.all{grid-template-columns:repeat(auto-fill,minmax(136px,1fr));gap:12px}
+#page-mitzvot .mz-det{margin-top:20px;padding:16px 18px}
+#page-mitzvot .mz-panel{flex:none;width:100%;position:static;order:0;display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;padding:16px}
+#page-mitzvot .mz-pbtn{width:auto;flex:1 1 170px;margin:0;padding:13px 14px}
+#page-mitzvot .mz-status{flex:1 1 100%;margin:0}
+#page-mitzvot .mz-ptray{flex:1 1 100%;max-height:30vh}
+#page-mitzvot .lvl-practice{max-width:880px}
+@media (max-width:600px){
+ #page-mitzvot .mz-flex .hm-card{padding:24px 16px 22px;border-radius:22px}
+ #page-mitzvot .hm-title{font-size:1.9rem}
+ #page-mitzvot .mz-pager{gap:12px;margin:18px 0 8px}
+ #page-mitzvot .mz-arr{width:56px;height:56px;font-size:2.2rem}
+ #page-mitzvot .mz-pbtn{flex-basis:100%}
+}
+</style>
 </head>
 <body>
 <div class="wrap">
