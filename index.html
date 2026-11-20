@@ -947,16 +947,18 @@ button.tag:hover{filter:brightness(.96)}
    to the previous one); each click swaps which card carries .mz-cur, the only
    card displayed. .all shows the full grid instead and hides the arrows, as
    does the in-page matching test (.mz-test), which needs every picture visible. */
-.mz-pager{display:flex;align-items:center;gap:8px;margin:10px 0 4px}
+.mz-pager{display:flex;align-items:center;gap:16px;margin:14px 0 6px}
 .mz-pager .mz-grid{flex:1 1 auto;min-width:0}
 .mz-grid{display:block}
 .mz-grid .mzpic{display:none;width:100%}
 .mz-grid .mzpic.mz-cur{display:block}
 .mz-grid.all{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
 .mz-grid.all .mzpic{display:block;width:100%}
-.mz-arr{display:flex;align-items:center;justify-content:center;flex:0 0 auto;width:44px;height:44px;border-radius:50%;border:1.5px solid rgba(176,141,87,.6);background:var(--panel);color:var(--gold);font-size:1.7rem;line-height:1;padding:0 0 3px;cursor:pointer;box-shadow:0 1px 3px rgba(17,24,39,.08)}
+.mz-arr{display:flex;align-items:center;justify-content:center;flex:0 0 auto;width:60px;height:60px;border-radius:50%;border:2px solid var(--gold);background:var(--navy);color:#fff;font-size:2.3rem;font-weight:700;line-height:1;padding:0 0 5px;cursor:pointer;box-shadow:0 4px 12px rgba(17,24,39,.22)}
 .mz-arr:hover:not(:disabled){background:var(--gold);color:#fff}
-.mz-arr:disabled{opacity:.35;cursor:default}
+.mz-arr:active:not(:disabled){transform:scale(.94)}
+.mz-arr:disabled{opacity:.3;cursor:default;box-shadow:none}
+@media (max-width:480px){.mz-pager{gap:10px}.mz-arr{width:52px;height:52px;font-size:2rem}}
 .mz-pager.all .mz-arr,.mz-pager.mz-test .mz-arr{display:none}
 .mz-pos{font-size:.85rem;font-weight:700;color:var(--muted);white-space:nowrap;margin-inline-end:auto}
 .mz-viewbar{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:12px 0 0}
