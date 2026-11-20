@@ -901,6 +901,18 @@ background:#fffaf0 repeating-linear-gradient(180deg,#fffaf0 0 2px,#8f846c 2px 3p
 .hm-intro{font-size:15px;line-height:1.5;color:#4b5563;margin:10px auto 0;max-width:460px}
 .hm-link{border:0;background:transparent;color:var(--gold);font-weight:700;font-size:.88rem;padding:6px 8px;margin-top:4px}
 .hm-link:hover{text-decoration:underline}
+/* Nov 20: language toggle — names show in Hebrew OR English, not both (html.lng-en = English) */
+.lang-toggle{display:inline-flex;align-items:center;margin-top:10px;padding:3px;border-radius:999px;border:1.5px solid var(--gold);background:var(--panel);cursor:pointer;font:inherit;box-shadow:0 1px 3px rgba(17,24,39,.08)}
+.lang-toggle .lt-opt{padding:4px 13px;border-radius:999px;font-size:.8rem;font-weight:800;color:var(--muted);line-height:1.25}
+.lang-toggle .lt-he{font-family:"Frank Ruhl Libre","SBL Hebrew","Times New Roman",serif;font-size:.95rem}
+html:not(.lng-en) .lang-toggle .lt-he{background:var(--navy);color:#fff}
+html.lng-en .lang-toggle .lt-en{background:var(--navy);color:#fff}
+html.lng-en .hm-he,html.lng-en .hm-title,html.lng-en .hl-pg-h,html.lng-en .sf-he,html.lng-en .bk-fhe,html.lng-en .bk-ph,html.lng-en .bk-lhe,html.lng-en .hc-he,html.lng-en .hr-he,html.lng-en .hr-x,html.lng-en .level-sm .he-word{display:none!important}
+html:not(.lng-en) .hm-en,html:not(.lng-en) .hm-sub,html:not(.lng-en) .hl-pg-s,html:not(.lng-en) .sf-en,html:not(.lng-en) .bk-fen,html:not(.lng-en) .bk-pt,html:not(.lng-en) .bk-len,html:not(.lng-en) .hc-en,html:not(.lng-en) .hr-en,html:not(.lng-en) .level-sm .ls-txt>b{display:none!important}
+html.lng-en .hm-sub{font-size:1.45rem;font-weight:700;opacity:1;line-height:1.25;margin-top:6px}
+html.lng-en #hlCard .hl-pg-s{font-size:1.05rem;color:var(--ink);border-bottom:0;margin-bottom:4px}
+.hm-chip .hc-en{font-size:.92rem;font-weight:700;white-space:nowrap}
+#hmSef .hm-chip .bk-fen{font-size:.55rem;line-height:1.05;text-align:center}
 .hm-cont{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;max-width:420px;margin:0 auto 18px;padding:14px 20px;border-radius:999px;background:var(--navy);color:#fff;border:0;box-shadow:0 8px 22px rgba(16,24,39,.18)}
 .hm-cont:hover{background:#1c2638}
 .hm-cl{font-size:17px;font-weight:800}
@@ -929,16 +941,19 @@ background:#fffaf0 repeating-linear-gradient(180deg,#fffaf0 0 2px,#8f846c 2px 3p
 button.tag{font:inherit;cursor:pointer;border:1px solid transparent}
 button.tag:hover{filter:brightness(.96)}
 .hm-tags button.tag.on{border-color:currentColor;box-shadow:inset 0 0 0 1px currentColor,0 2px 7px rgba(17,24,39,.16)}
-/* mitzvah picture cards: a sideways-scrolling row by default; .all shows the full grid */
-.mz-grid{display:flex;flex-direction:row;gap:10px;margin:10px 0 4px;overflow-x:auto;overflow-y:hidden;padding:4px 2px 10px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+/* mitzvah picture cards: the scroll view shows exactly one card at a time — each
+   card takes the full width of the row (flex-basis 100%, no side padding on the
+   row) so no part of the previous or next card ever peeks in, and the picture
+   (width:100% of the card) is as large as the card itself. Mandatory snap with
+   snap-stop keeps swipes to one card at a time. .all shows the full grid. */
+.mz-grid{display:flex;flex-direction:row;gap:10px;margin:10px 0 4px;overflow-x:auto;overflow-y:hidden;padding:4px 0 10px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
 .mz-grid::-webkit-scrollbar{height:8px}
 .mz-grid::-webkit-scrollbar-thumb{background:rgba(176,141,87,.45);border-radius:99px}
 .mz-grid::-webkit-scrollbar-track{background:rgba(176,141,87,.12);border-radius:99px}
-.mz-grid .mzpic{flex:0 0 148px;width:148px;scroll-snap-align:start}
+.mz-grid .mzpic{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always}
 .mz-grid.all{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));overflow:visible;padding:0;scroll-snap-type:none}
 .mz-grid.all .mzpic{width:100%}
-@media (max-width:600px){.mz-grid .mzpic{flex-basis:126px;width:126px}}
-.mz-viewbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0 0}
+.mz-viewbar{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:12px 0 0}
 .mz-viewhint{font-size:.82rem;font-weight:700;color:var(--muted)}
 .mz-vbtn{padding:8px 13px;border-radius:999px;font-size:.85rem;white-space:nowrap}
 .mzpic{display:block;width:100%;padding:0;border:1px solid rgba(176,141,87,.35);border-radius:14px;background:#fff;overflow:hidden;cursor:pointer;font:inherit}
@@ -1260,10 +1275,11 @@ button.hm-row:hover{background:rgba(176,141,87,.07)}
 /* Mitzvot "Choose a sefer" strip: the selected sefer's cover grows, with a gold ring */
 #hmSef .hm-chip .bk-cover{transition:width .25s ease,height .25s ease}
 #hmSef .hm-chip.on{border-color:var(--gold,#c9a227);box-shadow:0 0 0 2px var(--gold,#c9a227),0 8px 18px rgba(17,24,39,.2);z-index:1}
-#hmSef .hm-chip.on .bk-cover{width:92px;height:122px}
-#hmSef .hm-chip.on .bk-pic{width:50px;height:50px}
-#hmSef .hm-chip.on .bk-fn{width:23px;height:23px;font-size:.78rem}
-#hmSef .hm-chip.on .bk-fhe{font-size:.88rem}
+#hmSef .hm-chip.on .bk-cover{width:128px;height:170px}
+#hmSef .hm-chip.on .bk-pic{width:70px;height:70px}
+#hmSef .hm-chip.on .bk-fn{width:28px;height:28px;font-size:.95rem}
+#hmSef .hm-chip.on .bk-fhe{font-size:1.05rem}
+#hmSef .hm-chip.on .bk-fen{font-size:.72rem}
 /* "View all 14 sefarim" grid: the sefer you are up to is bigger, focus picks grow too */
 .mc-tile.sf-sel .bk-cover{transform:scale(1.1)}
 .mc-tile.sf-cur .bk-cover{transform:scale(1.16);outline:3px solid var(--gold,#c9a227);outline-offset:4px}
@@ -1598,7 +1614,7 @@ var S;
 /* Nov 12: owner-only preview mode. Turned on only by ?preview=rle-owner-7k, off by ?preview=off. While on: every stage opens, nothing is saved. */
 var RLE_PREVIEW = false;
 (function () { try { var m = /[?&]preview=([^&#]*)/.exec(location.search); if (m) { var v = decodeURIComponent(m[1]); if (v === "rle-owner-7k") localStorage.setItem("rle_preview", "1"); else if (v === "off") localStorage.removeItem("rle_preview"); var q = location.search.replace(/([?&])preview=[^&#]*&?/, "$1").replace(/[?&]$/, ""); history.replaceState(null, "", location.pathname + q + location.hash); } RLE_PREVIEW = localStorage.getItem("rle_preview") === "1"; } catch (e) { RLE_PREVIEW = false; } window.RLE_PREVIEW = RLE_PREVIEW; })();
-function defaults() { return { xp: 0, days: {}, streak: 0, lastDay: null, goal: 50, L: {}, sound: false, daily: "off", best: 0, cover: false, explore: { numbers: true, pictures: true, hebrew: true, english: true, translit: true }, milestones: {}, todayCache: null, flow: { cur: 1, ipos: { 1: 0, 2: 0, 3: 0 }, card: 0, bite: null }, intros: {}, lgoal: null, goalAsked: 0, today: null }; }
+function defaults() { return { xp: 0, days: {}, streak: 0, lastDay: null, goal: 50, L: {}, sound: false, daily: "off", best: 0, cover: false, lang: "he", explore: { numbers: true, pictures: true, hebrew: true, english: true, translit: true }, milestones: {}, todayCache: null, flow: { cur: 1, ipos: { 1: 0, 2: 0, 3: 0 }, card: 0, bite: null }, intros: {}, lgoal: null, goalAsked: 0, today: null }; }
 function load() {
   try { S = Object.assign(defaults(), JSON.parse(localStorage.getItem(KEY) || "{}")); } catch (e) { S = defaults(); }
   /* v2.1 migration: older saves keep all points, streak and mastery; only the new fields are added */
@@ -1606,9 +1622,14 @@ function load() {
   if (!S.flow.ipos) S.flow.ipos = { 1: 0, 2: 0, 3: 0 };
   if (!S.intros || typeof S.intros !== "object") S.intros = {};
   if (!S.explore) S.explore = defaults().explore;
+  if (S.lang !== "en") S.lang = "he";
 }
 function save() { if (RLE_PREVIEW) return; S._t = Date.now(); try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } if (window.RLE_SYNC) { try { window.RLE_SYNC.changed(); } catch (e) { } } }
 load();
+/* Nov 20: language display — Hebrew or English names, one at a time (S.lang, toggled on the Hilchot/Mitzvot pages) */
+function applyLang() { document.documentElement.classList.toggle("lng-en", S.lang === "en"); $$(".lang-toggle").forEach(function (b) { b.setAttribute("aria-pressed", S.lang === "en" ? "true" : "false"); }); }
+function setLang(v) { S.lang = v === "en" ? "en" : "he"; save(); applyLang(); }
+applyLang();
 /* Nov 12: the small Preview pill, shown only while preview mode is on */
 function rlePreviewPill() { if (!RLE_PREVIEW || document.getElementById("rlePreviewPill")) return; var b = document.createElement("button"); b.type = "button"; b.id = "rlePreviewPill"; b.textContent = "Preview";
   b.style.cssText = "position:fixed;left:8px;bottom:8px;z-index:9999;font:600 10px/1 system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#8a6a2f;background:rgba(253,248,238,.92);border:1px solid #c9a96a;border-radius:999px;padding:4px 8px;opacity:.75;cursor:pointer";
@@ -2911,7 +2932,7 @@ var MZKW = {
 /* full detail of one mitzvah — the same content the mitzvah list rows showed before the picture cards */
 function mzDetailHTML(h, k) {
   var m = h.m[k], cues = CUES[h.a], cu = cues && cues.items[k];
-  return '<div class="hm-row hm-mrow"><span class="hr-n ' + (m[0] === "+" ? "pos" : "neg") + '">' + (k + 1) + '</span><span class="hr-t"><span class="hr-he" lang="he" dir="rtl">' + esc(m[1]) + '</span>' + (m[3] ? '<span class="hr-x" lang="he" dir="rtl">' + esc(m[3]) + '</span>' : '') + '<span class="hr-en" dir="ltr">' + esc(cap(m[2])) + (m[4] ? ' <span class="hr-xen">' + esc(m[4]) + '</span>' : '') + '</span>' + (cu ? '<span class="hr-cue" dir="ltr">Memory cue: <b>' + esc(cu.cue) + '</b> <span lang="he" dir="rtl">' + esc(cu.cueHebrew) + '</span></span>' : '') + '</span><span class="hr-c ' + (m[0] === "+" ? "pos" : "neg") + '" lang="he" dir="rtl">' + (m[0] === "+" ? "עשה" : "לא תעשה") + '</span></div>';
+  return '<div class="hm-row hm-mrow"><span class="hr-n ' + (m[0] === "+" ? "pos" : "neg") + '">' + (k + 1) + '</span><span class="hr-t"><span class="hr-he" lang="he" dir="rtl">' + esc(m[1]) + '</span>' + (m[3] ? '<span class="hr-x" lang="he" dir="rtl">' + esc(m[3]) + '</span>' : '') + '<span class="hr-en" dir="ltr">' + esc(cap(m[2])) + (m[4] ? ' <span class="hr-xen">' + esc(m[4]) + '</span>' : '') + '</span>' + (cu ? '<span class="hr-cue" dir="ltr">Memory cue: <b>' + esc(cu.cue) + '</b> <span lang="he" dir="rtl">' + esc(cu.cueHebrew) + '</span></span>' : '') + '</span>' + (S.lang === "en" ? '<span class="hr-c ' + (m[0] === "+" ? "pos" : "neg") + '" dir="ltr">' + (m[0] === "+" ? "aseh" : "lo taaseh") + '</span>' : '<span class="hr-c ' + (m[0] === "+" ? "pos" : "neg") + '" lang="he" dir="rtl">' + (m[0] === "+" ? "עשה" : "לא תעשה") + '</span>') + '</div>';
 }
 function hmHeCount(h) { if (h.rab) return "דרבנן"; if (!h.n) return "—"; return h.n + (h.n === 1 ? " מצוה" : " מצוות"); }
 function hmBiteHe(lvl, items) {
@@ -2988,27 +3009,27 @@ function renderHM(lvl) {
   var nxt = done ? null : biteItems(biteFor(lvl));
   var html = '<div class="hm">' +
     '<div class="hm-head"><div class="hm-he" lang="he" dir="rtl">' + (lvl === 2 ? "הלכות" : "מצוות") + '</div><div class="hm-en">' + (lvl === 2 ? "The 83 hilchot" : "The 613 mitzvot") + '</div>' +
-    (lvl === 2 && SHOW_PHONE ? '<button type="button" class="hm-link" id="phoneHelp">☎ The Rambam\'s phone number</button>' : '') + '</div>' +
+    (lvl === 2 && SHOW_PHONE ? '<button type="button" class="hm-link" id="phoneHelp">☎ The Rambam\'s phone number</button>' : '') + '<div><button type="button" class="lang-toggle" id="langToggle" aria-label="Switch the names on this page between Hebrew and English"><span class="lt-opt lt-he">עברית</span><span class="lt-opt lt-en">English</span></button></div></div>' +
     '' +
-    (lvl === 2 ? '' : '<div class="hm-wheel"><button type="button" class="hm-arr hm-arr-l" data-dir="1" aria-label="Next sefer">‹</button><div class="hm-strip" id="hmSef" dir="rtl"><span class="hm-spacer" aria-hidden="true"></span>' + BOOKS.map(function (b) { return '<button type="button" class="hm-chip' + (b.n === st.s ? ' on' : '') + '" data-s="' + b.n + '" aria-label="Sefer ' + b.n + ', ' + esc(b.translit) + '"' + (b.n === st.s ? ' aria-pressed="true"' : '') + '><span class="bk-cover bk-c' + (b.n % 7) + '"><span class="bk-spine"></span><span class="bk-front"><span class="bk-fn">' + b.n + '</span><span class="bk-pic"><img src="' + b.img + '" alt=""></span><span class="bk-fhe" lang="he" dir="rtl">' + esc(b.shortHebrew || b.hebrew) + '</span></span><span class="bk-pg"></span></span></button>'; }).join("") + '<span class="hm-spacer" aria-hidden="true"></span></div><button type="button" class="hm-arr hm-arr-r" data-dir="-1" aria-label="Previous sefer">›</button></div>');
+    (lvl === 2 ? '' : '<div class="hm-wheel"><button type="button" class="hm-arr hm-arr-l" data-dir="1" aria-label="Next sefer">‹</button><div class="hm-strip" id="hmSef" dir="rtl"><span class="hm-spacer" aria-hidden="true"></span>' + BOOKS.map(function (b) { return '<button type="button" class="hm-chip' + (b.n === st.s ? ' on' : '') + '" data-s="' + b.n + '" aria-label="Sefer ' + b.n + ', ' + esc(b.translit) + '"' + (b.n === st.s ? ' aria-pressed="true"' : '') + '><span class="bk-cover bk-c' + (b.n % 7) + '"><span class="bk-spine"></span><span class="bk-front"><span class="bk-fn">' + b.n + '</span><span class="bk-pic"><img src="' + b.img + '" alt=""></span><span class="bk-fhe" lang="he" dir="rtl">' + esc(b.shortHebrew || b.hebrew) + '</span><span class="bk-fen">' + esc(b.english) + '</span></span><span class="bk-pg"></span></span></button>'; }).join("") + '<span class="hm-spacer" aria-hidden="true"></span></div><button type="button" class="hm-arr hm-arr-r" data-dir="-1" aria-label="Previous sefer">›</button></div>');
   if (lvl === 2) {
     /* Nov 12: Hilchot learn page in the same format as Sefarim: bookshelf + its own copy of the wheel (#hlWheel). Opening a book shows that sefer's hilchot. */
     html += '<div class="hl-detail" id="hlDetail"><div class="sf-case" id="hlShelf"><div class="sh-row">' + BOOKS.map(function (b, k) { return '<button type="button" class="sh-bk sh-c' + (b.n % 7) + '" data-k="' + k + '" aria-label="' + esc(b.english) + '"><span class="sh-n">' + b.n + '</span><span class="sh-he" lang="he" dir="rtl">' + (b.shortHebrew || b.hebrew).replace(/\s+/g, "").split("").map(function (ch) { return "<i>" + esc(ch) + "</i>"; }).join("") + '</span></button>'; }).join("") + '</div><div class="sh-board"></div><div class="sh-cap">Click a sefer to take it off the shelf</div></div>' +
       '<div class="sf-wheel sf-simple" id="hlWheel"><div class="sf-card" id="hlCard"></div></div><div class="sf-dots" id="hlDots"></div></div>';
   } else {
     var H = HMAP[st.a], c = hmTypeCount(H), cues = CUES[H.a];
-    if (st.fa !== H.a) { st.fa = H.a; st.f = "all"; }
-    var mzf = st.f || "all"; if (mzf === "pos" && !c.p) mzf = "all"; if (mzf === "neg" && !c.g) mzf = "all"; st.f = mzf;
+    if (st.fa !== H.a) { st.fa = H.a; }
+    /* Nov 20: the three count/filter chips (mitzvot · aseh · lo taaseh) are removed for now — every mitzvah shows */
+    st.f = "all"; var mzf = "all";
     var mzShown = (H.m || []).map(function (m, k) { return { m: m, k: k }; }).filter(function (x) { return mzf === "all" || (mzf === "pos" ? x.m[0] === "+" : x.m[0] === "-"); });
     var mzAll = !!st.showAll;
-    html += '<div class="hm-label">Choose a hilchah</div><div class="hm-strip hm-strip2" id="hmHil" dir="rtl">' + HL.map(function (x) { return '<button type="button" class="hm-chip hm-chip2' + (x.a === st.a ? ' on' : '') + '" data-a="' + x.a + '"' + (x.a === st.a ? ' aria-pressed="true"' : '') + '><span class="hc-he" lang="he" dir="rtl">' + esc(x.he) + '</span></button>'; }).join("") + '</div>' +
+    html += '<div class="hm-label">Choose a hilchah</div><div class="hm-strip hm-strip2" id="hmHil" dir="rtl">' + HL.map(function (x) { return '<button type="button" class="hm-chip hm-chip2' + (x.a === st.a ? ' on' : '') + '" data-a="' + x.a + '"' + (x.a === st.a ? ' aria-pressed="true"' : '') + '><span class="hc-he" lang="he" dir="rtl">' + esc(x.he) + '</span><span class="hc-en" dir="ltr">' + esc(x.tr) + '</span></button>'; }).join("") + '</div>' +
       '<div class="mz-flex"><div class="hm-card"><div class="hm-title" lang="he" dir="rtl">הלכות ' + esc(H.he) + '</div><div class="hm-sub">Hilchot ' + esc(H.tr) + ' · ' + esc(H.en) + '</div>' +
-      (H.n ? '<div class="hm-tags" role="group" aria-label="Show mitzvot"><button type="button" class="tag' + (mzf === "all" ? " on" : "") + '" data-mzf="all" aria-pressed="' + (mzf === "all") + '">' + H.n + (H.n === 1 ? ' mitzvah' : ' mitzvot') + '</button>' + (c.p ? '<button type="button" class="tag pos' + (mzf === "pos" ? " on" : "") + '" data-mzf="pos" aria-pressed="' + (mzf === "pos") + '">' + c.p + ' aseh · עשה</button>' : '') + (c.g ? '<button type="button" class="tag neg' + (mzf === "neg" ? " on" : "") + '" data-mzf="neg" aria-pressed="' + (mzf === "neg") + '">' + c.g + ' lo taaseh · לא תעשה</button>' : '') + '</div>' +
-        '<div class="mz-viewbar"><span class="mz-viewhint">' + (mzAll ? 'Showing all cards' : 'Scroll sideways to see every card') + '</span><button type="button" class="mz-vbtn" id="mzViewBtn" aria-pressed="' + mzAll + '">' + (mzAll ? 'Scroll view' : 'Show all cards') + '</button></div>' +
-        '<div class="mz-grid' + (mzAll ? ' all' : '') + '" dir="rtl">' + mzShown.map(function (x) { return '<button type="button" class="mzpic" data-mzk="' + x.k + '" aria-label="Mitzvah ' + (x.k + 1) + '"><span class="mzpic-n" aria-hidden="true">' + (x.k + 1) + '</span><img src="' + mzPicURL(H.a, x.k) + '" alt="" loading="lazy"><span class="mzpic-fb" hidden><span class="hr-he" lang="he" dir="rtl">' + esc(x.m[1]) + '</span></span></button>'; }).join("") + '</div><div class="mz-det" id="hmMzDet" dir="rtl" hidden></div>' +
+      (H.n ? '<div class="mz-viewbar"><button type="button" class="mz-vbtn" id="mzViewBtn" aria-pressed="' + mzAll + '">' + (mzAll ? 'Scroll view' : 'Show all cards') + '</button></div>' +
+        '<div class="mz-grid' + (mzAll ? ' all' : '') + '" dir="rtl">' + mzShown.map(function (x) { return '<button type="button" class="mzpic" data-mzk="' + x.k + '" aria-label="Mitzvah ' + (x.k + 1) + '"><span class="mzpic-n" aria-hidden="true">' + (x.k + 1) + '</span><img src="' + mzPicURL(H.a, x.k) + '" alt="" loading="lazy"><span class="mzpic-fb" hidden><span class="hr-he" lang="he" dir="rtl">' + esc(x.m[1]) + '</span><span class="hr-en" dir="ltr">' + esc(cap(x.m[2])) + '</span></span></button>'; }).join("") + '</div><div class="mz-det" id="hmMzDet" dir="rtl" hidden></div>' +
         ''
         : '<p class="hm-none">' + (H.rab ? "This hilchah has no mitzvah from the 613. Its laws are rabbinic." : "No counted mitzvah in this hilchah.") + '</p>' + (H.d ? '<p class="hm-d">' + esc(H.d) + '</p>' : '')) +
-      '</div>' + (H.n && MZKW[H.a] ? '<aside class="mz-panel" id="mzPanel"><div class="mz-panel-h">Test on this page</div><p class="mz-panel-p">The keyword at the top of each picture has come off — the keywords wait here in this panel, beside the pictures. Drag each keyword back onto the picture it belongs to — a right match sticks, a wrong one bounces back.</p><button type="button" class="mz-pbtn primary" id="mzMatchBtn">Match the keyword to the picture</button><button type="button" class="mz-pbtn" id="mzShuffleBtn" disabled>Shuffle</button><button type="button" class="mz-pbtn" id="mzFixBtn" disabled>Correct the order</button><p class="mz-status" id="mzStatus" aria-live="polite"></p><div class="mz-tray mz-ptray" id="mzTray" dir="rtl" hidden></div></aside>' : '') + '</div>';
+      '</div>' + (H.n && MZKW[H.a] ? '<aside class="mz-panel" id="mzPanel"><div class="mz-panel-h">Test on this page</div><button type="button" class="mz-pbtn primary" id="mzMatchBtn">Match the keyword to the picture</button><button type="button" class="mz-pbtn" id="mzShuffleBtn" disabled>Shuffle</button><button type="button" class="mz-pbtn" id="mzFixBtn" disabled>Correct the order</button><p class="mz-status" id="mzStatus" aria-live="polite"></p><div class="mz-tray mz-ptray" id="mzTray" dir="rtl" hidden></div></aside>' : '') + '</div>';
   }
   html += practiceBox(lvl) + '</div>';
   host.innerHTML = html;
@@ -3043,7 +3064,6 @@ function renderHM(lvl) {
   $$("[data-learn]", host).forEach(function (b) { b.onclick = function () { hmStartAt(lvl, b.getAttribute("data-learn")); }; });
   $$("[data-testnow]", host).forEach(function (b) { b.onclick = function () { testHilchahNow(b.getAttribute("data-testnow"), "mitzvot"); }; });
   if (lvl === 3) {
-    $$("[data-mzf]", host).forEach(function (b) { b.onclick = function () { st.f = b.getAttribute("data-mzf"); renderHM(3); }; });
     var mzViewBtn = $("#mzViewBtn", host);
     if (mzViewBtn) mzViewBtn.onclick = function () { st.showAll = !st.showAll; renderHM(3); };
     var mzDet = $("#hmMzDet", host), mzSel = -1;
@@ -3157,6 +3177,7 @@ function renderHM(lvl) {
   var _lvlBrowse = $("#lvlBrowse", host); if (_lvlBrowse) _lvlBrowse.onclick = function () { if (lvl === 2) browseState[2] = st.s; else { browseState[3].s = st.s; browseState[3].a = st.a; } openBrowse(lvl); };
   var _lvlReset = $("#lvlReset", host); if (_lvlReset) _lvlReset.onclick = function () { S.flow.ipos[lvl] = 0; S.flow.bite = null; save(); st.s = 0; renderHM(lvl); toast("Back to the first " + (lvl === 2 ? "hilchah." : "mitzvah.")); };
   if (lvl === 2 && $("#phoneHelp", host)) { $("#phoneHelp", host).onclick = openPhone; }
+  var _langT = $("#langToggle", host); if (_langT) { _langT.setAttribute("aria-pressed", S.lang === "en" ? "true" : "false"); _langT.onclick = function () { setLang(S.lang === "en" ? "he" : "en"); }; }
 }
 
 /* ---------- LEVEL pages ---------- */
