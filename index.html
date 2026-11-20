@@ -941,18 +941,24 @@ html.lng-en #hlCard .hl-pg-s{font-size:1.05rem;color:var(--ink);border-bottom:0;
 button.tag{font:inherit;cursor:pointer;border:1px solid transparent}
 button.tag:hover{filter:brightness(.96)}
 .hm-tags button.tag.on{border-color:currentColor;box-shadow:inset 0 0 0 1px currentColor,0 2px 7px rgba(17,24,39,.16)}
-/* mitzvah picture cards: the scroll view shows exactly one card at a time — each
-   card takes the full width of the row (flex-basis 100%, no side padding on the
-   row) so no part of the previous or next card ever peeks in, and the picture
-   (width:100% of the card) is as large as the card itself. Mandatory snap with
-   snap-stop keeps swipes to one card at a time. .all shows the full grid. */
-.mz-grid{display:flex;flex-direction:row;gap:10px;margin:10px 0 4px;overflow-x:auto;overflow-y:hidden;padding:4px 0 10px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
-.mz-grid::-webkit-scrollbar{height:8px}
-.mz-grid::-webkit-scrollbar-thumb{background:rgba(176,141,87,.45);border-radius:99px}
-.mz-grid::-webkit-scrollbar-track{background:rgba(176,141,87,.12);border-radius:99px}
-.mz-grid .mzpic{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always}
-.mz-grid.all{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));overflow:visible;padding:0;scroll-snap-type:none}
-.mz-grid.all .mzpic{width:100%}
+/* mitzvah picture cards: the single view shows one card at a time — no scrolling
+   row. Arrow buttons sit either side of the picture (.mz-pager, same side/glyph
+   convention as the sefer wheel: left ‹ steps to the next mitzvah, right › back
+   to the previous one); each click swaps which card carries .mz-cur, the only
+   card displayed. .all shows the full grid instead and hides the arrows, as
+   does the in-page matching test (.mz-test), which needs every picture visible. */
+.mz-pager{display:flex;align-items:center;gap:8px;margin:10px 0 4px}
+.mz-pager .mz-grid{flex:1 1 auto;min-width:0}
+.mz-grid{display:block}
+.mz-grid .mzpic{display:none;width:100%}
+.mz-grid .mzpic.mz-cur{display:block}
+.mz-grid.all{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
+.mz-grid.all .mzpic{display:block;width:100%}
+.mz-arr{display:flex;align-items:center;justify-content:center;flex:0 0 auto;width:44px;height:44px;border-radius:50%;border:1.5px solid rgba(176,141,87,.6);background:var(--panel);color:var(--gold);font-size:1.7rem;line-height:1;padding:0 0 3px;cursor:pointer;box-shadow:0 1px 3px rgba(17,24,39,.08)}
+.mz-arr:hover:not(:disabled){background:var(--gold);color:#fff}
+.mz-arr:disabled{opacity:.35;cursor:default}
+.mz-pager.all .mz-arr,.mz-pager.mz-test .mz-arr{display:none}
+.mz-pos{font-size:.85rem;font-weight:700;color:var(--muted);white-space:nowrap;margin-inline-end:auto}
 .mz-viewbar{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:12px 0 0}
 .mz-viewhint{font-size:.82rem;font-weight:700;color:var(--muted)}
 .mz-vbtn{padding:8px 13px;border-radius:999px;font-size:.85rem;white-space:nowrap}
@@ -3018,18 +3024,19 @@ function renderHM(lvl) {
       '<div class="sf-wheel sf-simple" id="hlWheel"><div class="sf-card" id="hlCard"></div></div><div class="sf-dots" id="hlDots"></div></div>';
   } else {
     var H = HMAP[st.a], c = hmTypeCount(H), cues = CUES[H.a];
-    if (st.fa !== H.a) { st.fa = H.a; }
+    if (st.fa !== H.a) { st.fa = H.a; st.mzIdx = 0; }
     /* Nov 20: the three count/filter chips (mitzvot · aseh · lo taaseh) are removed for now — every mitzvah shows */
     st.f = "all"; var mzf = "all";
     var mzShown = (H.m || []).map(function (m, k) { return { m: m, k: k }; }).filter(function (x) { return mzf === "all" || (mzf === "pos" ? x.m[0] === "+" : x.m[0] === "-"); });
     var mzAll = !!st.showAll;
-    html += '<div class="hm-label">Choose a hilchah</div><div class="hm-strip hm-strip2" id="hmHil" dir="rtl">' + HL.map(function (x) { return '<button type="button" class="hm-chip hm-chip2' + (x.a === st.a ? ' on' : '') + '" data-a="' + x.a + '"' + (x.a === st.a ? ' aria-pressed="true"' : '') + '><span class="hc-he" lang="he" dir="rtl">' + esc(x.he) + '</span><span class="hc-en" dir="ltr">' + esc(x.tr) + '</span></button>'; }).join("") + '</div>' +
-      '<div class="mz-flex"><div class="hm-card"><div class="hm-title" lang="he" dir="rtl">הלכות ' + esc(H.he) + '</div><div class="hm-sub">Hilchot ' + esc(H.tr) + ' · ' + esc(H.en) + '</div>' +
-      (H.n ? '<div class="mz-viewbar"><button type="button" class="mz-vbtn" id="mzViewBtn" aria-pressed="' + mzAll + '">' + (mzAll ? 'Scroll view' : 'Show all cards') + '</button></div>' +
-        '<div class="mz-grid' + (mzAll ? ' all' : '') + '" dir="rtl">' + mzShown.map(function (x) { return '<button type="button" class="mzpic" data-mzk="' + x.k + '" aria-label="Mitzvah ' + (x.k + 1) + '"><span class="mzpic-n" aria-hidden="true">' + (x.k + 1) + '</span><img src="' + mzPicURL(H.a, x.k) + '" alt="" loading="lazy"><span class="mzpic-fb" hidden><span class="hr-he" lang="he" dir="rtl">' + esc(x.m[1]) + '</span><span class="hr-en" dir="ltr">' + esc(cap(x.m[2])) + '</span></span></button>'; }).join("") + '</div><div class="mz-det" id="hmMzDet" dir="rtl" hidden></div>' +
+    st.mzIdx = Math.max(0, Math.min(mzShown.length - 1, st.mzIdx || 0));
+    /* Nov 20: the "Choose a hilchah" chip row is removed — hilchot names are seen by opening a sefer's contents (Hilchot page), not as chips here. st.a still defaults to the sefer's first hilchah and is set from the Hilchot page's book contents. */
+    html += '<div class="mz-flex"><div class="hm-card"><div class="hm-title" lang="he" dir="rtl">הלכות ' + esc(H.he) + '</div><div class="hm-sub">Hilchot ' + esc(H.tr) + ' · ' + esc(H.en) + '</div>' +
+      (H.n ? '<div class="mz-viewbar">' + (mzAll ? '' : '<span class="mz-pos" id="mzPos" aria-live="polite">' + (st.mzIdx + 1) + ' of ' + mzShown.length + '</span>') + '<button type="button" class="mz-vbtn" id="mzViewBtn" aria-pressed="' + mzAll + '">' + (mzAll ? 'One at a time' : 'Show all cards') + '</button></div>' +
+        '<div class="mz-pager' + (mzAll ? ' all' : '') + '" id="mzPager"><button type="button" class="mz-arr" id="mzNext" aria-label="Next mitzvah"' + (mzAll || st.mzIdx >= mzShown.length - 1 ? ' disabled' : '') + '>‹</button><div class="mz-grid' + (mzAll ? ' all' : '') + '" dir="rtl">' + mzShown.map(function (x, xi) { return '<button type="button" class="mzpic' + (!mzAll && xi === st.mzIdx ? ' mz-cur' : '') + '" data-mzk="' + x.k + '" aria-label="Mitzvah ' + (x.k + 1) + '"><span class="mzpic-n" aria-hidden="true">' + (x.k + 1) + '</span><img src="' + mzPicURL(H.a, x.k) + '" alt="" loading="lazy"><span class="mzpic-fb" hidden><span class="hr-he" lang="he" dir="rtl">' + esc(x.m[1]) + '</span><span class="hr-en" dir="ltr">' + esc(cap(x.m[2])) + '</span></span></button>'; }).join("") + '</div><button type="button" class="mz-arr" id="mzPrev" aria-label="Previous mitzvah"' + (mzAll || st.mzIdx <= 0 ? ' disabled' : '') + '>›</button></div><div class="mz-det" id="hmMzDet" dir="rtl" hidden></div>' +
         ''
         : '<p class="hm-none">' + (H.rab ? "This hilchah has no mitzvah from the 613. Its laws are rabbinic." : "No counted mitzvah in this hilchah.") + '</p>' + (H.d ? '<p class="hm-d">' + esc(H.d) + '</p>' : '')) +
-      '</div>' + (H.n && MZKW[H.a] ? '<aside class="mz-panel" id="mzPanel"><div class="mz-panel-h">Test on this page</div><button type="button" class="mz-pbtn primary" id="mzMatchBtn">Match the keyword to the picture</button><button type="button" class="mz-pbtn" id="mzShuffleBtn" disabled>Shuffle</button><button type="button" class="mz-pbtn" id="mzFixBtn" disabled>Correct the order</button><p class="mz-status" id="mzStatus" aria-live="polite"></p><div class="mz-tray mz-ptray" id="mzTray" dir="rtl" hidden></div></aside>' : '') + '</div>';
+      '</div>' + (H.n && MZKW[H.a] ? '<aside class="mz-panel" id="mzPanel"><button type="button" class="mz-pbtn primary" id="mzMatchBtn">Match the keyword to the picture</button><button type="button" class="mz-pbtn" id="mzShuffleBtn" disabled>Shuffle</button><button type="button" class="mz-pbtn" id="mzFixBtn" disabled>Correct the order</button><p class="mz-status" id="mzStatus" aria-live="polite"></p><div class="mz-tray mz-ptray" id="mzTray" dir="rtl" hidden></div></aside>' : '') + '</div>';
   }
   html += practiceBox(lvl) + '</div>';
   host.innerHTML = html;
@@ -3056,10 +3063,9 @@ function renderHM(lvl) {
     if (window.requestAnimationFrame) requestAnimationFrame(center);
     setTimeout(center, 350);
   };
-  chipOn($("#hmSef", host)); chipOn($("#hmHil", host)); hmWheelWire(host, lvl);
+  chipOn($("#hmSef", host)); hmWheelWire(host, lvl);
   if (lvl === 2) hlWheelWire(host, st);
   $$("#hmSef .hm-chip", host).forEach(function (b) { b.onclick = function () { var s = +b.getAttribute("data-s"); if (s === st.s) return; st.s = s; st.a = ""; st.open = ""; renderHM(lvl); }; });
-  $$("#hmHil .hm-chip", host).forEach(function (b) { b.onclick = function () { st.a = b.getAttribute("data-a"); renderHM(lvl); }; });
   $$(".hm-row[data-a]", host).forEach(function (b) { b.onclick = function () { var a = b.getAttribute("data-a"); st.open = st.open === a ? "" : a; renderHM(lvl); }; });
   $$("[data-learn]", host).forEach(function (b) { b.onclick = function () { hmStartAt(lvl, b.getAttribute("data-learn")); }; });
   $$("[data-testnow]", host).forEach(function (b) { b.onclick = function () { testHilchahNow(b.getAttribute("data-testnow"), "mitzvot"); }; });
@@ -3080,6 +3086,23 @@ function renderHM(lvl) {
         if (mzDet) { mzDet.innerHTML = mzDetailHTML(H, k); mzDet.hidden = false; }
       };
     });
+    /* Single view: the arrows either side of the picture step one mitzvah at a
+       time — st.mzIdx is the position within mzShown and .mz-cur marks the one
+       visible card. Stepping clears any open detail, which belonged to the
+       card just left. In the grid view the arrows are hidden and unused. */
+    var mzPrev = $("#mzPrev", host), mzNext = $("#mzNext", host), mzPos = $("#mzPos", host);
+    function mzShow(i) {
+      if (!mzShown.length) return;
+      st.mzIdx = Math.max(0, Math.min(mzShown.length - 1, i));
+      $$(".mzpic", host).forEach(function (x, xi) { x.classList.toggle("mz-cur", xi === st.mzIdx); x.classList.remove("on"); });
+      if (mzPrev) mzPrev.disabled = st.mzIdx <= 0;
+      if (mzNext) mzNext.disabled = st.mzIdx >= mzShown.length - 1;
+      if (mzPos) mzPos.textContent = (st.mzIdx + 1) + " of " + mzShown.length;
+      mzSel = -1;
+      if (mzDet) { mzDet.hidden = true; mzDet.innerHTML = ""; }
+    }
+    if (mzPrev) mzPrev.onclick = function () { mzShow(st.mzIdx - 1); };
+    if (mzNext) mzNext.onclick = function () { mzShow(st.mzIdx + 1); };
     /* In-page matching test: each picture's keyword comes off it (the printed keyword
        is covered by a white strip) and the keyword chips wait in the side panel;
        drag (or tap, then tap a picture) to put each keyword back on its picture.
@@ -3143,12 +3166,14 @@ function renderHM(lvl) {
         $$(".mzpic", host).forEach(function (x) { x.classList.remove("mz-done", "mz-auto", "mz-wrong"); var s = x.querySelector(".mz-stuck"); if (s) s.remove(); var cv = x.querySelector(".mz-cover"); if (cv) cv.remove(); });
         mzMT.on = false; mzMT.waiting = []; mzMT.placed = 0; mzMT.sel = null;
         if (!st.showAll) grid.classList.remove("all");
+        var pager0 = $("#mzPager", host); if (pager0) pager0.classList.remove("mz-test");
         mzMatchBtn.textContent = "Match the keyword to the picture";
         $("#mzShuffleBtn", host).disabled = true; $("#mzFixBtn", host).disabled = true; mzStatus("");
         return;
       }
       mzMT.on = true; mzMT.placed = 0; mzMT.bySelf = 0; mzMT.sel = null;
       grid.classList.add("all"); /* matching needs every picture on screen at once */
+      var pager1 = $("#mzPager", host); if (pager1) pager1.classList.add("mz-test");
       mzMT.waiting = mzShown.map(function (x) { return x.k; }); mzMT.total = mzMT.waiting.length; mzShuf(mzMT.waiting);
       mzSel = -1; $$(".mzpic", host).forEach(function (x) { x.classList.remove("on"); });
       if (mzDet) { mzDet.hidden = true; mzDet.innerHTML = ""; }
