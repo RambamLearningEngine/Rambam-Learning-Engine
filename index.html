@@ -929,7 +929,18 @@ background:#fffaf0 repeating-linear-gradient(180deg,#fffaf0 0 2px,#8f846c 2px 3p
 button.tag{font:inherit;cursor:pointer;border:1px solid transparent}
 button.tag:hover{filter:brightness(.96)}
 .hm-tags button.tag.on{border-color:currentColor;box-shadow:inset 0 0 0 1px currentColor,0 2px 7px rgba(17,24,39,.16)}
-.mz-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px;margin:14px 0 4px}
+/* mitzvah picture cards: a sideways-scrolling row by default; .all shows the full grid */
+.mz-grid{display:flex;flex-direction:row;gap:10px;margin:10px 0 4px;overflow-x:auto;overflow-y:hidden;padding:4px 2px 10px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.mz-grid::-webkit-scrollbar{height:8px}
+.mz-grid::-webkit-scrollbar-thumb{background:rgba(176,141,87,.45);border-radius:99px}
+.mz-grid::-webkit-scrollbar-track{background:rgba(176,141,87,.12);border-radius:99px}
+.mz-grid .mzpic{flex:0 0 148px;width:148px;scroll-snap-align:start}
+.mz-grid.all{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));overflow:visible;padding:0;scroll-snap-type:none}
+.mz-grid.all .mzpic{width:100%}
+@media (max-width:600px){.mz-grid .mzpic{flex-basis:126px;width:126px}}
+.mz-viewbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0 0}
+.mz-viewhint{font-size:.82rem;font-weight:700;color:var(--muted)}
+.mz-vbtn{padding:8px 13px;border-radius:999px;font-size:.85rem;white-space:nowrap}
 .mzpic{display:block;width:100%;padding:0;border:1px solid rgba(176,141,87,.35);border-radius:14px;background:#fff;overflow:hidden;cursor:pointer;font:inherit}
 .mzpic img{display:block;width:100%;aspect-ratio:1;object-fit:contain;background:#fff}
 .mzpic-fb{display:flex;align-items:center;justify-content:center;aspect-ratio:1;padding:10px;text-align:center}
@@ -1514,7 +1525,7 @@ var CUES = {
           items: [
             { id: "1.1.1", cue: "Emunah", cueHebrew: "אמונה", englishCue: "Know Hashem", shortHebrew: "לדעת את ה׳", meaning: "To know that Hashem exists and is the Creator and Sustainer of all existence.", meaningHebrew: "לדעת שיש שם אלו-ה, והוא בורא ומקיים את כל המציאות.", type: "Positive", typeHebrew: "עשה" },
             { id: "1.1.2", cue: "Zulaso", cueHebrew: "זולתו", englishCue: "No other god", shortHebrew: "אין אלו-ה זולתו", meaning: "Not to believe that any other deity exists besides Hashem.", meaningHebrew: "שלא להעלות במחשבה שיש אלו-ה אחר זולתי ה׳.", type: "Negative", typeHebrew: "לא תעשה" },
-            { id: "1.1.3", cue: "HaYichud", cueHebrew: "הייחוד", englishCue: "Hashem is One", shortHebrew: "ה׳ אחד", meaning: "To affirm that there is only one God and that Hashem's unity is absolute and indivisible.", meaningHebrew: "לייחד את ה׳ ולדעת שאחדותו מוחלטת ואינה מתחלקת.", type: "Positive", typeHebrew: "עשה" },
+            { id: "1.1.3", cue: "Yichud Hashem", cueHebrew: "ייחוד ה׳", englishCue: "Hashem is One", shortHebrew: "ה׳ אחד", meaning: "To affirm that there is only one God and that Hashem's unity is absolute and indivisible.", meaningHebrew: "לייחד את ה׳ ולדעת שאחדותו מוחלטת ואינה מתחלקת.", type: "Positive", typeHebrew: "עשה" },
             { id: "1.1.4", cue: "Ahavas Hashem", cueHebrew: "אהבת ה׳", englishCue: "Love Hashem", shortHebrew: "לאהוב את ה׳", meaning: "To love Hashem.", meaningHebrew: "לאהוב את ה׳.", type: "Positive", typeHebrew: "עשה" },
             { id: "1.1.5", cue: "Yiras Hashem", cueHebrew: "יראת ה׳", englishCue: "Fear Hashem", shortHebrew: "לירא את ה׳", meaning: "To fear and stand in awe of Hashem.", meaningHebrew: "לירא מה׳ ולעמוד לפניו ביראה.", type: "Positive", typeHebrew: "עשה" },
             { id: "1.1.6", cue: "Kiddush Hashem", cueHebrew: "קידוש ה׳", englishCue: "Sanctify His Name", shortHebrew: "לקדש את שמו", meaning: "To sanctify Hashem's name.", meaningHebrew: "לקדש את שמו של ה׳.", type: "Positive", typeHebrew: "עשה" },
@@ -2891,7 +2902,7 @@ function mzPicURL(a, k) { var p = String(a).split("."), i = String(k + 1); if (i
    ("sefer.hilchah") and the mitzvah's 0-based position in that hilchah — the pieces
    of the in-page matching test. Only Sefer HaMadda (sefer 1) has keyword data so far. */
 var MZKW = {
-  "1.1": ["אנכי ה׳", "לא יהיה", "הייחוד", "אהבת ה׳", "יראת ה׳", "קידוש ה׳", "חילול ה׳", "לא תעשון", "תשמעון", "לא תנסו"],
+  "1.1": ["אנכי ה׳", "לא יהיה", "ייחוד ה׳", "אהבת ה׳", "יראת ה׳", "קידוש ה׳", "חילול ה׳", "לא תעשון", "תשמעון", "לא תנסו"],
   "1.2": ["להדמות", "להדבק", "לאהוב", "לאהוב הגר", "לא תשנא", "להוכיח", "לא תלבין", "לא תענה", "לא תלך רכיל", "לא תקום", "לא תטור"],
   "1.3": ["ללמוד תורה", "לכבד"],
   "1.4": ["לא תפנה", "לא תתורו", "לא תגדף", "לא תעבד", "לא תשתחוה", "לא תעשה פסל", "לא תעשה לאחרים", "לא תעשה צורות", "לא תדיח", "שרוף", "לא תבנה", "לא תהנה", "לא תסית", "לא תאהב", "לא תעזוב שנאתו", "לא תציל", "לא תלמד זכות", "לא תמנע", "לא תתנבא", "לא תשמע", "לא תתנבא בשקר", "לא תגור", "לא תשבע", "לא תשאל אוב", "לא תשאל ידעוני", "לא תעביר", "לא תקים מצבה", "לא תשתחוה", "לא תטע אשרה", "אבד תאבדון", "לא תהנה", "לא תחמוד", "לא תכרת ברית", "לא תחון", "לא ישבו", "לא תדמה", "לא תנחש", "לא תקסום", "לא תעונן", "לא תחבור", "לא תדרוש", "באוב", "ידעוני", "לא תכשף", "לא תקיף", "לא תשחית", "לא ילבש", "לא תלבש", "לא תכתבו", "לא תתגדדו", "קרחה"],
@@ -2989,10 +3000,12 @@ function renderHM(lvl) {
     if (st.fa !== H.a) { st.fa = H.a; st.f = "all"; }
     var mzf = st.f || "all"; if (mzf === "pos" && !c.p) mzf = "all"; if (mzf === "neg" && !c.g) mzf = "all"; st.f = mzf;
     var mzShown = (H.m || []).map(function (m, k) { return { m: m, k: k }; }).filter(function (x) { return mzf === "all" || (mzf === "pos" ? x.m[0] === "+" : x.m[0] === "-"); });
+    var mzAll = !!st.showAll;
     html += '<div class="hm-label">Choose a hilchah</div><div class="hm-strip hm-strip2" id="hmHil" dir="rtl">' + HL.map(function (x) { return '<button type="button" class="hm-chip hm-chip2' + (x.a === st.a ? ' on' : '') + '" data-a="' + x.a + '"' + (x.a === st.a ? ' aria-pressed="true"' : '') + '><span class="hc-he" lang="he" dir="rtl">' + esc(x.he) + '</span></button>'; }).join("") + '</div>' +
       '<div class="mz-flex"><div class="hm-card"><div class="hm-title" lang="he" dir="rtl">הלכות ' + esc(H.he) + '</div><div class="hm-sub">Hilchot ' + esc(H.tr) + ' · ' + esc(H.en) + '</div>' +
       (H.n ? '<div class="hm-tags" role="group" aria-label="Show mitzvot"><button type="button" class="tag' + (mzf === "all" ? " on" : "") + '" data-mzf="all" aria-pressed="' + (mzf === "all") + '">' + H.n + (H.n === 1 ? ' mitzvah' : ' mitzvot') + '</button>' + (c.p ? '<button type="button" class="tag pos' + (mzf === "pos" ? " on" : "") + '" data-mzf="pos" aria-pressed="' + (mzf === "pos") + '">' + c.p + ' aseh · עשה</button>' : '') + (c.g ? '<button type="button" class="tag neg' + (mzf === "neg" ? " on" : "") + '" data-mzf="neg" aria-pressed="' + (mzf === "neg") + '">' + c.g + ' lo taaseh · לא תעשה</button>' : '') + '</div>' +
-        '<div class="mz-grid" dir="rtl">' + mzShown.map(function (x) { return '<button type="button" class="mzpic" data-mzk="' + x.k + '" aria-label="Mitzvah ' + (x.k + 1) + '"><span class="mzpic-n" aria-hidden="true">' + (x.k + 1) + '</span><img src="' + mzPicURL(H.a, x.k) + '" alt="" loading="lazy"><span class="mzpic-fb" hidden><span class="hr-he" lang="he" dir="rtl">' + esc(x.m[1]) + '</span></span></button>'; }).join("") + '</div><div class="mz-det" id="hmMzDet" dir="rtl" hidden></div>' +
+        '<div class="mz-viewbar"><span class="mz-viewhint">' + (mzAll ? 'Showing all cards' : 'Scroll sideways to see every card') + '</span><button type="button" class="mz-vbtn" id="mzViewBtn" aria-pressed="' + mzAll + '">' + (mzAll ? 'Scroll view' : 'Show all cards') + '</button></div>' +
+        '<div class="mz-grid' + (mzAll ? ' all' : '') + '" dir="rtl">' + mzShown.map(function (x) { return '<button type="button" class="mzpic" data-mzk="' + x.k + '" aria-label="Mitzvah ' + (x.k + 1) + '"><span class="mzpic-n" aria-hidden="true">' + (x.k + 1) + '</span><img src="' + mzPicURL(H.a, x.k) + '" alt="" loading="lazy"><span class="mzpic-fb" hidden><span class="hr-he" lang="he" dir="rtl">' + esc(x.m[1]) + '</span></span></button>'; }).join("") + '</div><div class="mz-det" id="hmMzDet" dir="rtl" hidden></div>' +
         ''
         : '<p class="hm-none">' + (H.rab ? "This hilchah has no mitzvah from the 613. Its laws are rabbinic." : "No counted mitzvah in this hilchah.") + '</p>' + (H.d ? '<p class="hm-d">' + esc(H.d) + '</p>' : '')) +
       '</div>' + (H.n && MZKW[H.a] ? '<aside class="mz-panel" id="mzPanel"><div class="mz-panel-h">Test on this page</div><p class="mz-panel-p">The keyword at the top of each picture has come off — the keywords wait here in this panel, beside the pictures. Drag each keyword back onto the picture it belongs to — a right match sticks, a wrong one bounces back.</p><button type="button" class="mz-pbtn primary" id="mzMatchBtn">Match the keyword to the picture</button><button type="button" class="mz-pbtn" id="mzShuffleBtn" disabled>Shuffle</button><button type="button" class="mz-pbtn" id="mzFixBtn" disabled>Correct the order</button><p class="mz-status" id="mzStatus" aria-live="polite"></p><div class="mz-tray mz-ptray" id="mzTray" dir="rtl" hidden></div></aside>' : '') + '</div>';
@@ -3031,6 +3044,8 @@ function renderHM(lvl) {
   $$("[data-testnow]", host).forEach(function (b) { b.onclick = function () { testHilchahNow(b.getAttribute("data-testnow"), "mitzvot"); }; });
   if (lvl === 3) {
     $$("[data-mzf]", host).forEach(function (b) { b.onclick = function () { st.f = b.getAttribute("data-mzf"); renderHM(3); }; });
+    var mzViewBtn = $("#mzViewBtn", host);
+    if (mzViewBtn) mzViewBtn.onclick = function () { st.showAll = !st.showAll; renderHM(3); };
     var mzDet = $("#hmMzDet", host), mzSel = -1;
     $$(".mzpic", host).forEach(function (card) {
       var img = card.querySelector("img"), fb = card.querySelector(".mzpic-fb");
@@ -3107,11 +3122,13 @@ function renderHM(lvl) {
         var tray0 = $("#mzTray", host); if (tray0) { tray0.hidden = true; tray0.innerHTML = ""; }
         $$(".mzpic", host).forEach(function (x) { x.classList.remove("mz-done", "mz-auto", "mz-wrong"); var s = x.querySelector(".mz-stuck"); if (s) s.remove(); var cv = x.querySelector(".mz-cover"); if (cv) cv.remove(); });
         mzMT.on = false; mzMT.waiting = []; mzMT.placed = 0; mzMT.sel = null;
+        if (!st.showAll) grid.classList.remove("all");
         mzMatchBtn.textContent = "Match the keyword to the picture";
         $("#mzShuffleBtn", host).disabled = true; $("#mzFixBtn", host).disabled = true; mzStatus("");
         return;
       }
       mzMT.on = true; mzMT.placed = 0; mzMT.bySelf = 0; mzMT.sel = null;
+      grid.classList.add("all"); /* matching needs every picture on screen at once */
       mzMT.waiting = mzShown.map(function (x) { return x.k; }); mzMT.total = mzMT.waiting.length; mzShuf(mzMT.waiting);
       mzSel = -1; $$(".mzpic", host).forEach(function (x) { x.classList.remove("on"); });
       if (mzDet) { mzDet.hidden = true; mzDet.innerHTML = ""; }
