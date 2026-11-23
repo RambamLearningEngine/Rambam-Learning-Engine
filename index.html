@@ -918,7 +918,7 @@ html.lng-en #hlCard .hl-pg-s{font-size:1.05rem;color:var(--ink);border-bottom:0;
 .hm-cl{font-size:17px;font-weight:800}
 .hm-cs{font-family:"Frank Ruhl Libre","SBL Hebrew","Times New Roman",serif;font-size:15px;font-weight:600;color:#e3d6bd;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hm-label{font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center;margin:6px 0 8px}
-.hm-strip{display:flex;gap:8px;overflow-x:auto;padding:4px 4px 10px;margin:0 -4px 6px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.hm-strip{display:flex;align-items:flex-start;gap:8px;overflow-x:auto;padding:4px 4px 10px;margin:0 -4px 6px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .hm-strip::-webkit-scrollbar{display:none}
 .hm-chip{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:58px;padding:8px 10px 7px;border-radius:14px;border:1px solid rgba(176,141,87,.35);background:var(--panel);font-weight:700;scroll-snap-align:center;box-shadow:0 1px 3px rgba(17,24,39,.04)}
 /* end spacers in the sefer strip: half a strip wide each, so even the first and
@@ -1343,6 +1343,132 @@ body:has(#page-mitzvot.active) .wrap{max-width:1060px}
  #page-mitzvot .mz-arr{width:56px;height:56px;font-size:2.2rem}
  #page-mitzvot .mz-pbtn{flex-basis:100%}
 }
+</style>
+<style>/* Nov 23: Mitzvot page — first pick which set of hilchot in the sefer to study;
+   only then do that set's mitzvot show. Picking a sefer (chip or wheel arrows)
+   lands on this list; tapping a set opens its mitzvot; the back button above
+   the mitzvot returns to the list. */
+.mz-pick-list{display:grid;gap:10px;margin:16px 0 2px;text-align:left}
+.mz-pick-row{display:flex;align-items:center;gap:12px;width:100%;padding:14px 16px;border-radius:16px;border:1px solid rgba(176,141,87,.35);background:var(--panel);text-align:left;font:inherit;color:inherit;cursor:pointer;box-shadow:0 1px 3px rgba(17,24,39,.04)}
+.mz-pick-row:hover{border-color:var(--gold);background:#fffaf0;box-shadow:0 6px 16px rgba(17,24,39,.08)}
+.mz-pick-row:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.mz-pick-n{flex:0 0 30px;width:30px;height:30px;border-radius:50%;background:var(--soft);color:#8a6a2f;font-weight:900;font-size:.85rem;display:flex;align-items:center;justify-content:center}
+.mz-pick-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:1px}
+.mz-pick-main .hc-he{font-family:"Frank Ruhl Libre","SBL Hebrew","Times New Roman",serif;font-size:1.25rem;font-weight:700;line-height:1.25;color:var(--ink)}
+.mz-pick-main .hc-en{font-size:.95rem;font-weight:700;line-height:1.3;color:var(--ink)}
+.mz-pick-sub{font-size:.82rem;color:var(--muted);font-weight:600;line-height:1.35}
+.mz-pick-count{flex:0 0 auto;text-align:right;font-size:.8rem;font-weight:800;color:#8a6a2f;white-space:nowrap;line-height:1.35}
+.mz-pick-count span{display:block;font-size:.72rem;font-weight:700;color:var(--muted)}
+.mz-pick-arr{flex:0 0 auto;color:var(--gold);font-size:1.5rem;font-weight:700;line-height:1}
+.mz-back{align-self:flex-start;border:0;background:transparent;color:var(--gold);font-weight:800;font-size:.95rem;padding:8px 4px;cursor:pointer;font:inherit}
+.mz-back:hover{text-decoration:underline}
+#page-mitzvot .mz-flex .mz-back{margin-bottom:-6px}
+@media (max-width:480px){.mz-pick-row{padding:12px}.mz-pick-count span{display:none}}
+</style>
+<style>/* Nov 23b: Mitzvot sefer strip — the selected (enlarged) sefer is centred
+   vertically against the smaller sefarim, not top-aligned. Its extra height
+   is split evenly: as much of it sits above the tops of the smaller boxes
+   as sits below their bottoms. The strip's vertical padding is made even
+   too, so the centred row keeps the same breathing room top and bottom
+   and the selected box's ring/shadow is not clipped on either side. */
+#hmSef{align-items:center;padding-top:10px;padding-bottom:10px}
+</style>
+<style>/* Nov 23e: Mitzvot page flow, fine-tuned at Joshua's request. The sefer
+   strip is back in its previous format: a rolling strip of covers with an
+   arrow at each end — clicking an arrow (or a cover) selects that sefer
+   and its cover grows in the strip. Below the strip, the selected sefer's
+   front cover stands on its own with a rightward arrow on it; clicking the
+   cover makes the sefer's page of hilchot populate to its right, and
+   clicking a hilchah makes a further page populate to the right of that
+   one, showing the set's mitzvot. The hilchot page's ✕ closes both pages.
+   On narrow screens the pages wrap, then stack, instead of squeezing. */
+.mz-flow{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;align-items:flex-start;margin:10px auto 6px}
+.mz-bookbox{flex:0 0 auto;width:252px;height:336px}
+.mz-cover-btn{display:block;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:pointer;border-radius:8px 16px 16px 8px}
+.mz-cover-btn .bk-cover{display:flex;position:relative;width:100%;height:100%;border:3px solid #1f2a44;border-radius:8px 16px 16px 8px;box-shadow:6px 6px 0 #1f2a44;background:#c9a227;transition:transform .2s ease}
+.mz-cover-btn:hover .bk-cover{transform:rotate(-1.5deg) translateY(-2px)}
+.mz-cover-btn .bk-c0{background:#2f6db5}.mz-cover-btn .bk-c1{background:#c0392b}.mz-cover-btn .bk-c2{background:#2e8b57}.mz-cover-btn .bk-c3{background:#d4a017}.mz-cover-btn .bk-c4{background:#7b4fa0}.mz-cover-btn .bk-c5{background:#e07b39}.mz-cover-btn .bk-c6{background:#1f8a8a}
+.mz-cover-btn .bk-spine{width:16px;border-right-width:3px}
+.mz-cover-btn .bk-front{gap:8px;padding:14px 10px;min-width:0}
+.mz-cover-btn .bk-fn{width:36px;height:36px;font-size:1.05rem}
+.mz-cover-btn .bk-pic{width:104px;height:104px}
+.mz-cover-btn .bk-fhe{font-size:1.35rem;max-width:100%}
+.mz-cover-btn .bk-fen{font-size:.85rem}
+.mz-cover-btn .bk-pg{right:-9px;top:6px;bottom:6px;width:6px}
+.mz-open-hint{margin-top:12px;font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.92);text-shadow:0 1px 2px rgba(31,42,68,.45)}
+.mz-page{width:100%;height:100%;display:flex;flex-direction:column;background:#fffaf0;border:3px solid #1f2a44;border-radius:8px 16px 16px 8px;box-shadow:6px 6px 0 #1f2a44;padding:12px;text-align:left;animation:fadeIn .2s ease}
+.mz-page-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:8px;margin-bottom:8px;border-bottom:1.5px dashed rgba(176,141,87,.55)}
+.mz-page-t{font-family:"Frank Ruhl Libre","SBL Hebrew","Times New Roman",serif;font-size:1.3rem;font-weight:700;line-height:1.2;color:#1f2a44}
+.mz-page-x{flex:0 0 auto;width:30px;height:30px;padding:0;border-radius:50%;font-size:.85rem;line-height:1}
+.mz-page-list{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding-right:2px}
+.mz-pick-sm{padding:9px 10px;border-radius:12px;box-shadow:none;gap:9px;background:#fff}
+.mz-pick-sm .mz-pick-n{flex-basis:24px;width:24px;height:24px;font-size:.75rem}
+.mz-pick-sm .mz-pick-main .hc-he{font-size:1.05rem}
+.mz-pick-sm .mz-pick-main .hc-en{font-size:.85rem}
+.mz-pick-sm .mz-pick-sub{font-size:.75rem}
+.mz-pick-sm .mz-pick-count{font-size:.7rem}
+.mz-open-arr{position:absolute;right:-15px;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;background:var(--gold);border:2.5px solid #1f2a44;box-shadow:2px 2px 0 #1f2a44;color:#fff;font-size:1.7rem;font-weight:900;line-height:1;display:flex;align-items:center;justify-content:center;z-index:2;transition:transform .2s ease,background .2s ease}
+.mz-cover-btn:hover .mz-open-arr{transform:translateY(-50%) translateX(3px)}
+.mz-cover-btn.open .mz-open-arr{background:var(--navy)}
+.mz-hilpage{flex:0 0 auto;width:252px;height:336px}
+.mz-mzpage{flex:1 1 340px;min-width:0;animation:fadeIn .2s ease}
+#page-mitzvot .mz-mzpage .mz-flex{max-width:none;margin-top:0}
+.mz-pick-row.on{border-color:var(--gold);background:#fff8ec}
+@media (max-width:620px){.mz-flow{flex-direction:column;flex-wrap:nowrap;align-items:center}.mz-bookbox,.mz-hilpage{width:min(80vw,252px);height:320px}.mz-mzpage{flex:none;width:100%}}
+</style>
+<style>/* Nov 23f: no duplicate cover below the strip. The selected sefer grows
+   in the strip itself — a decent amount bigger than the Nov 23 strip size
+   (cover 128x170 -> 200x266, with its picture, number and names scaled to
+   match) — and it carries the rightward arrow and "Tap to open" hint that
+   used to sit on the duplicated cover below. Clicking the selected sefer
+   opens the hilchot page to its right (the .mz-stage row: wheel, then the
+   hilchot page, then the mitzvot page to the right of that), and the
+   hilchot page's ✕ closes both pages. Non-selected sefarim keep their
+   tight boxes, and the enlarged sefer stays vertically centred against
+   them (Nov 23b). On narrow screens the stage stacks instead of squeezing. */
+.mz-stage{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;align-items:flex-start;margin:10px auto 6px}
+.mz-stage .hm-wheel{flex:1 1 360px;min-width:0}
+@media (min-width:700px){.mz-stage .hm-wheel{max-width:600px;margin:0}}
+.mz-stage .mz-hilpage{flex:0 0 auto}
+.mz-stage .mz-mzpage{flex:2 1 320px;min-width:0}
+#hmSef .hm-chip.on .bk-cover{width:200px;height:266px}
+#hmSef .hm-chip.on .bk-pic{width:104px;height:104px}
+#hmSef .hm-chip.on .bk-fn{width:34px;height:34px;font-size:1rem}
+#hmSef .hm-chip.on .bk-fhe{font-size:1.3rem}
+#hmSef .hm-chip.on .bk-fen{font-size:.82rem}
+#hmSef .hm-chip.on .bk-spine{width:14px}
+#hmSef .hm-chip.on .bk-front{gap:6px;padding:10px 6px}
+#hmSef .hm-chip.on{cursor:pointer}
+#hmSef .hm-chip.on:hover .bk-cover{transform:rotate(-1.5deg) translateY(-2px)}
+#hmSef .hm-chip.on.open .mz-open-arr{background:var(--navy)}
+#hmSef .hm-chip.on .mz-open-hint{margin-top:8px}
+@media (max-width:620px){.mz-stage{flex-direction:column;flex-wrap:nowrap;align-items:center}.mz-stage .hm-wheel{flex:none;width:100%}.mz-stage .mz-hilpage{width:min(80vw,252px);height:320px}.mz-stage .mz-mzpage{flex:none;width:100%}}
+</style>
+<style>/* Nov 23g: three pages side by side, as Joshua asked — sefer, hilchot,
+   then the mitzvot of the chosen hilchah. The stage lives inside .hm
+   (max-width 760px), which was too narrow for the strip + hilchot page +
+   mitzvot page, so the mitzvot page wrapped onto a row of its own below
+   them and read as missing. When a page is open the stage now breaks out
+   to the full Mitzvot-page width (.wrap is 1060px there), the strip
+   narrows to make room, and the mitzvot view is dressed as a page like
+   the hilchot page — same cream paper, navy border and offset shadow,
+   same 336px height — with its back button, picture pager and test panel
+   scrolling inside it. On narrow screens the three stack as before. */
+.mz-stage:has(.mz-hilpage){width:min(1020px,calc(100vw - 40px));flex-wrap:nowrap}
+.mz-stage:has(.mz-hilpage) .hm-wheel{flex:0 1 400px;max-width:400px}
+.mz-stage .mz-mzpage{height:336px;display:flex;flex-direction:column;background:#fffaf0;border:3px solid #1f2a44;border-radius:8px 16px 16px 8px;box-shadow:6px 6px 0 #1f2a44;padding:12px;text-align:left}
+#page-mitzvot .mz-stage .mz-mzpage .mz-flex{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;gap:10px;max-width:none;margin:0;padding-right:2px}
+#page-mitzvot .mz-stage .mz-flex .mz-back{margin:0;padding:2px 0;font-size:.88rem}
+#page-mitzvot .mz-stage .mz-flex .hm-card{flex:none;width:100%;max-width:none;margin:0;padding:14px 14px 12px;border-radius:14px;box-shadow:none}
+#page-mitzvot .mz-stage .mz-flex .hm-title{font-size:1.45rem}
+#page-mitzvot .mz-stage .mz-viewbar{margin-top:8px}
+#page-mitzvot .mz-stage .mz-pager{gap:10px;margin:10px 0 4px}
+#page-mitzvot .mz-stage .mz-pager:not(.all):not(.mz-test) .mz-grid{max-width:178px}
+#page-mitzvot .mz-stage .mz-arr{width:42px;height:42px;font-size:1.55rem;padding:0 0 3px}
+#page-mitzvot .mz-stage .mz-grid.all{grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}
+#page-mitzvot .mz-stage .mz-panel{flex:none;width:100%;position:static}
+@media (max-width:900px){.mz-stage:has(.mz-hilpage){flex-wrap:wrap}.mz-stage:has(.mz-hilpage) .hm-wheel{flex:1 1 340px;max-width:none}}
+@media (max-width:620px){.mz-stage:has(.mz-hilpage){width:100%}.mz-stage .mz-mzpage{flex:none;width:100%;height:340px}}
 </style>
 </head>
 <body>
@@ -2238,8 +2364,10 @@ tabRender["books-palace"] = function (host) {
 function hilchahDetail(h) {
   var cues = CUES[h.a];
   var head = '<div class="mz-summary"><strong>' + h.a + " · " + esc(h.tr) + ' · <span dir="rtl">' + esc(h.he) + "</span></strong></div>" + (h.d ? '<p class="hil-d" style="margin:2px 0 8px">' + esc(h.d) + "</p>" : "") +
-    '<div class="mz-summary">' + (h.n ? '<span class="tag">' + h.n + " mitzvot</span>" + (h.p ? '<span class="tag pos">' + h.p + " aseh</span>" : "") + (h.g ? '<span class="tag neg">' + h.g + " lo taaseh</span>" : "") : "") + (h.rab ? '<span class="tag rab">' + h.rab + " rabbinic</span>" : "") +
-    '</div>';
+    /* Nov 23c: the tally tags (N mitzvot · N aseh · N lo taaseh) removed at
+       Joshua's request; a plain "Rabbinic" tag (no number) stays for hilchot
+       whose laws are rabbinic. */
+    (h.rab ? '<div class="mz-summary"><span class="tag rab">Rabbinic</span></div>' : '');
   var body = "";
   if (!h.m) body = '<div class="desc-box"><div class="heb" dir="rtl" style="font-size:17px;font-weight:700">' + esc(h.dhe) + "</div><div style=\"margin-top:6px\">" + esc(h.den) + "</div></div>";
   else body = '<ol class="mz-list">' + h.m.map(function (m, i) {
@@ -2956,7 +3084,7 @@ function continueLearning() {
 
 
 /* ---------- Nov 10: Hilchot + Mitzvot stages, same look as the Sefarim stage ---------- */
-var HM = { 2: { s: 0, a: "", open: "" }, 3: { s: 0, a: "" } };
+var HM = { 2: { s: 0, a: "", open: "" }, 3: { s: 0, a: "", view: "pick" } };
 function hmDefault(lvl) { var p = ipos(lvl), n = SEQ[lvl].length, it = SEQ[lvl][Math.min(p, n - 1)]; var h = lvl === 2 ? HMAP[it] : mzKey(it).h; return { s: h.s, a: h.a }; }
 function hmStartAt(lvl, a) {
   var key = lvl === 2 ? a : a + ".0", k = SEQ[lvl].indexOf(key);
@@ -2989,7 +3117,7 @@ function hmBiteHe(lvl, items) {
 function bkFitTabs(bk) { bk.querySelectorAll(".bk-list li").forEach(function (li) { [".bk-len", ".bk-lhe"].forEach(function (q) { var el = li.querySelector(q); if (!el) return; el.style.fontSize = ""; var fs = parseFloat(getComputedStyle(el).fontSize), min = q === ".bk-len" ? 8 : 11, w = li.clientWidth - parseFloat(getComputedStyle(li).paddingLeft) - parseFloat(getComputedStyle(li).paddingRight); while (fs > min && el.scrollWidth > w + 0.5) { fs -= 0.5; el.style.setProperty("font-size", fs + "px", "important"); } }); }); }
 function hmWheelWire(host, lvl) {
   var st = HM[lvl], w = $("#hmSef", host); if (!w) return;
-  $$(".hm-arr", host).forEach(function (a) { a.onclick = function () { var s2 = st.s + (+a.getAttribute("data-dir")); if (s2 < 1 || s2 > 14) return; st.s = s2; st.a = ""; st.open = ""; renderHM(lvl); var a2 = $("#lvl" + lvl + " .hm-arr[data-dir=\"" + a.getAttribute("data-dir") + "\"]"); if (a2) a2.focus({ preventScroll: true }); }; a.disabled = (+a.getAttribute("data-dir") > 0 ? st.s >= 14 : st.s <= 1); });
+  $$(".hm-arr", host).forEach(function (a) { a.onclick = function () { var s2 = st.s + (+a.getAttribute("data-dir")); if (s2 < 1 || s2 > 14) return; st.s = s2; st.a = ""; st.open = ""; st.view = "pick"; st.bookOpen = false; renderHM(lvl); var a2 = $("#lvl" + lvl + " .hm-arr[data-dir=\"" + a.getAttribute("data-dir") + "\"]"); if (a2) a2.focus({ preventScroll: true }); }; a.disabled = (+a.getAttribute("data-dir") > 0 ? st.s >= 14 : st.s <= 1); });
   w.addEventListener("wheel", function (e) { if (!window.matchMedia("(min-width:700px)").matches || w.scrollWidth <= w.clientWidth) return; var d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY; if (!d) return; e.preventDefault(); w.scrollLeft += (getComputedStyle(w).direction === "rtl" ? -d : d); }, { passive: false });
   var dx0 = null, sl0 = 0, moved = false;
   w.addEventListener("mousedown", function (e) { if (e.button !== 0) return; dx0 = e.clientX; sl0 = w.scrollLeft; moved = false; });
@@ -3009,9 +3137,9 @@ function hlWheelWire(host, st) {
     var x = HMAP[a];
     if (!x) { bk.classList.remove("hl-reading"); pg.innerHTML = '<span class="hl-pg-p">Pick a section from the contents to turn to its page</span>'; return; }
     bk.classList.add("hl-reading");
-    pg.innerHTML = '<span class="hl-pg-h" lang="he" dir="rtl">הלכות ' + esc(x.he) + '</span><span class="hl-pg-s">Hilchot ' + esc(x.tr) + ' · ' + esc(x.en) + '</span>' + (x.d ? '<span class="hl-pg-d" lang="en">' + esc(x.d) + '</span>' : '') + '<span class="hl-pg-a"><span class="hl-pg-b hl-pg-b1" role="button" tabindex="0" data-learn="' + x.a + '">Learn this hilchah</span><span class="hl-pg-b" role="button" tabindex="0" data-testh="' + x.a + '">⚡ Test it now</span>' + '</span>';
+    pg.innerHTML = '<span class="hl-pg-h" lang="he" dir="rtl">הלכות ' + esc(x.he) + '</span><span class="hl-pg-s">Hilchot ' + esc(x.tr) + ' · ' + esc(x.en) + '</span>' + (x.d ? '<span class="hl-pg-d" lang="en">' + esc(x.d) + '</span>' : '') + '<span class="hl-pg-a"><span class="hl-pg-b hl-pg-b1" role="button" tabindex="0" data-learn="' + x.a + '">Learn this hilchah</span>' + (x.n ? '<span class="hl-pg-b" role="button" tabindex="0" data-tomz="' + x.a + '">See its mitzvot</span>' : '') + '<span class="hl-pg-b" role="button" tabindex="0" data-testh="' + x.a + '">⚡ Test it now</span>' + '</span>';
   }
-  function pgAct(t) { if (!t) return false; var la = t.getAttribute("data-learn"), ta = t.getAttribute("data-tomz"), te = t.getAttribute("data-testh"), ts = t.getAttribute("data-testsf"); if (te) { testHilchahNow(te, "hilchot"); return true; } if (ts) { testSeferHilchotNow(+ts); return true; } if (la) { hmStartAt(2, la); return true; } if (ta) { HM[3].s = HMAP[ta].s; HM[3].a = ta; go("mitzvot"); return true; } return false; }
+  function pgAct(t) { if (!t) return false; var la = t.getAttribute("data-learn"), ta = t.getAttribute("data-tomz"), te = t.getAttribute("data-testh"), ts = t.getAttribute("data-testsf"); if (te) { testHilchahNow(te, "hilchot"); return true; } if (ts) { testSeferHilchotNow(+ts); return true; } if (la) { hmStartAt(2, la); return true; } if (ta) { HM[3].s = HMAP[ta].s; HM[3].a = ta; HM[3].view = "mz"; go("mitzvot"); return true; } return false; }
   function flip(bk) { var pp = bk.querySelector(".bk-pages"); if (!pp) return; var o = pp.querySelector(".bk-flip"); if (o) o.remove(); var f = document.createElement("span"); f.className = "bk-flip"; f.innerHTML = "<i></i>"; pp.appendChild(f); setTimeout(function () { if (f.parentNode) f.remove(); }, 500); }
   function fit(bk) { var pg2 = bk.querySelector(".bk-pages"), n2 = bk.querySelectorAll(".bk-list li").length; if (!pg2) return; var ul2 = pg2.querySelector(".bk-list"); pg2.style.setProperty("--n", n2); pg2.style.setProperty("--bkh", Math.max(240, (ul2 ? ul2.offsetHeight : 0) + 28) + "px"); if (bk.classList.contains("open")) setTimeout(function () { bkFitTabs(bk); pg2.style.setProperty("--bkh", Math.max(240, (ul2 ? ul2.offsetHeight : 0) + 28) + "px"); }, 30); }
   function show(k, dir, keepOpen) {
@@ -3057,7 +3185,8 @@ function renderHM(lvl) {
     '<div class="hm-head"><div class="hm-he" lang="he" dir="rtl">' + (lvl === 2 ? "הלכות" : "מצוות") + '</div><div class="hm-en">' + (lvl === 2 ? "The 83 hilchot" : "The 613 mitzvot") + '</div>' +
     (lvl === 2 && SHOW_PHONE ? '<button type="button" class="hm-link" id="phoneHelp">☎ The Rambam\'s phone number</button>' : '') + '<div><button type="button" class="lang-toggle" id="langToggle" aria-label="Switch the names on this page between Hebrew and English"><span class="lt-opt lt-he">עברית</span><span class="lt-opt lt-en">English</span></button></div></div>' +
     '' +
-    (lvl === 2 ? '' : '<div class="hm-wheel"><button type="button" class="hm-arr hm-arr-l" data-dir="1" aria-label="Next sefer">‹</button><div class="hm-strip" id="hmSef" dir="rtl"><span class="hm-spacer" aria-hidden="true"></span>' + BOOKS.map(function (b) { return '<button type="button" class="hm-chip' + (b.n === st.s ? ' on' : '') + '" data-s="' + b.n + '" aria-label="Sefer ' + b.n + ', ' + esc(b.translit) + '"' + (b.n === st.s ? ' aria-pressed="true"' : '') + '><span class="bk-cover bk-c' + (b.n % 7) + '"><span class="bk-spine"></span><span class="bk-front"><span class="bk-fn">' + b.n + '</span><span class="bk-pic"><img src="' + b.img + '" alt=""></span><span class="bk-fhe" lang="he" dir="rtl">' + esc(b.shortHebrew || b.hebrew) + '</span><span class="bk-fen">' + esc(b.english) + '</span></span><span class="bk-pg"></span></span></button>'; }).join("") + '<span class="hm-spacer" aria-hidden="true"></span></div><button type="button" class="hm-arr hm-arr-r" data-dir="-1" aria-label="Previous sefer">›</button></div>');
+    (lvl === 2 ? '' : '<div class="mz-stage"><div class="hm-wheel"><button type="button" class="hm-arr hm-arr-l" data-dir="1" aria-label="Next sefer">‹</button><div class="hm-strip" id="hmSef" dir="rtl"><span class="hm-spacer" aria-hidden="true"></span>' + BOOKS.map(function (b) { var sel = b.n === st.s, opn = sel && (st.bookOpen || st.view === "mz"); return '<button type="button" class="hm-chip' + (sel ? ' on' : '') + (opn ? ' open' : '') + '" data-s="' + b.n + '" aria-label="Sefer ' + b.n + ', ' + esc(b.translit) + (sel ? ' — tap to open its hilchot' : '') + '"' + (sel ? ' aria-pressed="true"' : '') + '><span class="bk-cover bk-c' + (b.n % 7) + '"><span class="bk-spine"></span><span class="bk-front"><span class="bk-fn">' + b.n + '</span><span class="bk-pic"><img src="' + b.img + '" alt=""></span><span class="bk-fhe" lang="he" dir="rtl">' + esc(b.shortHebrew || b.hebrew) + '</span><span class="bk-fen">' + esc(b.english) + '</span>' + (sel && !opn ? '<span class="mz-open-hint">Tap to open</span>' : '') + '</span><span class="bk-pg"></span>' + (sel ? '<span class="mz-open-arr" aria-hidden="true">›</span>' : '') + '</span></button>'; }).join("") + '<span class="hm-spacer" aria-hidden="true"></span></div><button type="button" class="hm-arr hm-arr-r" data-dir="-1" aria-label="Previous sefer">›</button></div>' +
+      (st.bookOpen || st.view === "mz" ? '<div class="mz-page mz-hilpage"><div class="mz-page-head"><span class="mz-page-t" lang="he" dir="rtl">' + esc(B.hebrew) + '</span><button type="button" class="mz-page-x" id="mzBookClose" aria-label="Close the sefer">✕</button></div><div class="mz-page-list">' + HL.map(function (x, xi) { return '<button type="button" class="mz-pick-row mz-pick-sm' + (st.view === "mz" && st.a === x.a ? ' on' : '') + '" data-pick="' + x.a + '" aria-label="Hilchot ' + esc(x.tr) + '"><span class="mz-pick-n">' + (xi + 1) + '</span><span class="mz-pick-main"><span class="hc-he" lang="he" dir="rtl">הלכות ' + esc(x.he) + '</span><span class="hc-en">Hilchot ' + esc(x.tr) + '</span><span class="mz-pick-sub hc-en">' + esc(x.en) + '</span></span>' + (x.n ? '' : '<span class="mz-pick-count">' + (x.rab ? 'Rabbinic' : 'No counted mitzvah') + '</span>') + '<span class="mz-pick-arr" aria-hidden="true">›</span></button>'; }).join("") + '</div></div>' : ''));
   if (lvl === 2) {
     /* Nov 12: Hilchot learn page in the same format as Sefarim: bookshelf + its own copy of the wheel (#hlWheel). Opening a book shows that sefer's hilchot. */
     html += '<div class="hl-detail" id="hlDetail"><div class="sf-case" id="hlShelf"><div class="sh-row">' + BOOKS.map(function (b, k) { return '<button type="button" class="sh-bk sh-c' + (b.n % 7) + '" data-k="' + k + '" aria-label="' + esc(b.english) + '"><span class="sh-n">' + b.n + '</span><span class="sh-he" lang="he" dir="rtl">' + (b.shortHebrew || b.hebrew).replace(/\s+/g, "").split("").map(function (ch) { return "<i>" + esc(ch) + "</i>"; }).join("") + '</span></button>'; }).join("") + '</div><div class="sh-board"></div><div class="sh-cap">Click a sefer to take it off the shelf</div></div>' +
@@ -3070,14 +3199,30 @@ function renderHM(lvl) {
     var mzShown = (H.m || []).map(function (m, k) { return { m: m, k: k }; }).filter(function (x) { return mzf === "all" || (mzf === "pos" ? x.m[0] === "+" : x.m[0] === "-"); });
     var mzAll = !!st.showAll;
     st.mzIdx = Math.max(0, Math.min(mzShown.length - 1, st.mzIdx || 0));
-    /* Nov 20: the "Choose a hilchah" chip row is removed — hilchot names are seen by opening a sefer's contents (Hilchot page), not as chips here. st.a still defaults to the sefer's first hilchah and is set from the Hilchot page's book contents. */
-    html += '<div class="mz-flex"><div class="hm-card"><div class="hm-title" lang="he" dir="rtl">הלכות ' + esc(H.he) + '</div><div class="hm-sub">Hilchot ' + esc(H.tr) + ' · ' + esc(H.en) + '</div>' +
+    /* Nov 23: choose a set of hilchot first; tapping a set sets st.view = "mz"
+       and shows that set's mitzvot. Nov 23f: the three steps sit side by side
+       in the .mz-stage row above — the selected sefer, enlarged in the strip
+       itself (no second copy of its cover below the strip), then (once it is
+       clicked, st.bookOpen) its page of hilchot to its right, then this
+       mitzvot page to the right of that. Arriving via a hilchah's direct
+       mitzvot link (data-tomz) sets st.view = "mz" and shows all three. */
+    if (st.view !== "mz") {
+      /* Nov 23f: nothing further in pick view — the sefer's sets of
+         hilchot sit on the hilchot page in the .mz-stage row above (shown
+         when st.bookOpen). Rows there show names only, plus a plain
+         "Rabbinic" / "No counted mitzvah" note for sets with no mitzvah
+         from the 613 (counts and the positive/negative split were removed
+         at Joshua's request earlier today). */
+    } else {
+    html += '<div class="mz-mzpage"><div class="mz-flex"><button type="button" class="mz-back" id="mzBack">&larr; All the hilchot in Sefer ' + esc(B.translit) + '</button><div class="hm-card"><div class="hm-title" lang="he" dir="rtl">הלכות ' + esc(H.he) + '</div><div class="hm-sub">Hilchot ' + esc(H.tr) + ' · ' + esc(H.en) + '</div>' +
       (H.n ? '<div class="mz-viewbar">' + (mzAll ? '' : '<span class="mz-pos" id="mzPos" aria-live="polite">' + (st.mzIdx + 1) + ' of ' + mzShown.length + '</span>') + '<button type="button" class="mz-vbtn" id="mzViewBtn" aria-pressed="' + mzAll + '">' + (mzAll ? 'One at a time' : 'Show all cards') + '</button></div>' +
         '<div class="mz-pager' + (mzAll ? ' all' : '') + '" id="mzPager"><button type="button" class="mz-arr" id="mzNext" aria-label="Next mitzvah"' + (mzAll || st.mzIdx >= mzShown.length - 1 ? ' disabled' : '') + '>‹</button><div class="mz-grid' + (mzAll ? ' all' : '') + '" dir="rtl">' + mzShown.map(function (x, xi) { return '<button type="button" class="mzpic' + (!mzAll && xi === st.mzIdx ? ' mz-cur' : '') + '" data-mzk="' + x.k + '" aria-label="Mitzvah ' + (x.k + 1) + '"><span class="mzpic-n" aria-hidden="true">' + (x.k + 1) + '</span><img src="' + mzPicURL(H.a, x.k) + '" alt="" loading="lazy"><span class="mzpic-fb" hidden><span class="hr-he" lang="he" dir="rtl">' + esc(x.m[1]) + '</span><span class="hr-en" dir="ltr">' + esc(cap(x.m[2])) + '</span></span></button>'; }).join("") + '</div><button type="button" class="mz-arr" id="mzPrev" aria-label="Previous mitzvah"' + (mzAll || st.mzIdx <= 0 ? ' disabled' : '') + '>›</button></div><div class="mz-det" id="hmMzDet" dir="rtl" hidden></div>' +
         ''
         : '<p class="hm-none">' + (H.rab ? "This hilchah has no mitzvah from the 613. Its laws are rabbinic." : "No counted mitzvah in this hilchah.") + '</p>' + (H.d ? '<p class="hm-d">' + esc(H.d) + '</p>' : '')) +
-      '</div>' + (H.n && MZKW[H.a] ? '<aside class="mz-panel" id="mzPanel"><button type="button" class="mz-pbtn primary" id="mzMatchBtn">Match the keyword to the picture</button><button type="button" class="mz-pbtn" id="mzShuffleBtn" disabled>Shuffle</button><button type="button" class="mz-pbtn" id="mzFixBtn" disabled>Correct the order</button><p class="mz-status" id="mzStatus" aria-live="polite"></p><div class="mz-tray mz-ptray" id="mzTray" dir="rtl" hidden></div></aside>' : '') + '</div>';
+      '</div>' + (H.n && MZKW[H.a] ? '<aside class="mz-panel" id="mzPanel"><button type="button" class="mz-pbtn primary" id="mzMatchBtn">Match the keyword to the picture</button><button type="button" class="mz-pbtn" id="mzShuffleBtn" disabled>Shuffle</button><button type="button" class="mz-pbtn" id="mzFixBtn" disabled>Correct the order</button><p class="mz-status" id="mzStatus" aria-live="polite"></p><div class="mz-tray mz-ptray" id="mzTray" dir="rtl" hidden></div></aside>' : '') + '</div></div>';
+    }
   }
+  if (lvl !== 2) html += '</div>';
   html += practiceBox(lvl) + '</div>';
   host.innerHTML = html;
   /* Center the selected chip in its strip by setting scrollLeft from the rects.
@@ -3105,7 +3250,13 @@ function renderHM(lvl) {
   };
   chipOn($("#hmSef", host)); hmWheelWire(host, lvl);
   if (lvl === 2) hlWheelWire(host, st);
-  $$("#hmSef .hm-chip", host).forEach(function (b) { b.onclick = function () { var s = +b.getAttribute("data-s"); if (s === st.s) return; st.s = s; st.a = ""; st.open = ""; renderHM(lvl); }; });
+  /* Nov 23f: clicking a cover in the strip selects that sefer (the arrows
+     wired in hmWheelWire step the selection the same way); a newly selected
+     sefer starts closed. Clicking the selected sefer itself — enlarged in
+     the strip, with the rightward arrow on it — opens the hilchot page to
+     its right; the page's ✕ closes it and the mitzvot page with it. */
+  $$("#hmSef .hm-chip", host).forEach(function (b) { b.onclick = function () { var s = +b.getAttribute("data-s"); if (s === st.s) { if (!st.bookOpen) { st.bookOpen = true; renderHM(lvl); } return; } st.s = s; st.a = ""; st.open = ""; st.view = "pick"; st.bookOpen = false; renderHM(lvl); }; });
+  var _bkClose = $("#mzBookClose", host); if (_bkClose) _bkClose.onclick = function () { st.bookOpen = false; st.view = "pick"; renderHM(3); };
   $$(".hm-row[data-a]", host).forEach(function (b) { b.onclick = function () { var a = b.getAttribute("data-a"); st.open = st.open === a ? "" : a; renderHM(lvl); }; });
   $$("[data-learn]", host).forEach(function (b) { b.onclick = function () { hmStartAt(lvl, b.getAttribute("data-learn")); }; });
   $$("[data-testnow]", host).forEach(function (b) { b.onclick = function () { testHilchahNow(b.getAttribute("data-testnow"), "mitzvot"); }; });
@@ -3237,7 +3388,11 @@ function renderHM(lvl) {
       mzStatus("Corrected — every keyword is back on its picture. You matched " + mzMT.bySelf + " of " + mzMT.total + " yourself.");
     };
   }
-  $$("[data-tomz]", host).forEach(function (b) { b.onclick = function () { var a = b.getAttribute("data-tomz"); HM[3].s = HMAP[a].s; HM[3].a = a; go("mitzvot"); }; });
+  $$("[data-tomz]", host).forEach(function (b) { b.onclick = function () { var a = b.getAttribute("data-tomz"); HM[3].s = HMAP[a].s; HM[3].a = a; HM[3].view = "mz"; HM[3].bookOpen = true; go("mitzvot"); }; });
+  /* Nov 23: hilchot-set picker wiring (Mitzvot page) — a set opens its mitzvot
+     in the page to the right; the back button on that page returns to here */
+  $$(".mz-pick-row", host).forEach(function (b) { b.onclick = function () { st.a = b.getAttribute("data-pick"); st.view = "mz"; st.fa = ""; st.mzIdx = 0; renderHM(3); var mp = $(".mz-mzpage", host); if (mp) { var r = mp.getBoundingClientRect(); if (r.top < 60 || r.top > innerHeight - 140) mp.scrollIntoView({ behavior: "smooth", block: "start" }); } }; });
+  var _mzBack = $("#mzBack", host); if (_mzBack) _mzBack.onclick = function () { st.view = "pick"; st.bookOpen = true; renderHM(3); host.scrollIntoView({ block: "start" }); };
   var _lvlGo = $("#lvlGo", host); if (_lvlGo) _lvlGo.onclick = function () { markIntro("level" + lvl); if (done) { S.flow.ipos[lvl] = 0; S.flow.bite = null; save(); } startBite(lvl); };
   var _lvlBrowse = $("#lvlBrowse", host); if (_lvlBrowse) _lvlBrowse.onclick = function () { if (lvl === 2) browseState[2] = st.s; else { browseState[3].s = st.s; browseState[3].a = st.a; } openBrowse(lvl); };
   var _lvlReset = $("#lvlReset", host); if (_lvlReset) _lvlReset.onclick = function () { S.flow.ipos[lvl] = 0; S.flow.bite = null; save(); st.s = 0; renderHM(lvl); toast("Back to the first " + (lvl === 2 ? "hilchah." : "mitzvah.")); };
