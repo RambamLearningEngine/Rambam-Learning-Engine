@@ -1470,6 +1470,170 @@ body:has(#page-mitzvot.active) .wrap{max-width:1060px}
 @media (max-width:900px){.mz-stage:has(.mz-hilpage){flex-wrap:wrap}.mz-stage:has(.mz-hilpage) .hm-wheel{flex:1 1 340px;max-width:none}}
 @media (max-width:620px){.mz-stage:has(.mz-hilpage){width:100%}.mz-stage .mz-mzpage{flex:none;width:100%;height:340px}}
 </style>
+<style>/* Nov 23h: use the screen — on the Mitzvot page the content was boxed into a
+   narrow centred column (wrap capped at 1060px, .hm at 760px) with the three
+   pages fixed at 336px tall, leaving wide empty margins on both sides and a
+   large empty band underneath on any full-size screen. Now, while the
+   Mitzvot page is open, the shell widens to nearly the full viewport, the
+   stage spans it edge to edge, and the sefer strip, hilchot page and
+   mitzvot page share that width as three stretching columns of equal
+   height — tall enough to fill the screen below the header instead of
+   stopping a third of the way down it. The mitzvah picture inside the
+   third page grows with its page. Before a sefer is opened, the strip
+   alone widens and centres. Narrow screens keep the stacking behaviour. */
+body:has(#page-mitzvot.active) .wrap{max-width:1400px}
+#page-mitzvot .level-page{max-width:none}
+#page-mitzvot .hm{max-width:none}
+.mz-stage{width:100%}
+.mz-stage:not(:has(.mz-hilpage)) .hm-wheel{flex:1 1 auto}
+@media (min-width:700px){.mz-stage:not(:has(.mz-hilpage)) .hm-wheel{max-width:940px;margin:0 auto}}
+.mz-stage:has(.mz-hilpage){width:100%;max-width:none;flex-wrap:nowrap;align-items:stretch;gap:22px}
+.mz-stage:has(.mz-hilpage) .hm-wheel{flex:1 1 0;max-width:none;min-width:0}
+.mz-stage .mz-hilpage{flex:1 1 0;width:auto;height:auto;min-height:clamp(440px,58vh,600px)}
+.mz-stage .mz-mzpage{flex:1.3 1 0;height:auto;min-height:clamp(440px,58vh,600px)}
+#hmSef .hm-chip.on .bk-cover{width:232px;height:308px}
+#hmSef .hm-chip.on .bk-pic{width:120px;height:120px}
+#hmSef .hm-chip.on .bk-fn{width:38px;height:38px;font-size:1.1rem}
+#hmSef .hm-chip.on .bk-fhe{font-size:1.45rem}
+#page-mitzvot .mz-stage .mz-flex .hm-card{padding:20px}
+#page-mitzvot .mz-stage .mz-flex .hm-title{font-size:1.7rem}
+#page-mitzvot .mz-stage .mz-pager{gap:14px}
+#page-mitzvot .mz-stage .mz-pager:not(.all):not(.mz-test) .mz-grid{max-width:300px}
+#page-mitzvot .mz-stage .mz-arr{width:54px;height:54px;font-size:2rem}
+#page-mitzvot .mz-stage .mz-grid.all{grid-template-columns:repeat(auto-fill,minmax(104px,1fr))}
+@media (max-width:900px){
+ .mz-stage:has(.mz-hilpage){flex-wrap:wrap}
+ .mz-stage:has(.mz-hilpage) .hm-wheel{flex:1 1 100%;max-width:none}
+ .mz-stage .mz-hilpage{flex:1 1 260px;min-height:420px}
+ .mz-stage .mz-mzpage{flex:1.3 1 300px;min-height:420px}
+}
+@media (max-width:620px){
+ .mz-stage:has(.mz-hilpage){flex-direction:column;flex-wrap:nowrap;align-items:center}
+ .mz-stage .mz-hilpage{flex:none;width:min(80vw,252px);height:320px;min-height:0}
+ .mz-stage .mz-mzpage{flex:none;width:100%;height:340px;min-height:0}
+ #hmSef .hm-chip.on .bk-cover{width:200px;height:266px}
+ #hmSef .hm-chip.on .bk-pic{width:104px;height:104px}
+}
+</style>
+<style>/* Nov 23i: the three pages the same size, as Joshua asked. With the
+   hilchot page open, the stage's three columns — the sefer strip, the
+   hilchot page and the mitzvot page — now take equal thirds of one capped
+   stage width instead of stretching unevenly across the whole screen
+   (the mitzvot page was 1.3x the hilchot page), and the two pages share
+   one height: clamp(400px,50vh,470px), between the selected sefer's old
+   cover height (308px) and the full-stretch pages of Nov 23h (up to
+   600px). The selected sefer's cover grows toward that size too —
+   232x308 -> 288x384, picture and names scaled to match — and because
+   each column is a fixed third of the stage, a page keeps its size
+   whether two or all three are showing. On medium screens the hilchot
+   and mitzvot pages still wrap under the strip, now at equal widths;
+   narrow screens keep the stacked layout and the smaller cover. */
+@media (min-width:901px){
+ .mz-stage:has(.mz-hilpage){max-width:1260px}
+ .mz-stage:has(.mz-hilpage) .hm-wheel{flex:0 1 calc((100% - 44px)/3)}
+ .mz-stage:has(.mz-hilpage) .mz-hilpage{flex:0 1 calc((100% - 44px)/3);min-height:clamp(400px,50vh,470px)}
+ .mz-stage:has(.mz-hilpage) .mz-mzpage{flex:0 1 calc((100% - 44px)/3);min-height:clamp(400px,50vh,470px)}
+}
+@media (min-width:621px){
+ #hmSef .hm-chip.on .bk-cover{width:288px;height:384px}
+ #hmSef .hm-chip.on .bk-pic{width:144px;height:144px}
+ #hmSef .hm-chip.on .bk-fn{width:42px;height:42px;font-size:1.15rem}
+ #hmSef .hm-chip.on .bk-fhe{font-size:1.6rem}
+ #hmSef .hm-chip.on .bk-fen{font-size:.92rem}
+}
+@media (min-width:621px) and (max-width:900px){
+ .mz-stage .mz-hilpage{flex:1 1 280px}
+ .mz-stage .mz-mzpage{flex:1 1 280px}
+}
+</style>
+<style>/* Nov 23j: the sefer cover itself the same size as the two pages beside
+   it, as Joshua asked. In the three-across layout (Nov 23i) the columns
+   were already equal thirds, but the selected sefer's cover sat inside
+   the strip at a fixed 288x384 — smaller than the hilchot and mitzvot
+   pages in width and in height. Now, while a page is open on a wide
+   screen, all three boxes share one height (--pgh, the pages' Nov 23i
+   height) and the cover fills the first column exactly: the wheel's
+   arrow buttons lift out of the row and overlay the strip's edges, the
+   strip spans the full column with no padding or edge mask, the
+   selected chip gives up its own padding, border and ring, and the
+   cover takes the chip's whole box — same width, same height, same
+   border and offset shadow as the pages next to it. Its number,
+   picture and names scale up to suit. The gold open-arrow on the cover
+   is hidden in this state (its job is done once the page is open, and
+   the wheel's next-arrow overlays that edge instead). Before a sefer
+   is opened, and on narrower screens, everything is as it was. */
+@media (min-width:901px){
+ .mz-stage:has(.mz-hilpage){--pgh:clamp(400px,50vh,470px)}
+ .mz-stage:has(.mz-hilpage) .hm-wheel{height:var(--pgh)}
+ .mz-stage:has(.mz-hilpage) .mz-hilpage{height:var(--pgh);min-height:var(--pgh)}
+ .mz-stage:has(.mz-hilpage) .mz-mzpage{height:var(--pgh);min-height:var(--pgh)}
+ .mz-stage:has(.mz-hilpage) .hm-wheel .hm-arr{position:absolute;top:50%;transform:translateY(-50%);z-index:5}
+ .mz-stage:has(.mz-hilpage) .hm-wheel .hm-arr-l{left:6px}
+ .mz-stage:has(.mz-hilpage) .hm-wheel .hm-arr-r{right:6px}
+ .mz-stage:has(.mz-hilpage) #hmSef{height:100%;padding:0;-webkit-mask-image:none;mask-image:none}
+ .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on{flex:0 0 100%;width:100%;height:100%;min-width:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+ .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-cover{width:100%;height:100%;margin:0;border:3px solid #1f2a44;border-radius:8px 16px 16px 8px;box-shadow:6px 6px 0 #1f2a44}
+ .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-spine{width:18px;border-right-width:3px}
+ .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-front{gap:10px;padding:20px 14px}
+ .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-fn{width:52px;height:52px;font-size:1.35rem}
+ .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-pic{width:184px;height:184px}
+ .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-fhe{font-size:2rem;padding:2px 12px}
+ .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-fen{font-size:1.05rem}
+ .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-pg{right:-9px;top:6px;bottom:6px;width:6px;border-width:3px}
+ .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .mz-open-arr{display:none}
+}
+</style>
+<style>/* Nov 23k: overlay structure, as Joshua asked — one page at a time, stacked
+   on the sefer itself. Clicking the selected sefer lays its hilchot page
+   over the cover (same box, same size, same place), and clicking a hilchah
+   lays the mitzvot page over that in the same box. The hilchot page's ✕
+   (now under the mitzvot page) and the mitzvot page's back button peel the
+   layers back off. Both overlaid pages wear the front cover's colour for
+   that sefer (bk-c0..c6, the same classes the covers use), and every name
+   and label on the three pages follows the page's Hebrew/English toggle —
+   one language at a time, never both (the .mz-lng-he / .mz-lng-en spans
+   swap with html.lng-en, like the names always have). Before a sefer is
+   opened the strip is exactly as it was; narrow screens get the same
+   single stacked box, taller, instead of pages side by side. */
+.mz-stage{position:relative}
+#page-mitzvot .mz-stage:has(.mz-hilpage){--pgh:clamp(440px,56vh,520px);height:var(--pgh);max-width:580px;margin-left:auto;margin-right:auto;flex-wrap:nowrap}
+#page-mitzvot .mz-stage:has(.mz-hilpage) .hm-wheel{position:absolute;inset:0;flex:none;width:auto;max-width:none;height:auto;margin:0}
+#page-mitzvot .mz-stage:has(.mz-hilpage) .hm-arr{display:none}
+#page-mitzvot .mz-stage:has(.mz-hilpage) #hmSef{height:100%;padding-top:0;padding-bottom:0;-webkit-mask-image:none;mask-image:none}
+#page-mitzvot .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on{flex:0 0 100%;width:100%;height:100%;min-width:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+#page-mitzvot .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-cover{width:100%;height:100%;margin:0;border:3px solid #1f2a44;border-radius:8px 16px 16px 8px;box-shadow:6px 6px 0 #1f2a44}
+#page-mitzvot .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-spine{width:18px;border-right-width:3px}
+#page-mitzvot .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-front{gap:10px;padding:20px 14px}
+#page-mitzvot .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-fn{width:52px;height:52px;font-size:1.35rem}
+#page-mitzvot .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-pic{width:180px;height:180px}
+#page-mitzvot .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-fhe{font-size:2rem;padding:2px 12px}
+#page-mitzvot .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-fen{font-size:1.05rem}
+#page-mitzvot .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-pg{right:-9px;top:6px;bottom:6px;width:6px;border-width:3px}
+#page-mitzvot .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .mz-open-arr{display:none}
+#page-mitzvot .mz-stage:has(.mz-hilpage) .mz-hilpage{position:absolute;inset:0;z-index:3;width:auto;height:auto;min-height:0;flex:none}
+#page-mitzvot .mz-stage:has(.mz-hilpage) .mz-mzpage{position:absolute;inset:0;z-index:4;width:auto;height:auto;min-height:0;flex:none}
+@media (max-width:620px){
+ #page-mitzvot .mz-stage:has(.mz-hilpage){--pgh:clamp(430px,64vh,560px)}
+ #page-mitzvot .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-pic{width:150px;height:150px}
+ #page-mitzvot .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-fhe{font-size:1.7rem}
+}
+/* the overlaid pages in the sefer's own cover colour */
+#page-mitzvot .mz-stage .bk-c0{background:#2f6db5}
+#page-mitzvot .mz-stage .bk-c1{background:#c0392b}
+#page-mitzvot .mz-stage .bk-c2{background:#2e8b57}
+#page-mitzvot .mz-stage .bk-c3{background:#d4a017}
+#page-mitzvot .mz-stage .bk-c4{background:#7b4fa0}
+#page-mitzvot .mz-stage .bk-c5{background:#e07b39}
+#page-mitzvot .mz-stage .bk-c6{background:#1f8a8a}
+#page-mitzvot .mz-stage .mz-page .mz-page-t{color:#fff}
+#page-mitzvot .mz-stage .mz-page .mz-page-head{border-bottom-color:rgba(255,255,255,.55)}
+#page-mitzvot .mz-stage .mz-mzpage .mz-back{color:#fff}
+#page-mitzvot .mz-stage .mz-mzpage .mz-status{color:#fff}
+/* one language at a time on the three pages */
+html.lng-en .mz-lng-he{display:none!important}
+html:not(.lng-en) .mz-lng-en{display:none!important}
+#page-mitzvot .mz-stage .mz-page-t.mz-lng-en{font-family:Arial,Helvetica,sans-serif;font-weight:900;letter-spacing:-.01em}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -3185,8 +3349,8 @@ function renderHM(lvl) {
     '<div class="hm-head"><div class="hm-he" lang="he" dir="rtl">' + (lvl === 2 ? "הלכות" : "מצוות") + '</div><div class="hm-en">' + (lvl === 2 ? "The 83 hilchot" : "The 613 mitzvot") + '</div>' +
     (lvl === 2 && SHOW_PHONE ? '<button type="button" class="hm-link" id="phoneHelp">☎ The Rambam\'s phone number</button>' : '') + '<div><button type="button" class="lang-toggle" id="langToggle" aria-label="Switch the names on this page between Hebrew and English"><span class="lt-opt lt-he">עברית</span><span class="lt-opt lt-en">English</span></button></div></div>' +
     '' +
-    (lvl === 2 ? '' : '<div class="mz-stage"><div class="hm-wheel"><button type="button" class="hm-arr hm-arr-l" data-dir="1" aria-label="Next sefer">‹</button><div class="hm-strip" id="hmSef" dir="rtl"><span class="hm-spacer" aria-hidden="true"></span>' + BOOKS.map(function (b) { var sel = b.n === st.s, opn = sel && (st.bookOpen || st.view === "mz"); return '<button type="button" class="hm-chip' + (sel ? ' on' : '') + (opn ? ' open' : '') + '" data-s="' + b.n + '" aria-label="Sefer ' + b.n + ', ' + esc(b.translit) + (sel ? ' — tap to open its hilchot' : '') + '"' + (sel ? ' aria-pressed="true"' : '') + '><span class="bk-cover bk-c' + (b.n % 7) + '"><span class="bk-spine"></span><span class="bk-front"><span class="bk-fn">' + b.n + '</span><span class="bk-pic"><img src="' + b.img + '" alt=""></span><span class="bk-fhe" lang="he" dir="rtl">' + esc(b.shortHebrew || b.hebrew) + '</span><span class="bk-fen">' + esc(b.english) + '</span>' + (sel && !opn ? '<span class="mz-open-hint">Tap to open</span>' : '') + '</span><span class="bk-pg"></span>' + (sel ? '<span class="mz-open-arr" aria-hidden="true">›</span>' : '') + '</span></button>'; }).join("") + '<span class="hm-spacer" aria-hidden="true"></span></div><button type="button" class="hm-arr hm-arr-r" data-dir="-1" aria-label="Previous sefer">›</button></div>' +
-      (st.bookOpen || st.view === "mz" ? '<div class="mz-page mz-hilpage"><div class="mz-page-head"><span class="mz-page-t" lang="he" dir="rtl">' + esc(B.hebrew) + '</span><button type="button" class="mz-page-x" id="mzBookClose" aria-label="Close the sefer">✕</button></div><div class="mz-page-list">' + HL.map(function (x, xi) { return '<button type="button" class="mz-pick-row mz-pick-sm' + (st.view === "mz" && st.a === x.a ? ' on' : '') + '" data-pick="' + x.a + '" aria-label="Hilchot ' + esc(x.tr) + '"><span class="mz-pick-n">' + (xi + 1) + '</span><span class="mz-pick-main"><span class="hc-he" lang="he" dir="rtl">הלכות ' + esc(x.he) + '</span><span class="hc-en">Hilchot ' + esc(x.tr) + '</span><span class="mz-pick-sub hc-en">' + esc(x.en) + '</span></span>' + (x.n ? '' : '<span class="mz-pick-count">' + (x.rab ? 'Rabbinic' : 'No counted mitzvah') + '</span>') + '<span class="mz-pick-arr" aria-hidden="true">›</span></button>'; }).join("") + '</div></div>' : ''));
+    (lvl === 2 ? '' : '<div class="mz-stage"><div class="hm-wheel"><button type="button" class="hm-arr hm-arr-l" data-dir="1" aria-label="Next sefer">‹</button><div class="hm-strip" id="hmSef" dir="rtl"><span class="hm-spacer" aria-hidden="true"></span>' + BOOKS.map(function (b) { var sel = b.n === st.s, opn = sel && (st.bookOpen || st.view === "mz"); return '<button type="button" class="hm-chip' + (sel ? ' on' : '') + (opn ? ' open' : '') + '" data-s="' + b.n + '" aria-label="Sefer ' + b.n + ', ' + esc(b.translit) + (sel ? ' — tap to open its hilchot' : '') + '"' + (sel ? ' aria-pressed="true"' : '') + '><span class="bk-cover bk-c' + (b.n % 7) + '"><span class="bk-spine"></span><span class="bk-front"><span class="bk-fn">' + b.n + '</span><span class="bk-pic"><img src="' + b.img + '" alt=""></span><span class="bk-fhe" lang="he" dir="rtl">' + esc(b.shortHebrew || b.hebrew) + '</span><span class="bk-fen">' + esc(b.english) + '</span>' + (sel && !opn ? '<span class="mz-open-hint"><span class="mz-lng-en">Tap to open</span><span class="mz-lng-he" lang="he" dir="rtl">לחצו לפתיחה</span></span>' : '') + '</span><span class="bk-pg"></span>' + (sel ? '<span class="mz-open-arr" aria-hidden="true">›</span>' : '') + '</span></button>'; }).join("") + '<span class="hm-spacer" aria-hidden="true"></span></div><button type="button" class="hm-arr hm-arr-r" data-dir="-1" aria-label="Previous sefer">›</button></div>' +
+      (st.bookOpen || st.view === "mz" ? '<div class="mz-page mz-hilpage bk-c' + (B.n % 7) + '"><div class="mz-page-head"><span class="mz-page-t mz-lng-he" lang="he" dir="rtl">' + esc(B.hebrew) + '</span><span class="mz-page-t mz-lng-en">' + esc(B.english) + '</span><button type="button" class="mz-page-x" id="mzBookClose" aria-label="Close the sefer">✕</button></div><div class="mz-page-list">' + HL.map(function (x, xi) { return '<button type="button" class="mz-pick-row mz-pick-sm' + (st.view === "mz" && st.a === x.a ? ' on' : '') + '" data-pick="' + x.a + '" aria-label="Hilchot ' + esc(x.tr) + '"><span class="mz-pick-n">' + (xi + 1) + '</span><span class="mz-pick-main"><span class="hc-he" lang="he" dir="rtl">הלכות ' + esc(x.he) + '</span><span class="hc-en">Hilchot ' + esc(x.tr) + '</span><span class="mz-pick-sub hc-en">' + esc(x.en) + '</span></span>' + (x.n ? '' : '<span class="mz-pick-count"><span class="mz-lng-en">' + (x.rab ? 'Rabbinic' : 'No counted mitzvah') + '</span><span class="mz-lng-he" lang="he" dir="rtl">' + (x.rab ? 'דרבנן' : 'אין מצוה מנויה') + '</span></span>') + '<span class="mz-pick-arr" aria-hidden="true">›</span></button>'; }).join("") + '</div></div>' : ''));
   if (lvl === 2) {
     /* Nov 12: Hilchot learn page in the same format as Sefarim: bookshelf + its own copy of the wheel (#hlWheel). Opening a book shows that sefer's hilchot. */
     html += '<div class="hl-detail" id="hlDetail"><div class="sf-case" id="hlShelf"><div class="sh-row">' + BOOKS.map(function (b, k) { return '<button type="button" class="sh-bk sh-c' + (b.n % 7) + '" data-k="' + k + '" aria-label="' + esc(b.english) + '"><span class="sh-n">' + b.n + '</span><span class="sh-he" lang="he" dir="rtl">' + (b.shortHebrew || b.hebrew).replace(/\s+/g, "").split("").map(function (ch) { return "<i>" + esc(ch) + "</i>"; }).join("") + '</span></button>'; }).join("") + '</div><div class="sh-board"></div><div class="sh-cap">Click a sefer to take it off the shelf</div></div>' +
@@ -3214,7 +3378,7 @@ function renderHM(lvl) {
          from the 613 (counts and the positive/negative split were removed
          at Joshua's request earlier today). */
     } else {
-    html += '<div class="mz-mzpage"><div class="mz-flex"><button type="button" class="mz-back" id="mzBack">&larr; All the hilchot in Sefer ' + esc(B.translit) + '</button><div class="hm-card"><div class="hm-title" lang="he" dir="rtl">הלכות ' + esc(H.he) + '</div><div class="hm-sub">Hilchot ' + esc(H.tr) + ' · ' + esc(H.en) + '</div>' +
+    html += '<div class="mz-mzpage bk-c' + (B.n % 7) + '"><div class="mz-flex"><button type="button" class="mz-back" id="mzBack"><span class="mz-lng-en">&larr; All the hilchot in Sefer ' + esc(B.translit) + '</span><span class="mz-lng-he" lang="he" dir="rtl">כל ההלכות שב' + esc(B.hebrew) + ' &rarr;</span></button><div class="hm-card"><div class="hm-title" lang="he" dir="rtl">הלכות ' + esc(H.he) + '</div><div class="hm-sub">Hilchot ' + esc(H.tr) + ' · ' + esc(H.en) + '</div>' +
       (H.n ? '<div class="mz-viewbar">' + (mzAll ? '' : '<span class="mz-pos" id="mzPos" aria-live="polite">' + (st.mzIdx + 1) + ' of ' + mzShown.length + '</span>') + '<button type="button" class="mz-vbtn" id="mzViewBtn" aria-pressed="' + mzAll + '">' + (mzAll ? 'One at a time' : 'Show all cards') + '</button></div>' +
         '<div class="mz-pager' + (mzAll ? ' all' : '') + '" id="mzPager"><button type="button" class="mz-arr" id="mzNext" aria-label="Next mitzvah"' + (mzAll || st.mzIdx >= mzShown.length - 1 ? ' disabled' : '') + '>‹</button><div class="mz-grid' + (mzAll ? ' all' : '') + '" dir="rtl">' + mzShown.map(function (x, xi) { return '<button type="button" class="mzpic' + (!mzAll && xi === st.mzIdx ? ' mz-cur' : '') + '" data-mzk="' + x.k + '" aria-label="Mitzvah ' + (x.k + 1) + '"><span class="mzpic-n" aria-hidden="true">' + (x.k + 1) + '</span><img src="' + mzPicURL(H.a, x.k) + '" alt="" loading="lazy"><span class="mzpic-fb" hidden><span class="hr-he" lang="he" dir="rtl">' + esc(x.m[1]) + '</span><span class="hr-en" dir="ltr">' + esc(cap(x.m[2])) + '</span></span></button>'; }).join("") + '</div><button type="button" class="mz-arr" id="mzPrev" aria-label="Previous mitzvah"' + (mzAll || st.mzIdx <= 0 ? ' disabled' : '') + '>›</button></div><div class="mz-det" id="hmMzDet" dir="rtl" hidden></div>' +
         ''
