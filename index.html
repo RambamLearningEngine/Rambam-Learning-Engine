@@ -1690,6 +1690,32 @@ html:not(.lng-en) .mz-lng-en{display:none!important}
  #page-mitzvot .mz-stage .mz-pager:not(.all):not(.mz-test) .mz-grid{max-width:188px}
 }
 </style>
+<style>/* Nov 24c: Hilchot — clicking a hilchah shows its description on the
+   RIGHT side of the open book, beside the contents list, instead of
+   underneath the whole list where it had to be scrolled down to.
+   On wide screens the popped-out stage widens and the open book
+   becomes a two-page spread: the sefer's name and contents heading
+   span the top, the contents list runs down the left page, and the
+   clicked hilchah's page sits on the right, stuck in view while
+   the card scrolls, so the description is visible the moment a
+   hilchah is clicked. The "test this sefer" row sits under both
+   pages. Narrow screens keep the stacked layout (list, then the
+   description under it). Scoped to #hlCard throughout, so the
+   Sefarim book — summary only, no hilchot list — is untouched. */
+@media (min-width:700px){
+ body:has(#page-hilchot.active #hlDetail.hl-pop) .wrap{max-width:1060px}
+ #page-hilchot:has(#hlDetail.hl-pop) .level-page{max-width:940px}
+ #hlDetail.hl-pop #hlCard{max-width:920px}
+ #hlCard .sf-book.open{max-width:880px!important;padding-right:0!important}
+ #hlCard .sf-book.open .bk-pages{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"ph ph" "pt pt" "list detail" "foot foot";column-gap:22px;align-items:start;min-height:0!important;padding:16px 18px 14px!important;margin-top:6px!important}
+ #hlCard .sf-book.open .bk-ph{grid-area:ph}
+ #hlCard .sf-book.open .bk-pt{grid-area:pt}
+ #hlCard .sf-book.open .bk-list{grid-area:list;margin:4px 0 0!important;padding-right:20px!important;border-right:1px dashed rgba(176,141,87,.45)}
+ #hlCard .hl-pg{grid-area:detail;position:sticky;top:12px;background:#fffaf2;border:1px solid rgba(176,141,87,.45);border-radius:12px;padding:14px 14px 12px}
+ #hlCard .hl-pg .hl-pg-p{margin:0}
+ #hlCard .sf-book.open .bk-pages>.hl-pg-a{grid-area:foot;justify-content:center;margin-top:14px}
+}
+</style>
 </head>
 <body>
 <div class="wrap">
