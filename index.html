@@ -1298,13 +1298,13 @@ button.hm-row:hover{background:rgba(176,141,87,.07)}
 #sfStage:not(.sf-pop) #sfWheel{display:none!important}
 #sfStage.sf-pop #sfWheel{position:absolute;inset:-10px -6px;z-index:10;display:flex!important;align-items:center;justify-content:center;background:#fffdf7;border-radius:10px;padding:12px;animation:fadeIn .2s ease}
 #sfStage.sf-pop #sfCard{margin:0;width:100%;max-height:100%;overflow-y:auto}
-#sfStage.sf-pop .sh-cap{position:relative;z-index:12;cursor:pointer;text-decoration:underline;text-underline-offset:3px;color:#1f2a44}
+#sfStage.sf-pop .sh-cap{display:none}
 /* Nov 19b: Hilchot page — the same pop-out over its own shelf (#hlDetail is the stage); the ‹ › arrows are gone, shelf-tap is the navigation */
 #hlDetail{position:relative}
 #hlDetail:not(.hl-pop) #hlWheel{display:none!important}
 #hlDetail.hl-pop #hlWheel{position:absolute;inset:-10px -6px;z-index:10;display:flex!important;align-items:center;justify-content:center;background:#fffdf7;border-radius:10px;padding:12px;animation:fadeIn .2s ease;max-width:none}
-#hlDetail.hl-pop #hlCard{margin:0;width:100%;max-height:100%;overflow-y:auto}
-#hlDetail.hl-pop .sh-cap{position:relative;z-index:12;cursor:pointer;text-decoration:underline;text-underline-offset:3px;color:#1f2a44}
+#hlDetail.hl-pop #hlCard{margin:0;width:100%;max-height:100%;overflow-y:auto;justify-content:flex-start}
+#hlDetail.hl-pop .sh-cap{display:none}
 </style>
 <style>/* Nov 20: Mitzvot learning section made the main event — the single-card view
    was squeezed three ways: the page column capped at 560px, the test panel
@@ -1633,6 +1633,62 @@ body:has(#page-mitzvot.active) .wrap{max-width:1400px}
 html.lng-en .mz-lng-he{display:none!important}
 html:not(.lng-en) .mz-lng-en{display:none!important}
 #page-mitzvot .mz-stage .mz-page-t.mz-lng-en{font-family:Arial,Helvetica,sans-serif;font-weight:900;letter-spacing:-.01em}
+</style>
+<style>/* Nov 24: pull the whole Mitzvot page up so it fits on screen without
+   scrolling, as Joshua asked. The top nav banner moves up by about a
+   quarter inch (its 40px top margin becomes 16px) and slims down a
+   little, the מצוות heading moves up closer to the banner (the banner's
+   48px bottom margin becomes 8px, the heading's own margins and size
+   shrink, and the language toggle tucks in under it), and the book
+   stage is sized to the screen height left below all that instead of
+   a fixed 56vh — so the sefer / hilchot / mitzvot page ends above the
+   bottom of the window. Inside the mitzvot page the card, title and
+   picture trim a few px each so the picture card itself also fits
+   inside its page without the inner scrollbar. Other pages keep
+   their existing spacing. */
+#page-mitzvot .intro-next.nav-top{margin:16px 0 8px}
+#page-mitzvot .nav-top .in-nav .level-sm{padding:12px 14px;min-height:72px}
+#page-mitzvot .level-page{padding-top:0}
+#page-mitzvot .hm-head{margin:0 auto 6px}
+#page-mitzvot .hm-he{font-size:2.05rem}
+#page-mitzvot .lang-toggle{margin-top:4px}
+#page-mitzvot .mz-stage{margin-top:2px;margin-bottom:0}
+#page-mitzvot .mz-stage:has(.mz-hilpage){--pgh:clamp(400px,calc(100vh - 300px),520px)}
+#page-mitzvot .mz-stage .mz-flex .hm-card{padding:14px 16px 12px}
+#page-mitzvot .mz-stage .mz-flex .hm-title{font-size:1.5rem}
+#page-mitzvot .mz-stage .mz-viewbar{margin-top:4px}
+#page-mitzvot .mz-stage .mz-pager{gap:12px;margin:8px 0 2px}
+#page-mitzvot .mz-stage .mz-pager:not(.all):not(.mz-test) .mz-grid{max-width:272px}
+#page-mitzvot .mz-stage .mz-arr{width:48px;height:48px;font-size:1.8rem}
+#page-mitzvot .mz-stage .mz-panel{padding:10px 12px}
+#page-mitzvot .mz-stage .mz-pbtn{padding:9px 12px}
+#page-mitzvot .lvl-practice{margin-top:10px}
+@media (max-width:620px){
+ #page-mitzvot .mz-stage:has(.mz-hilpage){--pgh:clamp(380px,calc(100vh - 330px),560px)}
+ #page-mitzvot .mz-stage .mz-pager:not(.all):not(.mz-test) .mz-grid{max-width:230px}
+}
+</style>
+<style>/* Nov 24b: the order-number badge sat in the top corner of each mitzvah
+   picture card, right on top of the Hebrew keyword printed at the top of
+   the picture (and on the drawing of the small Show-all cards), as Joshua
+   flagged. Each card now opens with a plain white strip above the picture
+   and the badge sits in that strip: the picture — Hebrew word and all —
+   moves down (and so reads as shifted away from the number, to the left
+   of it in the RTL grid) and the number never touches it, however wide
+   the word is. The strip is sized to the badge in each context: 30px for
+   the 22px badge, 42px for the Mitzvot page's 30px one. The matching
+   test's white cover strip moves down by the same amount so it still
+   lands exactly on the printed keyword, and the single-picture view on
+   the Mitzvot page narrows by the strip height so the taller card still
+   fits its page without scrolling, as Nov 24 arranged. */
+.mzpic{padding-top:30px}
+#page-mitzvot .mzpic{padding-top:42px}
+.mz-cover{top:30px}
+#page-mitzvot .mz-cover{top:42px}
+#page-mitzvot .mz-stage .mz-pager:not(.all):not(.mz-test) .mz-grid{max-width:230px}
+@media (max-width:620px){
+ #page-mitzvot .mz-stage .mz-pager:not(.all):not(.mz-test) .mz-grid{max-width:188px}
+}
 </style>
 </head>
 <body>
@@ -3326,7 +3382,7 @@ function hlWheelWire(host, st) {
     var bk = ev.target.closest(".sf-book"); if (!bk) return;
     if (bk.classList.contains("open") && pgAct(ev.target.closest("[data-learn], [data-tomz], [data-testh], [data-testsf]"))) { ev.preventDefault(); return; }
     var tb = ev.target.closest(".bk-list li");
-    if (tb && bk.classList.contains("open")) { var xa = tb.getAttribute("data-a"); if (!HMAP[xa]) return; var chg = st.open !== xa; st.a = xa; st.open = xa; bk.querySelectorAll(".bk-list li").forEach(function (l) { l.classList.toggle("on", l === tb); }); if (chg) flip(bk); detail(st.open); fit(bk); var pp = bk.querySelector(".bk-pages"); if (pp) setTimeout(function () { var r = pp.getBoundingClientRect(); if (r.top < 0 || r.bottom > innerHeight) pp.scrollIntoView({ behavior: "smooth", block: r.height > innerHeight ? "start" : "nearest" }); }, 60); return; }
+    if (tb && bk.classList.contains("open")) { var xa = tb.getAttribute("data-a"); if (!HMAP[xa]) return; var chg = st.open !== xa; st.a = xa; st.open = xa; bk.querySelectorAll(".bk-list li").forEach(function (l) { l.classList.toggle("on", l === tb); }); if (chg) flip(bk); detail(st.open); fit(bk); /* Nov 24: no scrollIntoView here — it scrolled the card down to the foot of the taller page and hid the top of the contents list (hilchot 1-2). The list now stays put at the top of the card (see the justify-content:flex-start on #hlDetail.hl-pop #hlCard). */ return; }
     if (bk.classList.contains("open") && ev.target.closest(".hl-pg") && !ev.target.closest(".hl-pg-p")) return;
     bk.classList.toggle("open"); fit(bk); if (!bk.classList.contains("open")) { st.open = ""; detail(""); }
   });
