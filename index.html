@@ -1000,10 +1000,14 @@ button.tag:hover{filter:brightness(.96)}
 .mz-stuck{position:absolute;left:4px;right:4px;bottom:4px;font-family:"Frank Ruhl Libre","SBL Hebrew","Times New Roman",serif;font-size:.82rem;font-weight:700;line-height:1.25;background:rgba(16,24,39,.88);color:#fff;border-radius:8px;padding:4px 6px;pointer-events:none}
 /* while matching, a plain white strip covers the keyword printed at the top of each
    picture; once its keyword is matched back, the word shows in place on that strip.
-   The keyword ink on the square pictures runs from ~6% to ~19.5% of the picture height;
-   the card's content box is exactly the picture (padding:0, square img filling it), so
-   this strip is sized to the picture: 0 to 24% covers the whole band with margin */
-.mz-cover{position:absolute;top:0;left:0;right:0;height:24%;background:#fff;z-index:2;display:flex;align-items:center;justify-content:center;pointer-events:none}
+   The strip is sized to the picture (it lives inside the .mzpic-im wrapper, which is
+   exactly the picture). Measured across all 75 Sefer HaMadda pictures — the set the
+   matching test covers — the keyword ink ends by 19.3% of the picture height and the
+   highest drawing starts at 23.1% (the יראת ה׳ storm cloud, whose top sits at 23.8%):
+   the strip is 21% tall, inside that window with margin on both sides, so it hides
+   every keyword whole and never reaches the drawing beneath it. (It was 24% at
+   first, which did reach the drawings — on יראת ה׳ it shaved the top off the cloud.) */
+.mz-cover{position:absolute;top:0;left:0;right:0;height:21%;background:#fff;z-index:2;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .mz-cover.mz-cover-on{font-family:"Frank Ruhl Libre","SBL Hebrew","Times New Roman",serif;font-size:.95rem;font-weight:700;line-height:1.2;color:var(--ink);text-align:center;padding:0 4px}
 /* waiting keyword chips live in the side test panel while matching */
 .mz-ptray{margin-top:10px;justify-content:flex-start;max-height:46vh;overflow-y:auto;padding:2px}
@@ -1310,15 +1314,19 @@ button.hm-row:hover{background:rgba(176,141,87,.07)}
    was squeezed three ways: the page column capped at 560px, the test panel
    took 220px off the side of the card, and the two nav arrows took another
    ~150px, leaving the picture itself tiny. Now, while the Mitzvot page is
-   open, the page column widens, the learning card spans it in full, the test
-   panel sits underneath as a toolbar instead of beside the card, and the
-   picture is capped at a large, centred size with real breathing room
-   around it. The Show-all grid and the matching test keep working: the grid
-   uses the full card width and the panel's buttons/tray lay out in rows. */
+   open, the page column widens and the picture is capped at a large, centred
+   size with real breathing room around it. The Show-all grid and the
+   matching test keep working: the grid uses the full card width.
+   Nov 26: at Joshua's request the test panel no longer sits underneath the
+   card as a horizontal toolbar — it stands vertically on the right side of
+   the card again, its buttons stacked full-width, the keyword tray below
+   them. On narrow screens it stacks under the card, still as a vertical
+   column of full-width buttons rather than a horizontal strip. */
 body:has(#page-mitzvot.active) .wrap{max-width:1060px}
 #page-mitzvot .level-page{max-width:1020px}
-#page-mitzvot .mz-flex{flex-direction:column;max-width:880px;gap:20px;margin-top:16px}
-#page-mitzvot .mz-flex .hm-card{width:100%;max-width:none;margin:0;padding:36px 38px 32px;border-radius:26px;box-shadow:0 16px 38px rgba(17,24,39,.11)}
+#page-mitzvot .mz-flex{flex-direction:row;flex-wrap:wrap;align-items:flex-start;max-width:980px;gap:20px;margin-top:16px}
+#page-mitzvot .mz-flex .mz-back{flex:1 1 100%}
+#page-mitzvot .mz-flex .hm-card{flex:1 1 0;width:auto;min-width:0;max-width:none;margin:0;padding:36px 38px 32px;border-radius:26px;box-shadow:0 16px 38px rgba(17,24,39,.11)}
 #page-mitzvot .hm-title{font-size:2.35rem}
 #page-mitzvot .hm-sub{font-size:1.05rem}
 #page-mitzvot .mz-viewbar{margin:18px 0 2px}
@@ -1331,17 +1339,22 @@ body:has(#page-mitzvot.active) .wrap{max-width:1060px}
 #page-mitzvot .mzpic-n{min-width:30px;height:30px;font-size:.9rem;top:10px;inset-inline-start:10px}
 #page-mitzvot .mz-grid.all{grid-template-columns:repeat(auto-fill,minmax(136px,1fr));gap:12px}
 #page-mitzvot .mz-det{margin-top:20px;padding:16px 18px}
-#page-mitzvot .mz-panel{flex:none;width:100%;position:static;order:0;display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;padding:16px}
-#page-mitzvot .mz-pbtn{width:auto;flex:1 1 170px;margin:0;padding:13px 14px}
-#page-mitzvot .mz-status{flex:1 1 100%;margin:0}
-#page-mitzvot .mz-ptray{flex:1 1 100%;max-height:30vh}
+#page-mitzvot .mz-panel{flex:0 0 224px;width:224px;position:sticky;top:12px;order:0;display:flex;flex-direction:column;flex-wrap:nowrap;gap:10px;align-items:stretch;padding:16px 14px}
+#page-mitzvot .mz-pbtn{width:100%;flex:none;margin:0;padding:13px 12px;text-align:center}
+#page-mitzvot .mz-status{flex:none;width:100%;margin:0}
+#page-mitzvot .mz-ptray{flex:none;width:100%;max-height:46vh;margin-top:2px}
 #page-mitzvot .lvl-practice{max-width:880px}
+@media (max-width:760px){
+ #page-mitzvot .mz-flex{flex-direction:column}
+ #page-mitzvot .mz-flex .hm-card{flex:none;width:100%}
+ #page-mitzvot .mz-panel{flex:none;width:100%;position:static}
+ #page-mitzvot .mz-ptray{max-height:30vh}
+}
 @media (max-width:600px){
  #page-mitzvot .mz-flex .hm-card{padding:24px 16px 22px;border-radius:22px}
  #page-mitzvot .hm-title{font-size:1.9rem}
  #page-mitzvot .mz-pager{gap:12px;margin:18px 0 8px}
  #page-mitzvot .mz-arr{width:56px;height:56px;font-size:2.2rem}
- #page-mitzvot .mz-pbtn{flex-basis:100%}
 }
 </style>
 <style>/* Nov 23: Mitzvot page — first pick which set of hilchot in the sefer to study;
@@ -1715,6 +1728,106 @@ html:not(.lng-en) .mz-lng-en{display:none!important}
  #hlCard .hl-pg .hl-pg-p{margin:0}
  #hlCard .sf-book.open .bk-pages>.hl-pg-a{grid-area:foot;justify-content:center;margin-top:14px}
 }
+</style>
+<style>/* Nov 24d: more room in the working areas, as Joshua asked — not the
+   shelf pages, which stay as they are, but the views where the studying
+   happens, which were squeezed into boxes far narrower than the page
+   around them. Three places:
+   (1) Mitzvot "Show all cards" — and the matching test, which also
+   shows every card at once: the overlaid mitzvot page was capped at
+   the sefer cover's 580px box, so a hilchah's cards sat squashed in
+   ~104px columns while the rest of the screen stood empty. While
+   every card is showing, the stage now breaks out to nearly the full
+   page width and grows taller, and the grid's cards grow with it.
+   Going back to "One at a time" returns the stage to the cover-sized
+   box, as before.
+   (2) The single-picture pager and the test panel get a little of
+   that room too: a slightly taller stage and a larger picture.
+   (3) The Hilchot open book (Nov 24c's two-page spread) widens
+   further on wide screens — a broader spread, roomier contents tabs
+   and a roomier description page — and the Mitzvot hilchot picker
+   rows get more padding, so the list is easier to scan and tap. */
+@media (min-width:621px){
+ #page-mitzvot .mz-stage:has(.mz-grid.all){max-width:min(1180px,calc(100vw - 40px));--pgh:clamp(480px,calc(100vh - 260px),640px)}
+ #page-mitzvot .mz-stage:has(.mz-grid.all) .mz-mzpage{padding:16px}
+ #page-mitzvot .mz-stage:has(.mz-grid.all) .mz-grid.all{grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:16px}
+ #page-mitzvot .mz-stage:has(.mz-hilpage){--pgh:clamp(430px,calc(100vh - 280px),560px)}
+ #page-mitzvot .mz-stage .mz-pager:not(.all):not(.mz-test) .mz-grid{max-width:256px}
+ #page-mitzvot .mz-stage .mz-panel{padding:14px 16px}
+}
+@media (max-width:620px){
+ #page-mitzvot .mz-stage:has(.mz-grid.all){--pgh:clamp(430px,calc(100vh - 280px),600px)}
+ #page-mitzvot .mz-stage:has(.mz-grid.all) .mz-grid.all{grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px}
+}
+#page-mitzvot .mz-stage .mz-hilpage{padding:16px}
+#page-mitzvot .mz-stage .mz-hilpage .mz-page-list{gap:8px}
+#page-mitzvot .mz-stage .mz-pick-sm{padding:12px}
+@media (min-width:700px){
+ body:has(#page-hilchot.active #hlDetail.hl-pop) .wrap{max-width:1280px}
+ #page-hilchot:has(#hlDetail.hl-pop) .level-page{max-width:1140px}
+ #hlDetail.hl-pop #hlCard{max-width:1100px}
+ #hlCard .sf-book.open{max-width:1060px!important}
+ #hlCard .sf-book.open .bk-pages{column-gap:34px;padding:22px 26px 18px!important}
+ #hlCard .sf-book.open .bk-list li{min-height:58px;padding:8px 8px 8px 10px!important}
+ #hlCard .sf-book.open .bk-list .bk-lhe{font-size:.98rem!important}
+ #hlCard .hl-pg{padding:18px 18px 14px}
+ #hlCard .hl-pg-h{font-size:1.45rem}
+ #hlCard .hl-pg-d{font-size:.92rem;line-height:1.6}
+}
+</style>
+<style>/* Nov 26: the matching-test panel leaves the bottom of the mitzvot page,
+   as Joshua asked — instead of a horizontal strip under the picture card
+   (Match / Shuffle side by side, Correct the order stretched full-width
+   beneath them), it now stands vertically on the RIGHT side of the card,
+   inside the overlaid page: the back link keeps its own row at the top,
+   then the picture card and the panel sit side by side, the panel's
+   buttons stacked full-width in a narrow column that sticks in view
+   while the card scrolls, the keyword tray scrolling inside the panel
+   under the buttons. On narrow screens there is no room beside the
+   card, so the panel drops back under it — still as a vertical stack
+   of full-width buttons, not the old horizontal strip. */
+#page-mitzvot .mz-stage .mz-mzpage .mz-flex{flex-direction:row;flex-wrap:wrap;align-items:flex-start;align-content:flex-start;gap:12px}
+#page-mitzvot .mz-stage .mz-mzpage .mz-flex .mz-back{flex:1 1 100%}
+#page-mitzvot .mz-stage .mz-mzpage .mz-flex .hm-card{flex:1 1 0;width:auto;min-width:0}
+#page-mitzvot .mz-stage .mz-mzpage .mz-panel{flex:0 0 178px;width:178px;position:sticky;top:0;align-self:flex-start;display:flex;flex-direction:column;flex-wrap:nowrap;gap:8px;align-items:stretch;padding:12px 10px}
+#page-mitzvot .mz-stage .mz-mzpage .mz-pbtn{width:100%;flex:none;margin:0;padding:11px 8px;font-size:.88rem;text-align:center}
+#page-mitzvot .mz-stage .mz-mzpage .mz-status{flex:none;width:100%;margin:0;font-size:.8rem}
+#page-mitzvot .mz-stage .mz-mzpage .mz-ptray{flex:none;width:100%;max-height:210px;margin-top:0;justify-content:center}
+@media (max-width:620px){
+ #page-mitzvot .mz-stage .mz-mzpage .mz-flex{flex-direction:column;flex-wrap:nowrap}
+ #page-mitzvot .mz-stage .mz-mzpage .mz-flex .hm-card{flex:none;width:100%}
+ #page-mitzvot .mz-stage .mz-mzpage .mz-panel{flex:none;width:100%;position:static;align-self:stretch}
+ #page-mitzvot .mz-stage .mz-mzpage .mz-ptray{max-height:30vh}
+}
+</style>
+<style>/* Nov 26b: the cloud trimmed off the top of a picture in the all-cards
+   view (Yesodei HaTorah 5, יראת ה׳ — its storm cloud starts right under the
+   keyword). Cause: the matching test — which shows every card at once, like
+   Show all — lays a white .mz-cover strip over the top of each picture to
+   hide its printed keyword, sized as height:24%. That 24% was of the
+   picture when the card was exactly the picture, but Nov 24b gave each
+   card a 42px badge strip on top, so the strip's percentages resolved
+   against the taller card and it ran ~10px long, its bottom edge slicing
+   the top off the drawing. Fix: the picture and its text fallback now sit
+   in a .mzpic-im wrapper that is exactly the picture, the test drops its
+   cover into that wrapper instead of the card, and the Nov 24b top
+   offsets are retired — inside the wrapper, top:0 once again means the
+   top of the picture itself. (The strip's height is set where .mz-cover
+   is defined: 21%, measured to end below every keyword and above every
+   drawing — at the first 24% it still grazed this cloud's top.) */
+.mzpic-im{display:block;position:relative}
+.mz-cover{top:0}
+#page-mitzvot .mz-cover{top:0}
+/* Same day: "Correct the order doesn't seem to do anything." The button
+   works, but every reply the test panel gives — match progress, the
+   Shuffle result, "Corrected — every keyword is back on its picture" —
+   is written to the panel's status line, and in the stage layout that
+   line was coloured white (#fff, from when the panel copy sat on the
+   sefer-coloured page) on the panel's own cream background: invisible
+   ink, so the panel answered every tap with silence. The status now
+   uses the panel's normal gold, and while matching is off the line
+   itself says why Shuffle and Correct the order are greyed. */
+#page-mitzvot .mz-stage .mz-mzpage .mz-status{color:var(--gold)}
 </style>
 </head>
 <body>
@@ -3462,10 +3575,10 @@ function renderHM(lvl) {
     } else {
     html += '<div class="mz-mzpage bk-c' + (B.n % 7) + '"><div class="mz-flex"><button type="button" class="mz-back" id="mzBack"><span class="mz-lng-en">&larr; All the hilchot in Sefer ' + esc(B.translit) + '</span><span class="mz-lng-he" lang="he" dir="rtl">כל ההלכות שב' + esc(B.hebrew) + ' &rarr;</span></button><div class="hm-card"><div class="hm-title" lang="he" dir="rtl">הלכות ' + esc(H.he) + '</div><div class="hm-sub">Hilchot ' + esc(H.tr) + ' · ' + esc(H.en) + '</div>' +
       (H.n ? '<div class="mz-viewbar">' + (mzAll ? '' : '<span class="mz-pos" id="mzPos" aria-live="polite">' + (st.mzIdx + 1) + ' of ' + mzShown.length + '</span>') + '<button type="button" class="mz-vbtn" id="mzViewBtn" aria-pressed="' + mzAll + '">' + (mzAll ? 'One at a time' : 'Show all cards') + '</button></div>' +
-        '<div class="mz-pager' + (mzAll ? ' all' : '') + '" id="mzPager"><button type="button" class="mz-arr" id="mzNext" aria-label="Next mitzvah"' + (mzAll || st.mzIdx >= mzShown.length - 1 ? ' disabled' : '') + '>‹</button><div class="mz-grid' + (mzAll ? ' all' : '') + '" dir="rtl">' + mzShown.map(function (x, xi) { return '<button type="button" class="mzpic' + (!mzAll && xi === st.mzIdx ? ' mz-cur' : '') + '" data-mzk="' + x.k + '" aria-label="Mitzvah ' + (x.k + 1) + '"><span class="mzpic-n" aria-hidden="true">' + (x.k + 1) + '</span><img src="' + mzPicURL(H.a, x.k) + '" alt="" loading="lazy"><span class="mzpic-fb" hidden><span class="hr-he" lang="he" dir="rtl">' + esc(x.m[1]) + '</span><span class="hr-en" dir="ltr">' + esc(cap(x.m[2])) + '</span></span></button>'; }).join("") + '</div><button type="button" class="mz-arr" id="mzPrev" aria-label="Previous mitzvah"' + (mzAll || st.mzIdx <= 0 ? ' disabled' : '') + '>›</button></div><div class="mz-det" id="hmMzDet" dir="rtl" hidden></div>' +
+        '<div class="mz-pager' + (mzAll ? ' all' : '') + '" id="mzPager"><button type="button" class="mz-arr" id="mzNext" aria-label="Next mitzvah"' + (mzAll || st.mzIdx >= mzShown.length - 1 ? ' disabled' : '') + '>‹</button><div class="mz-grid' + (mzAll ? ' all' : '') + '" dir="rtl">' + mzShown.map(function (x, xi) { return '<button type="button" class="mzpic' + (!mzAll && xi === st.mzIdx ? ' mz-cur' : '') + '" data-mzk="' + x.k + '" aria-label="Mitzvah ' + (x.k + 1) + '"><span class="mzpic-n" aria-hidden="true">' + (x.k + 1) + '</span><span class="mzpic-im"><img src="' + mzPicURL(H.a, x.k) + '" alt="" loading="lazy"><span class="mzpic-fb" hidden><span class="hr-he" lang="he" dir="rtl">' + esc(x.m[1]) + '</span><span class="hr-en" dir="ltr">' + esc(cap(x.m[2])) + '</span></span></span></button>'; }).join("") + '</div><button type="button" class="mz-arr" id="mzPrev" aria-label="Previous mitzvah"' + (mzAll || st.mzIdx <= 0 ? ' disabled' : '') + '>›</button></div><div class="mz-det" id="hmMzDet" dir="rtl" hidden></div>' +
         ''
         : '<p class="hm-none">' + (H.rab ? "This hilchah has no mitzvah from the 613. Its laws are rabbinic." : "No counted mitzvah in this hilchah.") + '</p>' + (H.d ? '<p class="hm-d">' + esc(H.d) + '</p>' : '')) +
-      '</div>' + (H.n && MZKW[H.a] ? '<aside class="mz-panel" id="mzPanel"><button type="button" class="mz-pbtn primary" id="mzMatchBtn">Match the keyword to the picture</button><button type="button" class="mz-pbtn" id="mzShuffleBtn" disabled>Shuffle</button><button type="button" class="mz-pbtn" id="mzFixBtn" disabled>Correct the order</button><p class="mz-status" id="mzStatus" aria-live="polite"></p><div class="mz-tray mz-ptray" id="mzTray" dir="rtl" hidden></div></aside>' : '') + '</div></div>';
+      '</div>' + (H.n && MZKW[H.a] ? '<aside class="mz-panel" id="mzPanel"><button type="button" class="mz-pbtn primary" id="mzMatchBtn">Match the keyword to the picture</button><button type="button" class="mz-pbtn" id="mzShuffleBtn" disabled>Shuffle</button><button type="button" class="mz-pbtn" id="mzFixBtn" disabled>Correct the order</button><p class="mz-status" id="mzStatus" aria-live="polite">Shuffle and Correct the order wake up once matching starts.</p><div class="mz-tray mz-ptray" id="mzTray" dir="rtl" hidden></div></aside>' : '') + '</div></div>';
     }
   }
   if (lvl !== 2) html += '</div>';
@@ -3605,7 +3718,7 @@ function renderHM(lvl) {
         if (!st.showAll) grid.classList.remove("all");
         var pager0 = $("#mzPager", host); if (pager0) pager0.classList.remove("mz-test");
         mzMatchBtn.textContent = "Match the keyword to the picture";
-        $("#mzShuffleBtn", host).disabled = true; $("#mzFixBtn", host).disabled = true; mzStatus("");
+        $("#mzShuffleBtn", host).disabled = true; $("#mzFixBtn", host).disabled = true; mzStatus("Shuffle and Correct the order wake up once matching starts.");
         return;
       }
       mzMT.on = true; mzMT.placed = 0; mzMT.bySelf = 0; mzMT.sel = null;
@@ -3614,7 +3727,7 @@ function renderHM(lvl) {
       mzMT.waiting = mzShown.map(function (x) { return x.k; }); mzMT.total = mzMT.waiting.length; mzShuf(mzMT.waiting);
       mzSel = -1; $$(".mzpic", host).forEach(function (x) { x.classList.remove("on"); });
       if (mzDet) { mzDet.hidden = true; mzDet.innerHTML = ""; }
-      $$(".mzpic", host).forEach(function (x) { if (!x.querySelector(".mz-cover")) { var cv = document.createElement("span"); cv.className = "mz-cover"; cv.setAttribute("aria-hidden", "true"); x.appendChild(cv); } });
+      $$(".mzpic", host).forEach(function (x) { if (!x.querySelector(".mz-cover")) { var cv = document.createElement("span"); cv.className = "mz-cover"; cv.setAttribute("aria-hidden", "true"); (x.querySelector(".mzpic-im") || x).appendChild(cv); } });
       var tray = $("#mzTray", host); if (tray) tray.hidden = false;
       mzPaintChips();
       mzMatchBtn.textContent = "✕ Stop matching";
