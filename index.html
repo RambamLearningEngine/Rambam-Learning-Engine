@@ -1012,6 +1012,14 @@ button.tag:hover{filter:brightness(.96)}
 /* waiting keyword chips live in the side test panel while matching */
 .mz-ptray{margin-top:10px;justify-content:flex-start;max-height:46vh;overflow-y:auto;padding:2px}
 .mz-ptray[hidden]{display:none}
+/* card-ordering test: cards shuffled with their number badges hidden, dragged back into order */
+.mz-grid.mz-ordering .mzpic{cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.mz-grid.mz-ordering .mzpic:active{cursor:grabbing}
+.mz-grid.mz-ordering .mzpic-n{display:none}
+.mz-grid.mz-ordering .mzpic img{pointer-events:none}
+.mzpic.lift{opacity:.25}
+.mzpic.mz-sel{border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,141,87,.4)}
+.rc-ghost .mzpic-n{display:none}
 @keyframes mzShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
 .mz-shake{animation:mzShake .4s ease}
 @media (max-width:760px){
@@ -3578,7 +3586,7 @@ function renderHM(lvl) {
         '<div class="mz-pager' + (mzAll ? ' all' : '') + '" id="mzPager"><button type="button" class="mz-arr" id="mzNext" aria-label="Next mitzvah"' + (mzAll || st.mzIdx >= mzShown.length - 1 ? ' disabled' : '') + '>‹</button><div class="mz-grid' + (mzAll ? ' all' : '') + '" dir="rtl">' + mzShown.map(function (x, xi) { return '<button type="button" class="mzpic' + (!mzAll && xi === st.mzIdx ? ' mz-cur' : '') + '" data-mzk="' + x.k + '" aria-label="Mitzvah ' + (x.k + 1) + '"><span class="mzpic-n" aria-hidden="true">' + (x.k + 1) + '</span><span class="mzpic-im"><img src="' + mzPicURL(H.a, x.k) + '" alt="" loading="lazy"><span class="mzpic-fb" hidden><span class="hr-he" lang="he" dir="rtl">' + esc(x.m[1]) + '</span><span class="hr-en" dir="ltr">' + esc(cap(x.m[2])) + '</span></span></span></button>'; }).join("") + '</div><button type="button" class="mz-arr" id="mzPrev" aria-label="Previous mitzvah"' + (mzAll || st.mzIdx <= 0 ? ' disabled' : '') + '>›</button></div><div class="mz-det" id="hmMzDet" dir="rtl" hidden></div>' +
         ''
         : '<p class="hm-none">' + (H.rab ? "This hilchah has no mitzvah from the 613. Its laws are rabbinic." : "No counted mitzvah in this hilchah.") + '</p>' + (H.d ? '<p class="hm-d">' + esc(H.d) + '</p>' : '')) +
-      '</div>' + (H.n && MZKW[H.a] ? '<aside class="mz-panel" id="mzPanel"><button type="button" class="mz-pbtn primary" id="mzMatchBtn">Match the keyword to the picture</button><button type="button" class="mz-pbtn" id="mzShuffleBtn" disabled>Shuffle</button><button type="button" class="mz-pbtn" id="mzFixBtn" disabled>Correct the order</button><p class="mz-status" id="mzStatus" aria-live="polite">Shuffle and Correct the order wake up once matching starts.</p><div class="mz-tray mz-ptray" id="mzTray" dir="rtl" hidden></div></aside>' : '') + '</div></div>';
+      '</div>' + (H.n && MZKW[H.a] ? '<aside class="mz-panel" id="mzPanel"><button type="button" class="mz-pbtn primary" id="mzMatchBtn">Match the keyword to the picture</button><button type="button" class="mz-pbtn" id="mzOrderBtn">Put the cards in order</button><button type="button" class="mz-pbtn" id="mzCheckBtn" disabled>Check order</button><button type="button" class="mz-pbtn" id="mzShuffleBtn" disabled>Shuffle</button><button type="button" class="mz-pbtn" id="mzFixBtn" disabled>Correct the order</button><p class="mz-status" id="mzStatus" aria-live="polite">Shuffle and Correct the order wake up once a test starts.</p><div class="mz-tray mz-ptray" id="mzTray" dir="rtl" hidden></div></aside>' : '') + '</div></div>';
     }
   }
   if (lvl !== 2) html += '</div>';
@@ -3629,6 +3637,7 @@ function renderHM(lvl) {
       if (img) { if (img.complete && !img.naturalWidth) fail(); else img.addEventListener("error", fail); }
       card.onclick = function () {
         var k = +card.getAttribute("data-mzk");
+        if (mzOT.on) return;
         if (mzMT.on) { if (mzMT.sel !== null && !card.classList.contains("mz-done")) { var sk = mzMT.sel; mzMT.sel = null; $$(".mz-nchip", host).forEach(function (x) { x.classList.remove("mz-sel"); }); mzTry(card, sk); } return; }
         if (mzSel === k) { mzSel = -1; card.classList.remove("on"); if (mzDet) { mzDet.hidden = true; mzDet.innerHTML = ""; } return; }
         mzSel = k;
@@ -3718,7 +3727,7 @@ function renderHM(lvl) {
         if (!st.showAll) grid.classList.remove("all");
         var pager0 = $("#mzPager", host); if (pager0) pager0.classList.remove("mz-test");
         mzMatchBtn.textContent = "Match the keyword to the picture";
-        $("#mzShuffleBtn", host).disabled = true; $("#mzFixBtn", host).disabled = true; mzStatus("Shuffle and Correct the order wake up once matching starts.");
+        $("#mzShuffleBtn", host).disabled = true; $("#mzFixBtn", host).disabled = true; var ob0 = $("#mzOrderBtn", host); if (ob0) ob0.disabled = false; mzStatus("Shuffle and Correct the order wake up once a test starts.");
         return;
       }
       mzMT.on = true; mzMT.placed = 0; mzMT.bySelf = 0; mzMT.sel = null;
@@ -3731,13 +3740,115 @@ function renderHM(lvl) {
       var tray = $("#mzTray", host); if (tray) tray.hidden = false;
       mzPaintChips();
       mzMatchBtn.textContent = "✕ Stop matching";
-      $("#mzShuffleBtn", host).disabled = false; $("#mzFixBtn", host).disabled = false;
+      $("#mzShuffleBtn", host).disabled = false; $("#mzFixBtn", host).disabled = false; var ob1 = $("#mzOrderBtn", host); if (ob1) ob1.disabled = true;
       mzStatus("Drag each keyword onto its picture — " + mzMT.total + " to match.");
     };
+    /* Card-ordering test: the same picture cards, mixed up with their number
+       badges hidden; drag them (or tap two to swap) back into the Rambam's
+       order, then Check order. Cards carry data-locked outside this test so
+       the shared rcDrag helper leaves them alone the rest of the time. */
+    var mzOT = { on: false, total: 0 };
+    var mzOrdSel = null;
+    function mzCards() { return $$(".mzpic", host); }
+    function mzOrdClear() { mzCards().forEach(function (x) { x.classList.remove("mz-done", "mz-auto", "mz-wrong"); }); }
+    function mzOrdDeselect() { if (mzOrdSel) { mzOrdSel.classList.remove("mz-sel"); mzOrdSel = null; } }
+    function mzOrdSort() {
+      var grid = $(".mz-grid", host); if (!grid) return;
+      var pos = {}; mzShown.forEach(function (x, i) { pos[x.k] = i; });
+      mzCards().sort(function (a, b) { return pos[+a.getAttribute("data-mzk")] - pos[+b.getAttribute("data-mzk")]; }).forEach(function (c) { grid.appendChild(c); });
+    }
+    function mzShuffleCards() {
+      var grid = $(".mz-grid", host); if (!grid) return;
+      var cards = mzCards(), correct = mzShown.map(function (x) { return x.k; }), s = shuffle(cards), t = 0;
+      while (t < 25 && s.every(function (c, i) { return +c.getAttribute("data-mzk") === correct[i]; })) { s = shuffle(cards); t++; }
+      s.forEach(function (c) { grid.appendChild(c); });
+      mzOrdClear(); mzOrdDeselect();
+    }
+    function mzOrderStop() {
+      var grid = $(".mz-grid", host); if (!grid) return;
+      mzOrdSort();
+      mzCards().forEach(function (c) { c.setAttribute("data-locked", "1"); c.classList.remove("on"); });
+      mzOT.on = false; mzOrdDeselect(); mzOrdClear();
+      grid.classList.remove("mz-ordering"); if (!st.showAll) grid.classList.remove("all");
+      var pager = $("#mzPager", host); if (pager) pager.classList.remove("mz-test");
+      var ob = $("#mzOrderBtn", host); if (ob) ob.textContent = "Put the cards in order";
+      var mb = $("#mzMatchBtn", host); if (mb) mb.disabled = false;
+      var cb = $("#mzCheckBtn", host); if (cb) cb.disabled = true;
+      var sh = $("#mzShuffleBtn", host), fx = $("#mzFixBtn", host); if (sh) sh.disabled = true; if (fx) fx.disabled = true;
+      mzStatus("Shuffle and Correct the order wake up once a test starts.");
+    }
+    var mzGridEl = $(".mz-grid", host);
+    if (mzGridEl) {
+      mzCards().forEach(function (c) { c.setAttribute("data-locked", "1"); });
+      rcDrag(mzGridEl, ".mzpic", {
+        start: function () { mzOrdDeselect(); },
+        move: function (el, t) {
+          if (!mzOT.on) return;
+          var tg = t && t.closest ? t.closest(".mzpic") : null;
+          if (!tg || tg === el || tg.parentNode !== mzGridEl) return;
+          var kids = Array.prototype.slice.call(mzGridEl.children), a = kids.indexOf(el), b = kids.indexOf(tg);
+          if (a < 0 || b < 0 || a === b) return;
+          if (a < b) mzGridEl.insertBefore(el, tg.nextSibling); else mzGridEl.insertBefore(el, tg);
+          mzOrdClear();
+        },
+        tap: function (el) {
+          if (!mzOT.on) return;
+          if (!mzOrdSel) { mzOrdSel = el; el.classList.add("mz-sel"); mzStatus("Now tap the card to swap it with."); return; }
+          if (mzOrdSel === el) { mzOrdDeselect(); return; }
+          var a = mzOrdSel, ph = document.createElement("i");
+          mzGridEl.insertBefore(ph, el); mzGridEl.insertBefore(el, a); mzGridEl.insertBefore(a, ph); ph.remove();
+          mzOrdDeselect(); mzOrdClear();
+        }
+      });
+    }
+    var mzOrderBtn = $("#mzOrderBtn", host);
+    if (mzOrderBtn) mzOrderBtn.onclick = function () {
+      var grid = $(".mz-grid", host); if (!grid) return;
+      if (mzOT.on) { mzOrderStop(); return; }
+      if (mzShown.length < 2) { mzStatus("Only one card in this hilchah — nothing to put in order."); return; }
+      mzOT.on = true; mzOT.total = mzShown.length;
+      grid.classList.add("all"); grid.classList.add("mz-ordering");
+      var pager = $("#mzPager", host); if (pager) pager.classList.add("mz-test");
+      mzSel = -1; mzCards().forEach(function (x) { x.classList.remove("on"); x.removeAttribute("data-locked"); });
+      if (mzDet) { mzDet.hidden = true; mzDet.innerHTML = ""; }
+      mzShuffleCards();
+      mzOrderBtn.textContent = "✕ Stop ordering";
+      var mb = $("#mzMatchBtn", host); if (mb) mb.disabled = true;
+      $("#mzCheckBtn", host).disabled = false; $("#mzShuffleBtn", host).disabled = false; $("#mzFixBtn", host).disabled = false;
+      mzStatus("The cards are mixed up and their numbers are hidden. Drag them into order — the first mitzvah belongs at the top right — or tap two cards to swap them. Then tap Check order.");
+    };
+    var mzCheckBtn = $("#mzCheckBtn", host);
+    if (mzCheckBtn) mzCheckBtn.onclick = function () {
+      if (!mzOT.on) return;
+      var right = 0;
+      mzCards().forEach(function (c, i) {
+        var ok = +c.getAttribute("data-mzk") === mzShown[i].k;
+        if (ok) right++;
+        c.classList.toggle("mz-done", ok); c.classList.toggle("mz-wrong", !ok);
+      });
+      mzOrdDeselect();
+      var all = right === mzOT.total;
+      sfx(all);
+      if (all) {
+        confetti();
+        $("#mzShuffleBtn", host).disabled = true; $("#mzFixBtn", host).disabled = true; mzCheckBtn.disabled = true;
+        mzStatus("Perfect — all " + mzOT.total + " cards back in the Rambam's order!");
+      } else {
+        mzStatus(right + " of " + mzOT.total + " in the right place. The red ones still need moving — drag them and check again.");
+      }
+    };
     var mzShuffleBtn = $("#mzShuffleBtn", host);
-    if (mzShuffleBtn) mzShuffleBtn.onclick = function () { if (!mzMT.on) return; mzShuf(mzMT.waiting); mzMT.sel = null; mzPaintChips(); mzStatus(mzMT.waiting.length + (mzMT.waiting.length === 1 ? " keyword" : " keywords") + " still waiting — shuffled."); };
+    if (mzShuffleBtn) mzShuffleBtn.onclick = function () { if (mzOT.on) { mzShuffleCards(); mzStatus(mzOT.total + " cards shuffled again — drag them into order, then Check order."); return; } if (!mzMT.on) return; mzShuf(mzMT.waiting); mzMT.sel = null; mzPaintChips(); mzStatus(mzMT.waiting.length + (mzMT.waiting.length === 1 ? " keyword" : " keywords") + " still waiting — shuffled."); };
     var mzFixBtn = $("#mzFixBtn", host);
     if (mzFixBtn) mzFixBtn.onclick = function () {
+      if (mzOT.on) {
+        mzOrdSort();
+        mzCards().forEach(function (c) { c.classList.add("mz-done", "mz-auto"); c.classList.remove("mz-wrong"); });
+        mzOrdDeselect();
+        $("#mzShuffleBtn", host).disabled = true; $("#mzFixBtn", host).disabled = true; var cb2 = $("#mzCheckBtn", host); if (cb2) cb2.disabled = true;
+        mzStatus("Corrected — the cards are back in the Rambam's order. Tap ✕ Stop ordering, then try it yourself.");
+        return;
+      }
       if (!mzMT.on) return;
       mzMT.waiting.slice().forEach(function (k) {
         var card = null;
