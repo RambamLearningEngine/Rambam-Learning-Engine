@@ -635,6 +635,8 @@ body.on-home #page-home .hero.hero-sm{max-width:min(94vw,560px)!important;paddin
 .rc-type{width:100%;font:inherit;font-size:18px;padding:12px 14px;border-radius:14px;border:1px solid var(--line);margin-top:12px;text-align:center}
 .rc-big{width:150px;height:150px;object-fit:contain;border-radius:16px;background:#fff;margin:10px auto 0;display:block}
 .rc-msg{margin-top:12px}
+.fill-quote{font-size:17px;line-height:1.7;text-align:left}
+.fill-blank{display:inline-block;min-width:76px;padding:0 8px;margin:0 2px;text-align:center;font-weight:900;font-size:12px;letter-spacing:.08em;color:var(--gold);background:#fdf3d8;border-bottom:3px dashed var(--gold);border-radius:6px 6px 0 0;vertical-align:baseline}
 @media (max-width:380px){.rc-grid{gap:5px}.rc-tile{font-size:11px;padding:5px 3px}.rc-list .rc-tile{font-size:13px}.rc-chip{font-size:12px;padding:8px 9px}}
 </style>
 <style>.intro-page{max-width:640px;margin:0 auto;padding:8px 4px 40px}.intro-list{display:flex;flex-direction:column;gap:28px;align-items:center}.intro-list details.intro-sec{width:100%;text-align:center}.intro-list details.intro-sec .mt-about-body{text-align:left;margin-top:12px}@media (max-width:480px){#sfCard .sf-in-list li{grid-template-columns:24px 1fr!important;grid-template-areas:"num en" "num he" "num cnt"!important}#sfCard .sf-in-he{text-align:left;font-size:1.05rem;margin-top:2px}}
@@ -841,7 +843,7 @@ background:#fffaf0 repeating-linear-gradient(180deg,#fffaf0 0 2px,#8f846c 2px 3p
 .sh-c4{background-color:#7b4fa0}
 .sh-c5{background-color:#e07b39}
 .sh-c6{background-color:#1f8a8a}
-.sh-bk:nth-child(3n){--sh:132px}.sh-bk:nth-child(4n+1){--sh:116px}.sh-bk:nth-child(5n+2){--sh:128px}
+/* Nov 27: every book on the shelf is the same height — no varied --sh heights */
 .sh-n{font-weight:800;font-size:.72rem;background:rgba(255,255,255,.92);color:#1f2a44;border-radius:50%;width:19px;height:19px;line-height:19px;text-align:center;flex:none}
 .sh-he{display:flex;flex-direction:column;align-items:center;font-family:"Frank Ruhl Libre","SBL Hebrew","Times New Roman",serif;font-weight:800;font-size:.86rem;line-height:1;white-space:nowrap;overflow:hidden;text-shadow:0 1px 0 rgba(0,0,0,.35)}
 .sh-he i{font-style:normal;display:block;line-height:1.05}
@@ -887,12 +889,12 @@ background:#fffaf0 repeating-linear-gradient(180deg,#fffaf0 0 2px,#8f846c 2px 3p
 
 /* Nov 11: two shelves of 7, names written flat */
 .sh-row{flex-wrap:wrap;height:auto!important;row-gap:17px;align-content:flex-end;padding:8px 4px 0;background:#5e3a18 linear-gradient(transparent calc(8px + var(--lh)), #1f2a44 calc(8px + var(--lh)), #1f2a44 calc(11px + var(--lh)), #c58b4f calc(11px + var(--lh)), #c58b4f calc(22px + var(--lh)), #1f2a44 calc(22px + var(--lh)), #1f2a44 calc(25px + var(--lh)), transparent calc(25px + var(--lh)));--lh:96px}
-.sh-bk{flex:0 0 calc((100% - 18px) / 7)!important;max-width:none!important;--sh:86px;height:var(--sh)!important;padding:6px 1px 4px!important;justify-content:flex-start;box-sizing:border-box}
-.sh-bk:nth-child(3n){--sh:96px}.sh-bk:nth-child(4n+1){--sh:80px}.sh-bk:nth-child(5n+2){--sh:92px}
+.sh-bk{flex:0 0 calc((100% - 18px) / 7)!important;max-width:none!important;--sh:96px;height:var(--sh)!important;padding:6px 1px 4px!important;justify-content:flex-start;box-sizing:border-box}
+
 .sh-he{display:block!important;width:100%;text-align:center;font-size:.74rem!important;letter-spacing:-.02em;line-height:1.15!important;white-space:nowrap;overflow:visible;margin-top:auto;margin-bottom:auto;padding:3px 0;background:rgba(255,255,255,.18);border-radius:3px}
 .sh-he i{display:inline!important}
 .sf-case.picked .sh-bk.on{max-width:none!important;transform:translateY(-8px) scale(1.12)}
-@media (min-width:700px){.sh-row{--lh:120px}.sh-bk{--sh:108px}.sh-bk:nth-child(3n){--sh:120px}.sh-bk:nth-child(4n+1){--sh:100px}.sh-bk:nth-child(5n+2){--sh:114px}.sh-he{font-size:1.05rem!important}}
+@media (min-width:700px){.sh-row{--lh:120px}.sh-bk{--sh:120px}.sh-he{font-size:1.05rem!important}}
 /* Nov 10: Hilchot + Mitzvot stages */
 .hm{max-width:760px;margin:0 auto}
 .hm-head{text-align:center;margin:4px auto 14px;max-width:560px}
@@ -1308,14 +1310,14 @@ button.hm-row:hover{background:rgba(176,141,87,.07)}
 <style>/* Nov 19: Books page — a tapped sefer pops out over the shelf; tapping the shelf caption puts it back */
 #sfStage{position:relative;max-width:560px;margin:0 auto}
 #sfStage:not(.sf-pop) #sfWheel{display:none!important}
-#sfStage.sf-pop #sfWheel{position:absolute;inset:-10px -6px;z-index:10;display:flex!important;align-items:center;justify-content:center;background:#fffdf7;border-radius:10px;padding:12px;animation:fadeIn .2s ease}
-#sfStage.sf-pop #sfCard{margin:0;width:100%;max-height:100%;overflow-y:auto}
+#sfStage.sf-pop #sfWheel{position:absolute;inset:-10px -6px auto -6px;min-height:calc(100% + 20px);z-index:10;display:flex!important;align-items:center;justify-content:center;background:#fffdf7;border-radius:10px;padding:12px;animation:fadeIn .2s ease}
+#sfStage.sf-pop #sfCard{margin:0;width:100%}
 #sfStage.sf-pop .sh-cap{display:none}
 /* Nov 19b: Hilchot page — the same pop-out over its own shelf (#hlDetail is the stage); the ‹ › arrows are gone, shelf-tap is the navigation */
 #hlDetail{position:relative}
 #hlDetail:not(.hl-pop) #hlWheel{display:none!important}
-#hlDetail.hl-pop #hlWheel{position:absolute;inset:-10px -6px;z-index:10;display:flex!important;align-items:center;justify-content:center;background:#fffdf7;border-radius:10px;padding:12px;animation:fadeIn .2s ease;max-width:none}
-#hlDetail.hl-pop #hlCard{margin:0;width:100%;max-height:100%;overflow-y:auto;justify-content:flex-start}
+#hlDetail.hl-pop #hlWheel{position:absolute;inset:-10px -6px auto -6px;min-height:calc(100% + 20px);z-index:10;display:flex!important;align-items:center;justify-content:center;background:#fffdf7;border-radius:10px;padding:12px;animation:fadeIn .2s ease;max-width:none}
+#hlDetail.hl-pop #hlCard{margin:0;width:100%;justify-content:flex-start}
 #hlDetail.hl-pop .sh-cap{display:none}
 </style>
 <style>/* Nov 20: Mitzvot learning section made the main event — the single-card view
@@ -1428,9 +1430,8 @@ body:has(#page-mitzvot.active) .wrap{max-width:1060px}
 .mz-pick-sm .mz-pick-main .hc-en{font-size:.85rem}
 .mz-pick-sm .mz-pick-sub{font-size:.75rem}
 .mz-pick-sm .mz-pick-count{font-size:.7rem}
-.mz-open-arr{position:absolute;right:-15px;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;background:var(--gold);border:2.5px solid #1f2a44;box-shadow:2px 2px 0 #1f2a44;color:#fff;font-size:1.7rem;font-weight:900;line-height:1;display:flex;align-items:center;justify-content:center;z-index:2;transition:transform .2s ease,background .2s ease}
-.mz-cover-btn:hover .mz-open-arr{transform:translateY(-50%) translateX(3px)}
-.mz-cover-btn.open .mz-open-arr{background:var(--navy)}
+.mz-open-btn{position:absolute;right:-14px;top:50%;transform:translateY(-50%);padding:9px 15px;border-radius:999px;background:var(--gold);border:2.5px solid #1f2a44;box-shadow:2px 2px 0 #1f2a44;color:#1f2a44;font-size:.92rem;font-weight:900;line-height:1.1;letter-spacing:.02em;display:flex;align-items:center;justify-content:center;z-index:2;white-space:nowrap}
+.hm-chip.on:hover .mz-open-btn,.mz-cover-btn:hover .mz-open-btn{filter:brightness(1.08)}
 .mz-hilpage{flex:0 0 auto;width:252px;height:336px}
 .mz-mzpage{flex:1 1 340px;min-width:0;animation:fadeIn .2s ease}
 #page-mitzvot .mz-mzpage .mz-flex{max-width:none;margin-top:0}
@@ -1461,7 +1462,7 @@ body:has(#page-mitzvot.active) .wrap{max-width:1060px}
 #hmSef .hm-chip.on .bk-front{gap:6px;padding:10px 6px}
 #hmSef .hm-chip.on{cursor:pointer}
 #hmSef .hm-chip.on:hover .bk-cover{transform:rotate(-1.5deg) translateY(-2px)}
-#hmSef .hm-chip.on.open .mz-open-arr{background:var(--navy)}
+#hmSef .hm-chip.on .mz-open-btn{font-size:1rem;padding:11px 17px}
 #hmSef .hm-chip.on .mz-open-hint{margin-top:8px}
 @media (max-width:620px){.mz-stage{flex-direction:column;flex-wrap:nowrap;align-items:center}.mz-stage .hm-wheel{flex:none;width:100%}.mz-stage .mz-hilpage{width:min(80vw,252px);height:320px}.mz-stage .mz-mzpage{flex:none;width:100%}}
 </style>
@@ -1601,7 +1602,7 @@ body:has(#page-mitzvot.active) .wrap{max-width:1400px}
  .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-fhe{font-size:2rem;padding:2px 12px}
  .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-fen{font-size:1.05rem}
  .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-pg{right:-9px;top:6px;bottom:6px;width:6px;border-width:3px}
- .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .mz-open-arr{display:none}
+ .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .mz-open-btn{display:none}
 }
 </style>
 <style>/* Nov 23k: overlay structure, as Joshua asked — one page at a time, stacked
@@ -1630,7 +1631,7 @@ body:has(#page-mitzvot.active) .wrap{max-width:1400px}
 #page-mitzvot .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-fhe{font-size:2rem;padding:2px 12px}
 #page-mitzvot .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-fen{font-size:1.05rem}
 #page-mitzvot .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .bk-pg{right:-9px;top:6px;bottom:6px;width:6px;border-width:3px}
-#page-mitzvot .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .mz-open-arr{display:none}
+#page-mitzvot .mz-stage:has(.mz-hilpage) #hmSef .hm-chip.on .mz-open-btn{display:none}
 #page-mitzvot .mz-stage:has(.mz-hilpage) .mz-hilpage{position:absolute;inset:0;z-index:3;width:auto;height:auto;min-height:0;flex:none}
 #page-mitzvot .mz-stage:has(.mz-hilpage) .mz-mzpage{position:absolute;inset:0;z-index:4;width:auto;height:auto;min-height:0;flex:none}
 @media (max-width:620px){
@@ -1836,6 +1837,153 @@ html:not(.lng-en) .mz-lng-en{display:none!important}
    uses the panel's normal gold, and while matching is off the line
    itself says why Shuffle and Correct the order are greyed. */
 #page-mitzvot .mz-stage .mz-mzpage .mz-status{color:var(--gold)}
+</style>
+<style>/* Nov 27: fit the open mitzvot page on screen with no scrollbar, as
+   Joshua asked — the sefer-coloured page used to size its card grid
+   naturally (about 950px tall for Yesodei HaTorah's 16 cards) inside a
+   ~520px page, so the page scrolled internally, its scrollbar sat on
+   the page's right edge, and the second row of cards was cut off. Now
+   the stage takes the viewport height left under the header, the
+   page's inside becomes a grid (back link on its own row, then the
+   picture card and the test panel filling what remains), and nothing
+   inside the page scrolls. In Show-all — and in the matching / order
+   tests, which also show every card — the grid's rows share the
+   available height equally: each card keeps its natural square-ish
+   shape when there is room and shrinks to fit when there isn't, so
+   every card of the hilchah is visible at once. The detail strip a
+   card tap opens floats over the bottom of the card instead of
+   pushing the grid off the page. One-at-a-time keeps its arrows, its
+   picture simply growing or shrinking to the height on offer. On
+   narrow screens the layout stacks as before, with the test panel
+   compacted into a wrapping row of smaller buttons under the card so
+   the whole page still fits without scrolling. */
+#page-mitzvot .mz-stage:has(.mz-hilpage){--pgh:clamp(360px,calc(100vh - 236px),1200px);--pgh:clamp(360px,calc(100dvh - 236px),1200px)}
+#page-mitzvot .mz-stage:has(.mz-grid.all){--pgh:clamp(360px,calc(100vh - 236px),1200px);--pgh:clamp(360px,calc(100dvh - 236px),1200px)}
+#page-mitzvot .mz-stage .mz-mzpage{display:flex;flex-direction:column;overflow:hidden}
+#page-mitzvot .mz-stage .mz-mzpage .mz-flex{flex:1 1 auto;min-height:0;height:auto;display:grid;grid-template-rows:auto minmax(0,1fr);grid-template-columns:minmax(0,1fr) auto;gap:10px 12px;overflow:hidden;padding-right:0;align-items:stretch}
+#page-mitzvot .mz-stage .mz-mzpage .mz-flex .mz-back{grid-column:1/-1}
+#page-mitzvot .mz-stage .mz-mzpage .mz-flex .hm-card{grid-row:2;grid-column:1;min-height:0;height:auto;display:flex;flex-direction:column;position:relative;padding:14px 16px 12px}
+#page-mitzvot .mz-stage .mz-mzpage .mz-panel{grid-row:2;grid-column:2;position:static;align-self:stretch;height:auto;max-height:100%;overflow:hidden}
+#page-mitzvot .mz-stage .mz-mzpage .mz-ptray{flex:1 1 auto;min-height:0;max-height:none}
+#page-mitzvot .mz-stage .mz-pager{flex:1 1 auto;min-height:0}
+#page-mitzvot .mz-stage .mz-grid.all{flex:1 1 auto;min-width:0;height:100%;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));grid-auto-rows:minmax(0,1fr);gap:10px;align-items:center}
+#page-mitzvot .mz-stage .mz-grid.all .mzpic{width:100%;max-width:240px;height:auto;max-height:100%;min-height:0;aspect-ratio:.84;justify-self:center;display:flex;flex-direction:column;padding-top:28px}
+#page-mitzvot .mz-stage .mz-grid.all .mzpic-n{min-width:23px;height:23px;font-size:.78rem;top:2px;inset-inline-start:4px}
+#page-mitzvot .mz-stage .mz-grid.all .mzpic-im{flex:1 1 auto;min-height:0}
+#page-mitzvot .mz-stage .mz-grid.all .mzpic img{width:100%;height:100%;aspect-ratio:auto;object-fit:contain}
+#page-mitzvot .mz-stage .mz-grid.all .mzpic-fb{height:100%;aspect-ratio:auto}
+#page-mitzvot .mz-stage .mz-pager:not(.all):not(.mz-test) .mz-grid{align-self:stretch;height:100%;display:flex;justify-content:center}
+#page-mitzvot .mz-stage .mz-pager:not(.all):not(.mz-test) .mz-grid{max-width:none}
+#page-mitzvot .mz-stage .mz-pager:not(.all):not(.mz-test) .mzpic.mz-cur{display:flex;flex-direction:column;height:100%;width:auto;max-width:min(420px,100%);aspect-ratio:.84}
+#page-mitzvot .mz-stage .mz-pager:not(.all) .mzpic-im{flex:1 1 auto;min-height:0}
+#page-mitzvot .mz-stage .mz-pager:not(.all) .mzpic img{width:100%;height:100%;aspect-ratio:auto;object-fit:contain}
+#page-mitzvot .mz-stage .mz-pager:not(.all) .mzpic-fb{height:100%;aspect-ratio:auto}
+#page-mitzvot .mz-stage .mz-flex .mz-det{position:absolute;left:14px;right:14px;bottom:12px;z-index:5;max-height:46%;overflow-y:auto;margin-top:0;box-shadow:0 10px 26px rgba(17,24,39,.18);background:var(--panel)}
+@media (max-width:620px){
+ #page-mitzvot .mz-stage:has(.mz-hilpage){--pgh:clamp(430px,calc(100vh - 300px),900px);--pgh:clamp(430px,calc(100dvh - 300px),900px)}
+ #page-mitzvot .mz-stage .mz-mzpage .mz-flex{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto}
+ #page-mitzvot .mz-stage .mz-mzpage .mz-flex .hm-card{grid-row:2;padding:10px 12px}
+ #page-mitzvot .mz-stage .mz-flex .hm-title{font-size:1.3rem}
+ #page-mitzvot .mz-stage .mz-mzpage .mz-panel{grid-row:3;grid-column:1;width:100%;flex:none;display:flex;flex-direction:row;flex-wrap:wrap;gap:6px;padding:8px}
+ #page-mitzvot .mz-stage .mz-mzpage .mz-pbtn{flex:1 1 42%;width:auto;padding:8px 6px;font-size:.8rem}
+ #page-mitzvot .mz-stage .mz-mzpage .mz-status{flex:1 1 100%;width:auto;font-size:.75rem}
+ #page-mitzvot .mz-stage .mz-mzpage .mz-ptray{flex:1 1 100%;max-height:96px}
+ #page-mitzvot .mz-stage .mz-grid.all{grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:7px}
+ #page-mitzvot .mz-stage .mz-grid.all .mzpic{padding-top:24px}
+}
+</style>
+<style>/* Nov 27c: picture repairs. (1) Laptop: the mitzvah pictures are
+   JPEGs now, which every browser decodes — the WebP originals never
+   appeared in Joshua's laptop browser at all. Inside the fitted stage
+   the <img> also fills its wrapper absolutely instead of through a
+   percentage height in the flex chain, a sizing path some engines
+   collapse to nothing, and a card only swaps to its keyword fallback
+   on a real load error (see the wiring in renderHM), never merely for
+   still being on its way. (2) One-at-a-time: the card is sized from
+   the pager area itself — the pictures are square, so the card is the
+   largest square the area offers (container units; the earlier
+   height/aspect sizing remains as the fallback where they are not
+   understood) — instead of the small box it used to shrink to in a
+   mostly empty card, and on wider screens the stage widens for the
+   single view just as it already did for Show all. On narrow phones
+   the step arrows ride on the card's left and right edges, so the
+   card gets the full column width; the test panel keeps its own row
+   underneath, unchanged. */
+#page-mitzvot .mz-stage .mzpic-im{overflow:hidden}
+#page-mitzvot .mz-stage .mzpic img{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;object-fit:contain}
+#page-mitzvot .mz-stage .mzpic-fb{position:absolute;inset:0;aspect-ratio:auto}
+#page-mitzvot .mz-stage .mz-pager:not(.all):not(.mz-test){align-items:stretch}
+#page-mitzvot .mz-stage .mz-pager:not(.all):not(.mz-test) .mz-grid{container-type:size;align-items:center}
+#page-mitzvot .mz-stage .mz-pager:not(.all):not(.mz-test) .mzpic.mz-cur{aspect-ratio:1;width:min(100cqw,100cqh);height:min(100cqw,100cqh);max-width:min(640px,100%);max-height:100%}
+@media (min-width:621px){
+ #page-mitzvot .mz-stage:has(.mz-grid:not(.all)){max-width:min(1180px,calc(100vw - 40px))}
+}
+@media (max-width:620px){
+ #page-mitzvot .mz-stage .mz-pager:not(.all):not(.mz-test){position:relative}
+ #page-mitzvot .mz-stage .mz-pager:not(.all):not(.mz-test) .mz-arr{position:absolute;top:50%;transform:translateY(-50%);z-index:4}
+ #page-mitzvot .mz-stage .mz-pager:not(.all):not(.mz-test) .mz-arr:active{transform:translateY(-50%) scale(.94)}
+ #page-mitzvot .mz-stage .mz-pager:not(.all):not(.mz-test) #mzNext{left:2px}
+ #page-mitzvot .mz-stage .mz-pager:not(.all):not(.mz-test) #mzPrev{right:2px}
+}
+</style>
+<style>/* Books view switch: bookshelf OR grid — only one display at a time.
+   A segmented control (same idiom as the home tabs / language toggle)
+   replaces the old "View all 14 sefarim" disclosure, which left the
+   shelf on screen above the grid. The chosen view is the only pane
+   shown; picking a sefer in the grid switches back to the bookshelf
+   with that sefer popped out. */
+.sf-view-switch{display:flex;gap:6px;background:var(--soft);padding:5px;border-radius:16px;margin:2px auto 16px;max-width:440px}
+.sf-view-switch button{flex:1;border:0;background:transparent;border-radius:12px;padding:10px 8px;font-weight:800;color:var(--muted)}
+.sf-view-switch button.active{background:var(--panel);color:var(--ink);box-shadow:0 2px 8px rgba(15,23,42,.10);border:1px solid rgba(176,141,87,.35)}
+.sf-view-switch button .sf-vs-sub{display:block;font-size:.72rem;font-weight:700;opacity:.65;margin-top:1px}
+.sf-view-pane[hidden]{display:none!important}
+#sfAllHost .sf-bar{margin-top:0}
+</style>
+<style>/* Nov 27d: bigger mitzvah pictures, still fitted to the screen with no
+   scrolling — and the layout stays clean. Three moves. (1) The Mitzvot
+   page header (the מצוות title, its English line and the Hebrew/English
+   toggle) becomes one slim centred row instead of three stacked lines,
+   and the level-nav row above it slims down, so the stage starts
+   higher. (2) The stage is sized to end just inside the fold (the
+   --pgh offset is now 230px, matched to the slimmer header) and, on wide screens, more of the width
+   (1180px -> 1400px), with the Show-all card cap raised from 240px to
+   320px. (3) A small script (mzFitGrid, in the mitzvot wiring) picks
+   the grid's column count for the hilchah in view — the count whose
+   cards, and so their pictures, come out largest in the space the
+   stage actually has; the CSS grid remains as the first-paint
+   fallback. The matching and ordering tests share the same grid, so
+   they get the same size as the non-test pages. On narrow screens
+   only the header row changes; the phone sizing is untouched. */
+@media (min-width:621px){
+ #page-mitzvot .hm-head{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 16px;max-width:none;margin:0 auto 8px}
+ #page-mitzvot .hm-head .hm-he{font-size:1.9rem}
+ #page-mitzvot .hm-head .hm-en{margin-top:0}
+ #page-mitzvot .hm-head .lang-toggle{margin-top:0}
+ #page-mitzvot .intro-next.nav-top{margin:10px 0 6px}
+ #page-mitzvot .nav-top .in-nav .level-sm{min-height:0;padding:9px 12px}
+ #page-mitzvot .mz-stage:has(.mz-hilpage),#page-mitzvot .mz-stage:has(.mz-grid.all){--pgh:clamp(400px,calc(100vh - 230px),1400px);--pgh:clamp(400px,calc(100dvh - 230px),1400px)}
+ #page-mitzvot .mz-stage:has(.mz-grid.all),#page-mitzvot .mz-stage:has(.mz-grid:not(.all)){max-width:min(1400px,calc(100vw - 32px))}
+ #page-mitzvot .mz-stage .mz-grid.all .mzpic{max-width:320px}
+}
+@media (max-width:620px){
+ #page-mitzvot .hm-head{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 12px;margin:0 auto 6px}
+ #page-mitzvot .hm-head .hm-en{margin-top:0}
+ #page-mitzvot .hm-head .lang-toggle{margin-top:0}
+}
+</style>
+<style>/* Nov 27e: 2 rows of 5 for the Show-all / matching / ordering grid,
+   as Joshua asked. The Nov 27d auto-fit could pick a single row of 10
+   on wide screens, squeezing the pictures and pushing the last cards
+   behind the test panel. The grid is now five columns wide (the
+   script in mzFitGrid does the same, using fewer only for a hilchah
+   with fewer than 5 cards); the rows keep sharing the fitted stage
+   height equally (Nov 27), so the page still fits with no scrolling. */
+#page-mitzvot .mz-stage .mz-grid.all{grid-template-columns:repeat(5,minmax(0,1fr))}
+#page-mitzvot .mz-grid.all{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media (max-width:620px){
+ #page-mitzvot .mz-stage .mz-grid.all{grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+ #page-mitzvot .mz-stage .mz-grid.all .mzpic{max-width:none}
+}
 </style>
 </head>
 <body>
@@ -2120,6 +2268,10 @@ var SHOW_PHONE = false;
 if (SHOW_PHONE) document.body.classList.add("show-phone");
 /* Nov 12: very short opening summaries for the Sefarim book page (Josh, 6:59 AM). The longer b.theme text is kept and still used by the games. */
 var SF_BRIEF = {"1": "Sefer Madda, the Book of Knowledge: the core beliefs and character traits needed to serve God.", "2": "Sefer Ahavah, the Book of Love: daily mitzvot of serving Hashem, like Shema, tefillah, tefillin and tzitzit.", "3": "Sefer Zemanim, the Book of Times: Shabbat, the festivals, fast days, Chanukah and Purim.", "4": "Sefer Nashim, the Book of Women: marriage, divorce, yibbum and chalitzah.", "5": "Sefer Kedushah, the Book of Holiness: forbidden relationships, forbidden foods and shechitah.", "6": "Sefer Haflaah, the Book of Utterances: the power of words, through oaths, vows, nazirut and pledges.", "7": "Sefer Zeraim, the Book of Seeds: mitzvot of the land, like gifts to the poor, tithes and shemittah.", "8": "Sefer Avodah, the Book of Temple Service: the Beit HaMikdash, its vessels and the daily service.", "9": "Sefer Korbanot, the Book of Offerings: the different korbanot and how each one is brought.", "10": "Sefer Taharah, the Book of Purity: tumah and taharah, and how one becomes pure again.", "11": "Sefer Nezikin, the Book of Damages: harm to others, like theft, robbery, injury and murder.", "12": "Sefer Kinyan, the Book of Acquisition: buying, selling, gifts, neighbors and partners, and how ownership passes.", "13": "Sefer Mishpatim, the Book of Judgments: money between people, like loans, deposits, claims and inheritance.", "14": "Sefer Shoftim, the Book of Judges: courts, the Sanhedrin, witnesses, mourning, kings and war."};
+/* Nov 27 (Josh): Fill in the Blanks — the two words taken out of each sefer's summary
+   (SF_BRIEF, the summary shown in the learning section) that the learner has to supply.
+   Each word appears once, in this order, in its summary. */
+var SF_FILL = { 1: ["beliefs", "character"], 2: ["Shema", "tefillin"], 3: ["Shabbat", "festivals"], 4: ["marriage", "divorce"], 5: ["relationships", "foods"], 6: ["oaths", "vows"], 7: ["tithes", "shemittah"], 8: ["vessels", "service"], 9: ["korbanot", "brought"], 10: ["tumah", "taharah"], 11: ["theft", "robbery"], 12: ["buying", "selling"], 13: ["loans", "deposits"], 14: ["Sanhedrin", "witnesses"] };
 
 /* ---------- helpers ---------- */
 var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -2234,8 +2386,9 @@ POOL.bname = BOOKS.map(function (b) { return "B.name." + b.n; });
 POOL.bnum = BOOKS.map(function (b) { return "B.num." + b.n; });
 POOL.btheme = BOOKS.map(function (b) { return "B.theme." + b.n; });
 POOL.bdesc = BOOKS.map(function (b) { return "B.desc." + b.n; });
+POOL.bfill = BOOKS.map(function (b) { return "B.fill." + b.n; });
 POOL.bnext = BOOKS.slice(0, 13).map(function (b) { return "B.next." + b.n; });
-POOL.L1 = [].concat(POOL.bname, POOL.bnum, POOL.btheme, POOL.bdesc, POOL.bnext);
+POOL.L1 = [].concat(POOL.bname, POOL.bnum, POOL.btheme, POOL.bdesc, POOL.bfill, POOL.bnext);
 POOL.hsort = HIL.map(function (h) { return "H.sefer." + h.a; });
 POOL.hcount = BOOKS.map(function (b) { return "H.count." + b.n; });
 POOL.hmc = HIL.map(function (h) { return "H.mc." + h.a; });
@@ -2398,6 +2551,17 @@ function build(key, optPool) {
       opts = shuffle([b].concat(distractSefarim(b.n, 3))).map(function (x) { return seferOpt(x, true); });
       q.correct = b.n; q.layout = "sefer";
       q.explain = '<span dir="rtl">' + esc(w.he.replace(w.qhe, "").trim()) + "</span> " + esc(w.en.replace(w.qen, "").trim());
+      break;
+    case "B.fill":
+      b = seferOf(+p[2]);
+      var fw = SF_FILL[b.n] || [], fsum = SF_BRIEF[b.n] || b.theme, fdisp = esc(fsum);
+      fw.forEach(function (w, wi) { fdisp = fdisp.replace(new RegExp("\\b" + w + "\\b"), '<span class="fill-blank">blank ' + (wi + 1) + "</span>"); });
+      q.kicker = "Fill in the blanks"; q.prompt = "Fill in the blanks";
+      q.sub = "The summary of <b>" + esc(b.translit) + '</b> · <span dir="rtl">' + esc(b.hebrew) + "</span>, with two words taken out. Which pair fills the gaps, in order?";
+      q.media = '<div class="q-quote fill-quote">' + fdisp + "</div>";
+      opts = shuffle([b].concat(distractSefarim(b.n, 3))).map(function (x) { var xp = SF_FILL[x.n] || []; return { id: x.n, html: '<span style="font-weight:700">' + esc(xp[0] || "") + " · " + esc(xp[1] || "") + "</span>" }; });
+      q.correct = b.n; q.layout = "list";
+      q.explain = "The summary in full: <b>" + esc(fsum) + "</b>"; q.sayText = b.hebrew;
       break;
     case "B.next":
       b = seferOf(+p[2]); var nx = seferOf(b.n + 1);
@@ -2827,7 +2991,7 @@ function rcSeferHTML(b, show) {
 }
 var gameFrom = "home";
 function rcDone() { if (gameFrom && gameFrom !== "home") { go(gameFrom); return; } go("home"); homeTab("games"); }
-var RC_FIRST = { 1: ["shelf", "dorder", "missing", "typeit"], 2: ["tsort", "hdrag", "hmissing"], 3: ["mdrag"] }, RC_GROUP = { 1: "Sefarim", 2: "Hilchot", 3: "Mitzvot" };
+var RC_FIRST = { 1: ["fill", "shelf", "dorder", "missing", "typeit"], 2: ["tsort", "hdrag", "hmissing"], 3: ["mdrag"] }, RC_GROUP = { 1: "Sefarim", 2: "Hilchot", 3: "Mitzvot" };
 function shelfGameRender(host) {
   host.innerHTML = '<div class="card"><h3 style="margin:0 0 4px">Bookshelf</h3><p class="trans" style="margin:0 0 10px">The 14 sefarim are mixed up on the shelf. Drag them back into order, 1 on the right to 14 on the left, then click Check.</p><div class="sf-case" id="shGame"><div class="sh-row">' + BOOKS.map(function (b, k) { return '<button type="button" class="sh-bk sh-c' + (b.n % 7) + '" data-k="' + k + '" aria-label="Sefer"><span class="sh-n">' + b.n + '</span><span class="sh-he" lang="he" dir="rtl">' + (b.shortHebrew || b.hebrew).replace(/\s+/g, "").split("").map(function (ch) { return "<i>" + esc(ch) + "</i>"; }).join("") + '</span></button>'; }).join("") + '</div><div class="sh-board"></div><div class="sh-game"><span class="sh-msg"></span><span class="sh-btns"><button type="button" class="sh-check">Check</button><button type="button" class="sh-shuf">Shuffle again</button></span></div></div></div>';
   var shf = $("#shGame", host);
@@ -3120,7 +3284,7 @@ function rcTypeIt(host) {
 
 
 /* ---------- instant test: test the page you are viewing, right now ---------- */
-function instantRun(title, keys, backPage) {
+function instantRun(title, keys, backPage, pinFirst) {
   if (!keys.length) { toast("Nothing to test here yet."); return; }
   gameFrom = backPage || "home"; tyGame = null;
   go("play", gameFrom);
@@ -3128,11 +3292,14 @@ function instantRun(title, keys, backPage) {
   var host = $("#playHost");
   host.innerHTML = '<div class="play-head"><h2>' + esc(title) + '</h2></div><div id="gBody"></div>';
   var body = $("#gBody", host);
-  var r = new Runner(body, { kickerFor: function () { return "Lock it in · " + title; }, again: function () { r.start(shuffle(keys.slice())); }, done: function () { rcDone(); } });
-  r.start(shuffle(keys.slice()));
+  /* pinFirst: keys[0] stays as the opening question (the rest still shuffle) */
+  var deal = function (fresh) { if (!pinFirst) return shuffle(keys.slice()); return fresh ? keys.slice() : [keys[0]].concat(shuffle(keys.slice(1))); };
+  var r = new Runner(body, { kickerFor: function () { return "Lock it in · " + title; }, again: function () { r.start(deal(false)); }, done: function () { rcDone(); } });
+  r.start(deal(true));
   window.scrollTo(0, 0);
 }
-function testSeferNow(n) { var keys = keysForSefer(n).concat(shuffle(hilOfSefer(n).map(function (h) { return "H.sefer." + h.a; })).slice(0, 4)); instantRun("Sefer " + n + " · " + seferOf(n).translit, keys, "books"); }
+/* Nov 27 (Josh): testing a sefer opens with Fill in the Blanks — its summary with words removed */
+function testSeferNow(n) { var rest = shuffle(keysForSefer(n).concat(shuffle(hilOfSefer(n).map(function (h) { return "H.sefer." + h.a; })).slice(0, 4))); instantRun("Sefer " + n + " · " + seferOf(n).translit, ["B.fill." + n].concat(rest), "books", true); }
 function testSeferHilchotNow(n) { var hs = hilOfSefer(n); var keys = shuffle(hs.map(function (h) { return "H.sefer." + h.a; }).concat(hs.map(function (h) { return "H.name." + h.a; }))); instantRun(seferOf(n).translit + " — its hilchot", keys.slice(0, 8), "hilchot"); }
 function testHilchahNow(a, backPage) { var h = HMAP[a]; if (!h) return; var keys = shuffle(["H.name." + a].concat(keysForHilchah(a))); instantRun("Hilchot " + h.tr, keys.slice(0, 8), backPage || "hilchot"); }
 
@@ -3458,8 +3625,9 @@ function hmStartAt(lvl, a) {
   if (k < 0) return false; S.flow.ipos[lvl] = k; S.flow.bite = null; S.flow.card = 0; markIntro("level" + lvl); save(); startBite(lvl); return true;
 }
 function hmTypeCount(h) { var p = 0, g = 0; (h.m || []).forEach(function (m) { if (m[0] === "+") p++; else g++; }); return { p: p, g: g }; }
-/* memory picture for a hilchah's mitzvah: mz-{sefer}-{hilchah}-{index}.webp, index 1-based, zero-padded */
-function mzPicURL(a, k) { var p = String(a).split("."), i = String(k + 1); if (i.length < 2) i = "0" + i; return "https://rambamlearningengine.github.io/Rambam-Learning-Engine/images/mitzvot/mz-" + p[0] + "-" + p[1] + "-" + i + ".webp"; }
+/* memory picture for a hilchah's mitzvah: mz-{sefer}-{hilchah}-{index}.jpg, index 1-based, zero-padded.
+   JPEG, not WebP: the WebP originals never rendered at all in Joshua's laptop browser. */
+function mzPicURL(a, k) { var p = String(a).split("."), i = String(k + 1); if (i.length < 2) i = "0" + i; return "assets/mitzvot/mz-" + p[0] + "-" + p[1] + "-" + i + ".jpg"; }
 /* Short Hebrew keyword printed at the top of each mitzvah memory picture, by hilchah
    ("sefer.hilchah") and the mitzvah's 0-based position in that hilchah — the pieces
    of the in-page matching test. Only Sefer HaMadda (sefer 1) has keyword data so far. */
@@ -3552,7 +3720,7 @@ function renderHM(lvl) {
     '<div class="hm-head"><div class="hm-he" lang="he" dir="rtl">' + (lvl === 2 ? "הלכות" : "מצוות") + '</div><div class="hm-en">' + (lvl === 2 ? "The 83 hilchot" : "The 613 mitzvot") + '</div>' +
     (lvl === 2 && SHOW_PHONE ? '<button type="button" class="hm-link" id="phoneHelp">☎ The Rambam\'s phone number</button>' : '') + '<div><button type="button" class="lang-toggle" id="langToggle" aria-label="Switch the names on this page between Hebrew and English"><span class="lt-opt lt-he">עברית</span><span class="lt-opt lt-en">English</span></button></div></div>' +
     '' +
-    (lvl === 2 ? '' : '<div class="mz-stage"><div class="hm-wheel"><button type="button" class="hm-arr hm-arr-l" data-dir="1" aria-label="Next sefer">‹</button><div class="hm-strip" id="hmSef" dir="rtl"><span class="hm-spacer" aria-hidden="true"></span>' + BOOKS.map(function (b) { var sel = b.n === st.s, opn = sel && (st.bookOpen || st.view === "mz"); return '<button type="button" class="hm-chip' + (sel ? ' on' : '') + (opn ? ' open' : '') + '" data-s="' + b.n + '" aria-label="Sefer ' + b.n + ', ' + esc(b.translit) + (sel ? ' — tap to open its hilchot' : '') + '"' + (sel ? ' aria-pressed="true"' : '') + '><span class="bk-cover bk-c' + (b.n % 7) + '"><span class="bk-spine"></span><span class="bk-front"><span class="bk-fn">' + b.n + '</span><span class="bk-pic"><img src="' + b.img + '" alt=""></span><span class="bk-fhe" lang="he" dir="rtl">' + esc(b.shortHebrew || b.hebrew) + '</span><span class="bk-fen">' + esc(b.english) + '</span>' + (sel && !opn ? '<span class="mz-open-hint"><span class="mz-lng-en">Tap to open</span><span class="mz-lng-he" lang="he" dir="rtl">לחצו לפתיחה</span></span>' : '') + '</span><span class="bk-pg"></span>' + (sel ? '<span class="mz-open-arr" aria-hidden="true">›</span>' : '') + '</span></button>'; }).join("") + '<span class="hm-spacer" aria-hidden="true"></span></div><button type="button" class="hm-arr hm-arr-r" data-dir="-1" aria-label="Previous sefer">›</button></div>' +
+    (lvl === 2 ? '' : '<div class="mz-stage"><div class="hm-wheel"><button type="button" class="hm-arr hm-arr-l" data-dir="1" aria-label="Next sefer">‹</button><div class="hm-strip" id="hmSef" dir="rtl"><span class="hm-spacer" aria-hidden="true"></span>' + BOOKS.map(function (b) { var sel = b.n === st.s, opn = sel && (st.bookOpen || st.view === "mz"); return '<button type="button" class="hm-chip' + (sel ? ' on' : '') + (opn ? ' open' : '') + '" data-s="' + b.n + '" aria-label="Sefer ' + b.n + ', ' + esc(b.translit) + (sel ? ' — tap to open its hilchot' : '') + '"' + (sel ? ' aria-pressed="true"' : '') + '><span class="bk-cover bk-c' + (b.n % 7) + '"><span class="bk-spine"></span><span class="bk-front"><span class="bk-fn">' + b.n + '</span><span class="bk-pic"><img src="' + b.img + '" alt=""></span><span class="bk-fhe" lang="he" dir="rtl">' + esc(b.shortHebrew || b.hebrew) + '</span><span class="bk-fen">' + esc(b.english) + '</span>' + (sel && !opn ? '<span class="mz-open-hint"><span class="mz-lng-en">Tap to open</span><span class="mz-lng-he" lang="he" dir="rtl">לחצו לפתיחה</span></span>' : '') + '</span><span class="bk-pg"></span>' + (sel && !opn ? '<span class="mz-open-btn"><span class="mz-lng-en">Open</span><span class="mz-lng-he" lang="he" dir="rtl">פתח</span></span>' : '') + '</span></button>'; }).join("") + '<span class="hm-spacer" aria-hidden="true"></span></div><button type="button" class="hm-arr hm-arr-r" data-dir="-1" aria-label="Previous sefer">›</button></div>' +
       (st.bookOpen || st.view === "mz" ? '<div class="mz-page mz-hilpage bk-c' + (B.n % 7) + '"><div class="mz-page-head"><span class="mz-page-t mz-lng-he" lang="he" dir="rtl">' + esc(B.hebrew) + '</span><span class="mz-page-t mz-lng-en">' + esc(B.english) + '</span><button type="button" class="mz-page-x" id="mzBookClose" aria-label="Close the sefer">✕</button></div><div class="mz-page-list">' + HL.map(function (x, xi) { return '<button type="button" class="mz-pick-row mz-pick-sm' + (st.view === "mz" && st.a === x.a ? ' on' : '') + '" data-pick="' + x.a + '" aria-label="Hilchot ' + esc(x.tr) + '"><span class="mz-pick-n">' + (xi + 1) + '</span><span class="mz-pick-main"><span class="hc-he" lang="he" dir="rtl">הלכות ' + esc(x.he) + '</span><span class="hc-en">Hilchot ' + esc(x.tr) + '</span><span class="mz-pick-sub hc-en">' + esc(x.en) + '</span></span>' + (x.n ? '' : '<span class="mz-pick-count"><span class="mz-lng-en">' + (x.rab ? 'Rabbinic' : 'No counted mitzvah') + '</span><span class="mz-lng-he" lang="he" dir="rtl">' + (x.rab ? 'דרבנן' : 'אין מצוה מנויה') + '</span></span>') + '<span class="mz-pick-arr" aria-hidden="true">›</span></button>'; }).join("") + '</div></div>' : ''));
   if (lvl === 2) {
     /* Nov 12: Hilchot learn page in the same format as Sefarim: bookshelf + its own copy of the wheel (#hlWheel). Opening a book shows that sefer's hilchot. */
@@ -3583,7 +3751,7 @@ function renderHM(lvl) {
     } else {
     html += '<div class="mz-mzpage bk-c' + (B.n % 7) + '"><div class="mz-flex"><button type="button" class="mz-back" id="mzBack"><span class="mz-lng-en">&larr; All the hilchot in Sefer ' + esc(B.translit) + '</span><span class="mz-lng-he" lang="he" dir="rtl">כל ההלכות שב' + esc(B.hebrew) + ' &rarr;</span></button><div class="hm-card"><div class="hm-title" lang="he" dir="rtl">הלכות ' + esc(H.he) + '</div><div class="hm-sub">Hilchot ' + esc(H.tr) + ' · ' + esc(H.en) + '</div>' +
       (H.n ? '<div class="mz-viewbar">' + (mzAll ? '' : '<span class="mz-pos" id="mzPos" aria-live="polite">' + (st.mzIdx + 1) + ' of ' + mzShown.length + '</span>') + '<button type="button" class="mz-vbtn" id="mzViewBtn" aria-pressed="' + mzAll + '">' + (mzAll ? 'One at a time' : 'Show all cards') + '</button></div>' +
-        '<div class="mz-pager' + (mzAll ? ' all' : '') + '" id="mzPager"><button type="button" class="mz-arr" id="mzNext" aria-label="Next mitzvah"' + (mzAll || st.mzIdx >= mzShown.length - 1 ? ' disabled' : '') + '>‹</button><div class="mz-grid' + (mzAll ? ' all' : '') + '" dir="rtl">' + mzShown.map(function (x, xi) { return '<button type="button" class="mzpic' + (!mzAll && xi === st.mzIdx ? ' mz-cur' : '') + '" data-mzk="' + x.k + '" aria-label="Mitzvah ' + (x.k + 1) + '"><span class="mzpic-n" aria-hidden="true">' + (x.k + 1) + '</span><span class="mzpic-im"><img src="' + mzPicURL(H.a, x.k) + '" alt="" loading="lazy"><span class="mzpic-fb" hidden><span class="hr-he" lang="he" dir="rtl">' + esc(x.m[1]) + '</span><span class="hr-en" dir="ltr">' + esc(cap(x.m[2])) + '</span></span></span></button>'; }).join("") + '</div><button type="button" class="mz-arr" id="mzPrev" aria-label="Previous mitzvah"' + (mzAll || st.mzIdx <= 0 ? ' disabled' : '') + '>›</button></div><div class="mz-det" id="hmMzDet" dir="rtl" hidden></div>' +
+        '<div class="mz-pager' + (mzAll ? ' all' : '') + '" id="mzPager"><button type="button" class="mz-arr" id="mzNext" aria-label="Next mitzvah"' + (mzAll || st.mzIdx >= mzShown.length - 1 ? ' disabled' : '') + '>‹</button><div class="mz-grid' + (mzAll ? ' all' : '') + '" dir="rtl">' + mzShown.map(function (x, xi) { return '<button type="button" class="mzpic' + (!mzAll && xi === st.mzIdx ? ' mz-cur' : '') + '" data-mzk="' + x.k + '" aria-label="Mitzvah ' + (x.k + 1) + '"><span class="mzpic-n" aria-hidden="true">' + (x.k + 1) + '</span><span class="mzpic-im"><img src="' + mzPicURL(H.a, x.k) + '" alt=""><span class="mzpic-fb" hidden><span class="hr-he" lang="he" dir="rtl">' + esc(x.m[1]) + '</span><span class="hr-en" dir="ltr">' + esc(cap(x.m[2])) + '</span></span></span></button>'; }).join("") + '</div><button type="button" class="mz-arr" id="mzPrev" aria-label="Previous mitzvah"' + (mzAll || st.mzIdx <= 0 ? ' disabled' : '') + '>›</button></div><div class="mz-det" id="hmMzDet" dir="rtl" hidden></div>' +
         ''
         : '<p class="hm-none">' + (H.rab ? "This hilchah has no mitzvah from the 613. Its laws are rabbinic." : "No counted mitzvah in this hilchah.") + '</p>' + (H.d ? '<p class="hm-d">' + esc(H.d) + '</p>' : '')) +
       '</div>' + (H.n && MZKW[H.a] ? '<aside class="mz-panel" id="mzPanel"><button type="button" class="mz-pbtn primary" id="mzMatchBtn">Match the keyword to the picture</button><button type="button" class="mz-pbtn" id="mzOrderBtn">Put the cards in order</button><button type="button" class="mz-pbtn" id="mzCheckBtn" disabled>Check order</button><button type="button" class="mz-pbtn" id="mzShuffleBtn" disabled>Shuffle</button><button type="button" class="mz-pbtn" id="mzFixBtn" disabled>Correct the order</button><p class="mz-status" id="mzStatus" aria-live="polite">Shuffle and Correct the order wake up once a test starts.</p><div class="mz-tray mz-ptray" id="mzTray" dir="rtl" hidden></div></aside>' : '') + '</div></div>';
@@ -3634,7 +3802,14 @@ function renderHM(lvl) {
     $$(".mzpic", host).forEach(function (card) {
       var img = card.querySelector("img"), fb = card.querySelector(".mzpic-fb");
       var fail = function () { if (img) img.hidden = true; if (fb) fb.hidden = false; };
-      if (img) { if (img.complete && !img.naturalWidth) fail(); else img.addEventListener("error", fail); }
+      if (img) {
+        img.addEventListener("error", fail);
+        /* A picture still on its way can report complete with no width in
+           some browsers; that is "not arrived yet", not "missing". Only
+           fall back if it is still broken after it has had time to load —
+           a genuinely missing file fires the error listener at once. */
+        if (img.complete && !img.naturalWidth) setTimeout(function () { if (img.complete && !img.naturalWidth) fail(); }, 900);
+      }
       card.onclick = function () {
         var k = +card.getAttribute("data-mzk");
         if (mzOT.on) return;
@@ -3732,6 +3907,7 @@ function renderHM(lvl) {
       }
       mzMT.on = true; mzMT.placed = 0; mzMT.bySelf = 0; mzMT.sel = null;
       grid.classList.add("all"); /* matching needs every picture on screen at once */
+      mzFitGrid();
       var pager1 = $("#mzPager", host); if (pager1) pager1.classList.add("mz-test");
       mzMT.waiting = mzShown.map(function (x) { return x.k; }); mzMT.total = mzMT.waiting.length; mzShuf(mzMT.waiting);
       mzSel = -1; $$(".mzpic", host).forEach(function (x) { x.classList.remove("on"); });
@@ -3801,6 +3977,24 @@ function renderHM(lvl) {
         }
       });
     }
+    /* Nov 27e: fixed at 5 columns, as Joshua asked — a 10-card hilchah
+       (e.g. Yesodei HaTorah) now shows as 2 rows of 5 instead of the
+       single squeezed row of 10 the Nov 27d auto-fit picker chose on
+       wide screens. Fewer columns only when the hilchah itself has
+       fewer than 5 cards. Runs once after each render and again on
+       window resize; the CSS grid is the first-paint fallback. */
+    function mzFitGridEl(grid) {
+      if (!grid || !grid.classList.contains("all")) return;
+      var n = grid.children.length; if (!n) return;
+      var best = Math.min(5, n);
+      grid.style.gridTemplateColumns = "repeat(" + best + ",minmax(0,1fr))";
+    }
+    function mzFitGrid() { mzFitGridEl($(".mz-grid", host)); }
+    requestAnimationFrame(mzFitGrid);
+    if (!window.__mzFitWired) {
+      window.__mzFitWired = true; var mzFitT = null;
+      window.addEventListener("resize", function () { clearTimeout(mzFitT); mzFitT = setTimeout(function () { mzFitGridEl(document.querySelector("#page-mitzvot .mz-grid.all")); }, 120); });
+    }
     var mzOrderBtn = $("#mzOrderBtn", host);
     if (mzOrderBtn) mzOrderBtn.onclick = function () {
       var grid = $(".mz-grid", host); if (!grid) return;
@@ -3808,6 +4002,7 @@ function renderHM(lvl) {
       if (mzShown.length < 2) { mzStatus("Only one card in this hilchah — nothing to put in order."); return; }
       mzOT.on = true; mzOT.total = mzShown.length;
       grid.classList.add("all"); grid.classList.add("mz-ordering");
+      mzFitGrid();
       var pager = $("#mzPager", host); if (pager) pager.classList.add("mz-test");
       mzSel = -1; mzCards().forEach(function (x) { x.classList.remove("on"); x.removeAttribute("data-locked"); });
       if (mzDet) { mzDet.hidden = true; mzDet.innerHTML = ""; }
@@ -3883,7 +4078,7 @@ function renderLevel(lvl) {
     (lvl === 1 ? "" : introBox("level" + lvl, info.intro)) +
     (lvl === 1 ? '<div class="sf-bar" id="sfBar"></div>' : "") +
     (lvl === 1 ? '<div class="sf-grid" id="sfGrid">' + BOOKS.map(function (b, k) { return '<button type="button" class="sf-tile mc-tile' + (k < p ? ' sf-learned' : '') + '" data-k="' + k + '" aria-label="Sefer ' + b.n + ', ' + esc(b.translit) + '"><span class="sf-chk" aria-hidden="true">✓</span><span class="mc-book"><span class="bk-cover bk-c' + (b.n % 7) + '"><span class="bk-spine"></span><span class="bk-front"><span class="bk-fn">' + b.n + '</span><span class="bk-pic"><img src="' + b.img + '" alt="" loading="lazy"></span><span class="bk-fhe" lang="he" dir="rtl">' + esc(b.hebrew) + '</span><span class="bk-fen">' + esc(b.english) + '</span></span><span class="bk-pg"></span></span></span></button>'; }).join("") + '</div>' : "") +
-    (lvl === 1 ? '<div class="sf-detail" id="sfDetail" hidden><button type="button" class="sf-back" id="sfBack">&larr; All 14 sefarim</button><div class="sf-stage" id="sfStage"><div class="sf-case" id="sfShelf"><div class="sh-row">' + BOOKS.map(function (b, k) { return '<button type="button" class="sh-bk sh-c' + (b.n % 7) + '" data-k="' + k + '" aria-label="' + esc(b.english) + '"><span class="sh-n">' + b.n + '</span><span class="sh-he" lang="he" dir="rtl">' + (b.shortHebrew || b.hebrew).replace(/\s+/g, "").split("").map(function (ch) { return "<i>" + esc(ch) + "</i>"; }).join("") + '</span></button>'; }).join("") + '</div><div class="sh-board"></div><div class="sh-cap">Click a sefer to take it off the shelf</div></div><div class="sf-wheel sf-simple" id="sfWheel"><div class="sf-card" id="sfCard"></div></div><div class="sf-dots" id="sfDots"></div></div><details class="mt-about intro-sec sf-all" id="sfAll"><summary>View all 14 sefarim</summary><div class="mt-about-body" id="sfAllHost"></div></details></div>' : "") +
+    (lvl === 1 ? '<div class="sf-detail" id="sfDetail" hidden><button type="button" class="sf-back" id="sfBack">&larr; All 14 sefarim</button><div class="sf-view-switch" role="group" aria-label="Choose how to see the 14 sefarim"><button type="button" id="sfViewShelf" class="active" aria-pressed="true">Bookshelf view</button><button type="button" id="sfViewGrid" aria-pressed="false">Grid view<span class="sf-vs-sub">all 14 at once</span></button></div><div class="sf-view-pane" id="sfShelfView"><div class="sf-stage" id="sfStage"><div class="sf-case" id="sfShelf"><div class="sh-row">' + BOOKS.map(function (b, k) { return '<button type="button" class="sh-bk sh-c' + (b.n % 7) + '" data-k="' + k + '" aria-label="' + esc(b.english) + '"><span class="sh-n">' + b.n + '</span><span class="sh-he" lang="he" dir="rtl">' + (b.shortHebrew || b.hebrew).replace(/\s+/g, "").split("").map(function (ch) { return "<i>" + esc(ch) + "</i>"; }).join("") + '</span></button>'; }).join("") + '</div><div class="sh-board"></div><div class="sh-cap">Click a sefer to take it off the shelf</div></div><div class="sf-wheel sf-simple" id="sfWheel"><div class="sf-card" id="sfCard"></div></div><div class="sf-dots" id="sfDots"></div></div></div><div class="sf-view-pane" id="sfAllHost" hidden></div></div>' : "") +
     (lvl === 1 ? practiceBox(1) : "") +
     (lvl === 1 ? '<div class="sf-nextsec"><button type="button" class="sf-nextbtn" id="sfNextSec" data-go="hilchot"><span class="sf-nx-en">Next section: Hilchot ›</span><span class="sf-nx-he" lang="he" dir="rtl">הלכות</span></button></div>' : "") +
     '<div' + (lvl === 1 ? ' hidden' : '') + '>' + '<button type="button" class="continue-btn" id="lvlGo"><span class="cb-label">' + (done ? "Go through it again" : (p ? "Continue" : "Start")) + '</span><span class="cb-sub">' + esc(nextTxt) + "</span></button>" +
@@ -3947,9 +4142,27 @@ function renderLevel(lvl) {
     }; });
     $("#sfBack", host).onclick = function () { putBookBack(); det.hidden = true; grid.hidden = false; bar.hidden = false; var lp = $("#lvlPractice", host); if (lp) lp.hidden = false; window.scrollTo(0, 0); };
     paintFocus();
-    /* Nov 9: Sefarim page opens straight on the wheel (no grid) */
-    grid.hidden = true; bar.hidden = true; det.hidden = false; var bk0 = $("#sfBack", host); if (bk0) bk0.hidden = true; var allH = $("#sfAllHost", host), allD = $("#sfAll", host); allH.appendChild(bar); allH.appendChild(grid); grid.hidden = false; bar.hidden = false;
-    $$(".sf-tile", grid).forEach(function (t) { var o = t.onclick; t.onclick = function () { if (picking) return o.call(t); popBook(+t.getAttribute("data-k")); allD.open = false; det.scrollIntoView({ behavior: "smooth", block: "start" }); }; });
+    /* Books view switch: the page opens on the bookshelf, and the grid
+       lives in its own pane — only one of the two is ever shown. The
+       focus bar and grid move into the grid pane; choosing a sefer
+       there (outside focus-picking) switches back to the bookshelf
+       with that sefer popped out. The choice is kept for the session
+       so leaving and returning to Books keeps the view you picked. */
+    grid.hidden = true; bar.hidden = true; det.hidden = false; var bk0 = $("#sfBack", host); if (bk0) bk0.hidden = true; var allH = $("#sfAllHost", host); allH.appendChild(bar); allH.appendChild(grid); grid.hidden = false; bar.hidden = false;
+    var shelfView = $("#sfShelfView", host), viewShelfBtn = $("#sfViewShelf", host), viewGridBtn = $("#sfViewGrid", host);
+    function setBooksView(v) {
+      window.__rleBooksView = v;
+      var isGrid = v === "grid";
+      if (isGrid) putBookBack();
+      if (shelfView) shelfView.hidden = isGrid;
+      if (allH) allH.hidden = !isGrid;
+      if (viewShelfBtn) { viewShelfBtn.classList.toggle("active", !isGrid); viewShelfBtn.setAttribute("aria-pressed", String(!isGrid)); }
+      if (viewGridBtn) { viewGridBtn.classList.toggle("active", isGrid); viewGridBtn.setAttribute("aria-pressed", String(isGrid)); }
+    }
+    if (viewShelfBtn) viewShelfBtn.onclick = function () { setBooksView("shelf"); };
+    if (viewGridBtn) viewGridBtn.onclick = function () { setBooksView("grid"); };
+    $$(".sf-tile", grid).forEach(function (t) { var o = t.onclick; t.onclick = function () { if (picking) return o.call(t); popBook(+t.getAttribute("data-k")); setBooksView("shelf"); det.scrollIntoView({ behavior: "smooth", block: "start" }); }; });
+    setBooksView(window.__rleBooksView === "grid" ? "grid" : "shelf");
   })();
   $("#lvlGo", host).onclick = function () { markIntro("level" + lvl); if (done) { S.flow.ipos[lvl] = 0; S.flow.bite = null; save(); } startBite(lvl); };
   $("#lvlBrowse", host).onclick = function () { openBrowse(lvl); };
@@ -3988,7 +4201,7 @@ function checkIntro(lvl, bite, repeat) {
 }
 function checkKeys(lvl, items) {
   var it = shuffle(items), keys = [], i;
-  if (lvl === 1) { var kinds = shuffle(["B.name.", "B.num.", "B.theme."]); for (i = 0; i < 3; i++) keys.push(kinds[i] + it[i % it.length]); }
+  if (lvl === 1) { var kinds = shuffle(["B.name.", "B.num.", "B.theme."]); keys.push("B.fill." + it[0]); keys.push(kinds[0] + it[it.length - 1]); keys.push(kinds[1] + it[0]); }
   if (lvl === 2) { for (i = 0; i < 3; i++) keys.push((i < it.length ? "H.name." : "H.sefer.") + it[i % it.length]); }
   if (lvl === 3) {
     var k3 = shuffle(["M.en.", "M.en.", "M.type."]);
@@ -4117,6 +4330,7 @@ var GAMES = [
   { id: "review", group: "Review", icon: "↻", title: "Smart Review", intro: "Questions you missed come back first. Short, regular review is what moves things into long-term memory.", run: function (host) { runReview(host); } },
   { id: "lightning", group: "Review", icon: "⚡", title: "Lightning Round", intro: "", run: null },
   { id: "finder", group: "Review", icon: "⌕", title: "Where is it?", intro: "See a mitzvah from the Rambam's list and find its hilchah or sefer. Knowing where things live builds your mental map.", run: quizGame(function () { return POOL.mhil.concat(POOL.msef); }, 10) },
+  { id: "fill", group: "Sefarim", icon: "✎", title: "Fill in the Blanks", intro: "Each sefer's summary — the one from the learning section — with two words taken out. Pick the pair that fills the gaps.", run: quizGame(function () { return POOL.bfill; }, 10) },
   { id: "shelf", group: "Sefarim", icon: "📚", title: "Bookshelf", intro: "The 14 sefarim get mixed up on a bookshelf, and you drag them back into order. Seeing the whole shelf builds the map in your mind.", run: function (host) { shelfGameRender(host); } },
   { id: "explore", group: "Sefarim", icon: "▦", title: "All 14 at a glance", intro: "See all 14 sefarim at once. Cover mode hides the names so you can test yourself, and testing is what makes it stick.", run: function (host) { renderExplore(host); } },
   { id: "name", group: "Sefarim", icon: "🖼", title: "Name It", intro: "You'll see a sefer's picture and pick its name. Linking a picture to a name gives your memory a hook.", run: quizGame(function () { return POOL.bname; }, 10) },
